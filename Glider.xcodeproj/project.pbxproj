@@ -1,0 +1,603 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A947FE432654383A007A5E5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FE422654383A007A5E5A /* Preview Assets.xcassets */; };
+		A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4C26543893007A5E5A /* ButtonStyles.swift */; };
+		A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4E26543893007A5E5A /* DefaultBackground.swift */; };
+		A947FE8426543894007A5E5A /* StartupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4F26543893007A5E5A /* StartupView.swift */; };
+		A947FE8526543894007A5E5A /* AutoConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5026543893007A5E5A /* AutoConnectView.swift */; };
+		A947FE8626543894007A5E5A /* View+If.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5226543893007A5E5A /* View+If.swift */; };
+		A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5326543893007A5E5A /* HideKeyboard.swift */; };
+		A947FE8826543894007A5E5A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5426543893007A5E5A /* RootView.swift */; };
+		A947FE8926543894007A5E5A /* FileTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5526543893007A5E5A /* FileTransferView.swift */; };
+		A947FE8A26543894007A5E5A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5626543893007A5E5A /* MainView.swift */; };
+		A947FE8B26543894007A5E5A /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5826543893007A5E5A /* TodoView.swift */; };
+		A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5926543893007A5E5A /* RootViewModel.swift */; };
+		A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5A26543893007A5E5A /* StartupViewModel.swift */; };
+		A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */; };
+		A947FE8F26543894007A5E5A /* AutoConnectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */; };
+		A947FE9026543894007A5E5A /* AdafruitBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5F26543893007A5E5A /* AdafruitBoard.swift */; };
+		A947FE9126543894007A5E5A /* AdafruitBoardsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6026543893007A5E5A /* AdafruitBoardsManager.swift */; };
+		A947FE9226543894007A5E5A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
+		A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6326543893007A5E5A /* PeripheralList.swift */; };
+		A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */; };
+		A947FE9526543894007A5E5A /* DefaultPreferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = A947FE6626543893007A5E5A /* DefaultPreferences.plist */; };
+		A947FE9626543894007A5E5A /* BlePeripheral+AdafruitCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6A26543893007A5E5A /* BlePeripheral+AdafruitCommon.swift */; };
+		A947FE9726543894007A5E5A /* BlePeripheral+FileTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6B26543893007A5E5A /* BlePeripheral+FileTransfer.swift */; };
+		A947FE9826543894007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6C26543893007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift */; };
+		A947FE9926543894007A5E5A /* BlePeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6E26543893007A5E5A /* BlePeripheral.swift */; };
+		A947FE9A26543894007A5E5A /* BleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6F26543893007A5E5A /* BleManager.swift */; };
+		A947FE9B26543894007A5E5A /* BlePeripheral+Battery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7026543893007A5E5A /* BlePeripheral+Battery.swift */; };
+		A947FE9C26543894007A5E5A /* Data+LittleEndianTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7226543893007A5E5A /* Data+LittleEndianTypes.swift */; };
+		A947FE9D26543894007A5E5A /* HexUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7326543893007A5E5A /* HexUtils.swift */; };
+		A947FE9E26543894007A5E5A /* Int+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7426543893007A5E5A /* Int+Bytes.swift */; };
+		A947FE9F26543894007A5E5A /* CommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7526543893007A5E5A /* CommandQueue.swift */; };
+		A947FEA026543894007A5E5A /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7626543893007A5E5A /* LogHelper.swift */; };
+		A947FEA126543894007A5E5A /* Types+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7726543893007A5E5A /* Types+Data.swift */; };
+		A947FEA226543894007A5E5A /* Data+ScanValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7826543893007A5E5A /* Data+ScanValue.swift */; };
+		A947FEA326543894007A5E5A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7A26543893007A5E5A /* Config.swift */; };
+		A947FEA426543894007A5E5A /* GliderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7B26543893007A5E5A /* GliderApp.swift */; };
+		A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7C26543894007A5E5A /* AppDelegate.swift */; };
+		A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7E26543894007A5E5A /* AppEnvironment.swift */; };
+		A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FEA92654392F007A5E5A /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A947FE3826543839007A5E5A /* Glider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glider.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A947FE422654383A007A5E5A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A947FE442654383A007A5E5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A947FE4C26543893007A5E5A /* ButtonStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		A947FE4E26543893007A5E5A /* DefaultBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultBackground.swift; sourceTree = "<group>"; };
+		A947FE4F26543893007A5E5A /* StartupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupView.swift; sourceTree = "<group>"; };
+		A947FE5026543893007A5E5A /* AutoConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoConnectView.swift; sourceTree = "<group>"; };
+		A947FE5226543893007A5E5A /* View+If.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+If.swift"; sourceTree = "<group>"; };
+		A947FE5326543893007A5E5A /* HideKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HideKeyboard.swift; sourceTree = "<group>"; };
+		A947FE5426543893007A5E5A /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		A947FE5526543893007A5E5A /* FileTransferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferView.swift; sourceTree = "<group>"; };
+		A947FE5626543893007A5E5A /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		A947FE5826543893007A5E5A /* TodoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
+		A947FE5926543893007A5E5A /* RootViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
+		A947FE5A26543893007A5E5A /* StartupViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupViewModel.swift; sourceTree = "<group>"; };
+		A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferViewModel.swift; sourceTree = "<group>"; };
+		A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoConnectViewModel.swift; sourceTree = "<group>"; };
+		A947FE5F26543893007A5E5A /* AdafruitBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdafruitBoard.swift; sourceTree = "<group>"; };
+		A947FE6026543893007A5E5A /* AdafruitBoardsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdafruitBoardsManager.swift; sourceTree = "<group>"; };
+		A947FE6126543893007A5E5A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		A947FE6326543893007A5E5A /* PeripheralList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralList.swift; sourceTree = "<group>"; };
+		A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralAutoConnect.swift; sourceTree = "<group>"; };
+		A947FE6626543893007A5E5A /* DefaultPreferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultPreferences.plist; sourceTree = "<group>"; };
+		A947FE6A26543893007A5E5A /* BlePeripheral+AdafruitCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BlePeripheral+AdafruitCommon.swift"; sourceTree = "<group>"; };
+		A947FE6B26543893007A5E5A /* BlePeripheral+FileTransfer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BlePeripheral+FileTransfer.swift"; sourceTree = "<group>"; };
+		A947FE6C26543893007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BlePeripheral+ManufacturerAdafruit.swift"; sourceTree = "<group>"; };
+		A947FE6E26543893007A5E5A /* BlePeripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlePeripheral.swift; sourceTree = "<group>"; };
+		A947FE6F26543893007A5E5A /* BleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BleManager.swift; sourceTree = "<group>"; };
+		A947FE7026543893007A5E5A /* BlePeripheral+Battery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BlePeripheral+Battery.swift"; sourceTree = "<group>"; };
+		A947FE7226543893007A5E5A /* Data+LittleEndianTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+LittleEndianTypes.swift"; sourceTree = "<group>"; };
+		A947FE7326543893007A5E5A /* HexUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexUtils.swift; sourceTree = "<group>"; };
+		A947FE7426543893007A5E5A /* Int+Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int+Bytes.swift"; sourceTree = "<group>"; };
+		A947FE7526543893007A5E5A /* CommandQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandQueue.swift; sourceTree = "<group>"; };
+		A947FE7626543893007A5E5A /* LogHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogHelper.swift; sourceTree = "<group>"; };
+		A947FE7726543893007A5E5A /* Types+Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Types+Data.swift"; sourceTree = "<group>"; };
+		A947FE7826543893007A5E5A /* Data+ScanValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+ScanValue.swift"; sourceTree = "<group>"; };
+		A947FE7A26543893007A5E5A /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		A947FE7B26543893007A5E5A /* GliderApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderApp.swift; sourceTree = "<group>"; };
+		A947FE7C26543894007A5E5A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A947FE7E26543894007A5E5A /* AppEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		A947FEA92654392F007A5E5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A947FE3526543839007A5E5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A947FE2F26543839007A5E5A = {
+			isa = PBXGroup;
+			children = (
+				A947FE3A26543839007A5E5A /* Glider */,
+				A947FE3926543839007A5E5A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A947FE3926543839007A5E5A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE3826543839007A5E5A /* Glider.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A947FE3A26543839007A5E5A /* Glider */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE7926543893007A5E5A /* App */,
+				A947FE4A26543893007A5E5A /* Views */,
+				A947FE5726543893007A5E5A /* ViewModels */,
+				A947FE5D26543893007A5E5A /* Models */,
+				A947FE7D26543894007A5E5A /* Utils */,
+				A947FE6526543893007A5E5A /* Resources */,
+				A947FE6726543893007A5E5A /* AdafruitKit */,
+				A947FEA92654392F007A5E5A /* Assets.xcassets */,
+				A947FE442654383A007A5E5A /* Info.plist */,
+				A947FE412654383A007A5E5A /* Preview Content */,
+			);
+			path = Glider;
+			sourceTree = "<group>";
+		};
+		A947FE412654383A007A5E5A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE422654383A007A5E5A /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A947FE4A26543893007A5E5A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE4B26543893007A5E5A /* Decoration */,
+				A947FE4D26543893007A5E5A /* Modifiers */,
+				A947FE5126543893007A5E5A /* Utils */,
+				A947FE5426543893007A5E5A /* RootView.swift */,
+				A947FE4F26543893007A5E5A /* StartupView.swift */,
+				A947FE5626543893007A5E5A /* MainView.swift */,
+				A947FE5026543893007A5E5A /* AutoConnectView.swift */,
+				A947FE5526543893007A5E5A /* FileTransferView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A947FE4B26543893007A5E5A /* Decoration */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE4C26543893007A5E5A /* ButtonStyles.swift */,
+			);
+			path = Decoration;
+			sourceTree = "<group>";
+		};
+		A947FE4D26543893007A5E5A /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE4E26543893007A5E5A /* DefaultBackground.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		A947FE5126543893007A5E5A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE5226543893007A5E5A /* View+If.swift */,
+				A947FE5326543893007A5E5A /* HideKeyboard.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A947FE5726543893007A5E5A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE5826543893007A5E5A /* TodoView.swift */,
+				A947FE5926543893007A5E5A /* RootViewModel.swift */,
+				A947FE5A26543893007A5E5A /* StartupViewModel.swift */,
+				A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */,
+				A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A947FE5D26543893007A5E5A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE6126543893007A5E5A /* Settings.swift */,
+				A947FE5E26543893007A5E5A /* AdafruitBoard */,
+				A947FE6226543893007A5E5A /* Scanner */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A947FE5E26543893007A5E5A /* AdafruitBoard */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE5F26543893007A5E5A /* AdafruitBoard.swift */,
+				A947FE6026543893007A5E5A /* AdafruitBoardsManager.swift */,
+			);
+			path = AdafruitBoard;
+			sourceTree = "<group>";
+		};
+		A947FE6226543893007A5E5A /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE6326543893007A5E5A /* PeripheralList.swift */,
+				A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
+		A947FE6526543893007A5E5A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE6626543893007A5E5A /* DefaultPreferences.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A947FE6726543893007A5E5A /* AdafruitKit */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE6826543893007A5E5A /* Ble */,
+				A947FE7126543893007A5E5A /* Utils */,
+			);
+			path = AdafruitKit;
+			sourceTree = "<group>";
+		};
+		A947FE6826543893007A5E5A /* Ble */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE6926543893007A5E5A /* AdafruitSensors */,
+				A947FE6D26543893007A5E5A /* BleCentralMode */,
+			);
+			path = Ble;
+			sourceTree = "<group>";
+		};
+		A947FE6926543893007A5E5A /* AdafruitSensors */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE6A26543893007A5E5A /* BlePeripheral+AdafruitCommon.swift */,
+				A947FE6B26543893007A5E5A /* BlePeripheral+FileTransfer.swift */,
+				A947FE6C26543893007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift */,
+			);
+			path = AdafruitSensors;
+			sourceTree = "<group>";
+		};
+		A947FE6D26543893007A5E5A /* BleCentralMode */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE6E26543893007A5E5A /* BlePeripheral.swift */,
+				A947FE6F26543893007A5E5A /* BleManager.swift */,
+				A947FE7026543893007A5E5A /* BlePeripheral+Battery.swift */,
+			);
+			path = BleCentralMode;
+			sourceTree = "<group>";
+		};
+		A947FE7126543893007A5E5A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE7226543893007A5E5A /* Data+LittleEndianTypes.swift */,
+				A947FE7326543893007A5E5A /* HexUtils.swift */,
+				A947FE7426543893007A5E5A /* Int+Bytes.swift */,
+				A947FE7526543893007A5E5A /* CommandQueue.swift */,
+				A947FE7626543893007A5E5A /* LogHelper.swift */,
+				A947FE7726543893007A5E5A /* Types+Data.swift */,
+				A947FE7826543893007A5E5A /* Data+ScanValue.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A947FE7926543893007A5E5A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE7A26543893007A5E5A /* Config.swift */,
+				A947FE7B26543893007A5E5A /* GliderApp.swift */,
+				A947FE7C26543894007A5E5A /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A947FE7D26543894007A5E5A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A947FE7E26543894007A5E5A /* AppEnvironment.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A947FE3726543839007A5E5A /* Glider */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A947FE472654383A007A5E5A /* Build configuration list for PBXNativeTarget "Glider" */;
+			buildPhases = (
+				A947FE3426543839007A5E5A /* Sources */,
+				A947FE3526543839007A5E5A /* Frameworks */,
+				A947FE3626543839007A5E5A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Glider;
+			productName = Glider;
+			productReference = A947FE3826543839007A5E5A /* Glider.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A947FE3026543839007A5E5A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					A947FE3726543839007A5E5A = {
+						CreatedOnToolsVersion = 12.5;
+					};
+				};
+			};
+			buildConfigurationList = A947FE3326543839007A5E5A /* Build configuration list for PBXProject "Glider" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A947FE2F26543839007A5E5A;
+			productRefGroup = A947FE3926543839007A5E5A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A947FE3726543839007A5E5A /* Glider */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A947FE3626543839007A5E5A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A947FE432654383A007A5E5A /* Preview Assets.xcassets in Resources */,
+				A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */,
+				A947FE9526543894007A5E5A /* DefaultPreferences.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A947FE3426543839007A5E5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A947FE9626543894007A5E5A /* BlePeripheral+AdafruitCommon.swift in Sources */,
+				A947FE8F26543894007A5E5A /* AutoConnectViewModel.swift in Sources */,
+				A947FE9826543894007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift in Sources */,
+				A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */,
+				A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */,
+				A947FE9226543894007A5E5A /* Settings.swift in Sources */,
+				A947FE8A26543894007A5E5A /* MainView.swift in Sources */,
+				A947FE9026543894007A5E5A /* AdafruitBoard.swift in Sources */,
+				A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */,
+				A947FE8B26543894007A5E5A /* TodoView.swift in Sources */,
+				A947FE9726543894007A5E5A /* BlePeripheral+FileTransfer.swift in Sources */,
+				A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */,
+				A947FE8926543894007A5E5A /* FileTransferView.swift in Sources */,
+				A947FE9926543894007A5E5A /* BlePeripheral.swift in Sources */,
+				A947FE9C26543894007A5E5A /* Data+LittleEndianTypes.swift in Sources */,
+				A947FE8426543894007A5E5A /* StartupView.swift in Sources */,
+				A947FEA426543894007A5E5A /* GliderApp.swift in Sources */,
+				A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */,
+				A947FEA026543894007A5E5A /* LogHelper.swift in Sources */,
+				A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */,
+				A947FE8626543894007A5E5A /* View+If.swift in Sources */,
+				A947FEA126543894007A5E5A /* Types+Data.swift in Sources */,
+				A947FE8526543894007A5E5A /* AutoConnectView.swift in Sources */,
+				A947FE9A26543894007A5E5A /* BleManager.swift in Sources */,
+				A947FE9E26543894007A5E5A /* Int+Bytes.swift in Sources */,
+				A947FEA226543894007A5E5A /* Data+ScanValue.swift in Sources */,
+				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
+				A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */,
+				A947FE9126543894007A5E5A /* AdafruitBoardsManager.swift in Sources */,
+				A947FEA326543894007A5E5A /* Config.swift in Sources */,
+				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
+				A947FE9F26543894007A5E5A /* CommandQueue.swift in Sources */,
+				A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */,
+				A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */,
+				A947FE9B26543894007A5E5A /* BlePeripheral+Battery.swift in Sources */,
+				A947FE9D26543894007A5E5A /* HexUtils.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A947FE452654383A007A5E5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A947FE462654383A007A5E5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A947FE482654383A007A5E5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Glider/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.test;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A947FE492654383A007A5E5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Glider/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.test;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A947FE3326543839007A5E5A /* Build configuration list for PBXProject "Glider" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A947FE452654383A007A5E5A /* Debug */,
+				A947FE462654383A007A5E5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A947FE472654383A007A5E5A /* Build configuration list for PBXNativeTarget "Glider" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A947FE482654383A007A5E5A /* Debug */,
+				A947FE492654383A007A5E5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A947FE3026543839007A5E5A /* Project object */;
+}
