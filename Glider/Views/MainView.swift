@@ -30,6 +30,9 @@ struct MainView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())        // Use a single view also on iPad
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 

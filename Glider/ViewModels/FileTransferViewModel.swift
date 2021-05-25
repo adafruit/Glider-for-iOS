@@ -17,6 +17,9 @@ class FileTransferViewModel: ObservableObject {
         enum TransmissionType: Equatable {
             case read(data: Data)
             case write(size: Int)
+            case delete(success: Bool)
+            case listDirectory(numItems: Int?)
+            case makeDirectory(success: Bool)
             case error(message: String)
         }
         let type: TransmissionType
@@ -26,6 +29,9 @@ class FileTransferViewModel: ObservableObject {
             switch self.type {
             case .read(let data): modeText = "Received \(data.count) bytes"
             case .write(let size): modeText = "Sent \(size) bytes"
+            case .delete(let success): modeText = "Deleted file: \(success ? "success":"failed")"
+            case .listDirectory(numItems: let numItems): modeText = numItems != nil ? "Listed directory: \(numItems!) items" : "Listed nonexistent directory"
+            case .makeDirectory(let success): modeText = "Created directory: \(success ? "success":"failed")"
             case .error(let message): modeText = message
             }
             
@@ -39,12 +45,12 @@ class FileTransferViewModel: ObservableObject {
 
 
     // MARK: - Placeholders
-    var fileNamePlaceholders: [String] = ["/hello.txt", "/bye.txt", "/test.txt"]
+    var fileNamePlaceholders: [String] = ["/hello.txt"/*, "/bye.txt"*/, "/test.txt"]
 
     static let defaultFileContentePlaceholder = "This is some editable text 👻😎..."
     lazy var fileContentPlaceholders: [String] = {
         
-        let longText =  "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an al1most unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way. When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek"
+        let longText =  "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way. When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek"
         
         let sortedText = (1...500).map{"\($0)"}.joined(separator: ", ")
         
@@ -55,6 +61,9 @@ class FileTransferViewModel: ObservableObject {
     func onAppear(blePeripheral: BlePeripheral?) {
         registerNotifications(enabled: true)
         setup(blePeripheral: blePeripheral)
+        
+        // Debug
+        // blePeripheral?.listDirectory("/") { result in}
     }
     
     func onDissapear() {
@@ -73,7 +82,7 @@ class FileTransferViewModel: ObservableObject {
     // MARK: - Actions
     func readFile(filename: String) {
         startCommand()
-        readFile(filename: filename) { [weak self] result in
+        readFileCommand(filename: filename) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -90,15 +99,78 @@ class FileTransferViewModel: ObservableObject {
         }
     }
     
-    
     func writeFile(filename: String, data: Data) {
         startCommand()
-        writeFile(filename: filename, data: data) { [weak self] result in
+        writeFileCommand(filename: filename, data: data) { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success:
                     self.lastTransmit = TransmissionLog(type: .write(size: data.count))
+                    
+                case .failure(let error):
+                    self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
+                }
+                
+                self.endCommand()
+            }
+        }
+    }
+    
+
+    
+    func listDirectory(filename: String) {
+        let directory = FileTransferUtils.fileDirectory(filename: filename)
+        
+        startCommand()
+
+        listDirectoryCommand(directory: directory) { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let entries):
+                    self.lastTransmit = TransmissionLog(type: .listDirectory(numItems: entries?.count))
+                    
+                case .failure(let error):
+                    self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
+                }
+                
+                self.endCommand()
+            }
+        }
+    }
+    
+    func deleteFile(filename: String) {
+        startCommand()
+        
+        deleteFileCommand(filename: filename) { [weak self]  result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let success):
+                    self.lastTransmit = TransmissionLog(type: .delete(success: success))
+                    
+                case .failure(let error):
+                    self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
+                }
+                
+                self.endCommand()
+            }
+        }
+    }
+    
+    func makeDirectory(filename: String) {
+        startCommand()
+        
+        makeDirectoryCommand(directory: filename) { [weak self]  result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let success):
+                    self.lastTransmit = TransmissionLog(type: .makeDirectory(success: success))
                     
                 case .failure(let error):
                     self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
@@ -119,11 +191,10 @@ class FileTransferViewModel: ObservableObject {
         isTransmitting = false
     }
     
-    private func readFile(filename: String, completion: ((Result<Data, Error>) -> Void)?) {
-        
+    private func readFileCommand(filename: String, completion: ((Result<Data, Error>) -> Void)?) {
         print("start readFile \(filename)")
         blePeripheral?.readFile(filename: filename) { result in
-            if Config.isDebugEnabled {
+            if AppEnvironment.isDebug {
                 switch result {
                 case .success(let data):
                     print("readFile \(filename) success. Size: \(data.count)")
@@ -137,14 +208,10 @@ class FileTransferViewModel: ObservableObject {
         }
     }
     
-    private func writeFile(filename: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
-//        guard let fileURL = Bundle.main.url(forResource: "transfer_test", withExtension: "txt") else { print("Invalid file"); return }
-//        guard let data = try? Data(contentsOf: fileURL) else { print("Error loading file"); return  }
-
-    
+    private func writeFileCommand(filename: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
         print("start writeFile \(filename)")
         blePeripheral?.writeFile(data: data, filename: filename) { result in
-            if Config.isDebugEnabled {
+            if AppEnvironment.isDebug {
                 switch result {
                 case .success:
                     print("writeFile \(filename) success. Size: \(data.count)")
@@ -158,15 +225,50 @@ class FileTransferViewModel: ObservableObject {
         }
     }
     
-    func listDirectory(_ directory: String) {
+    private func deleteFileCommand(filename: String, completion: ((Result<Bool, Error>) -> Void)?) {
+        print("start deleteFile \(filename)")
+        blePeripheral?.deleteFile(filename: filename) { result in
+            if AppEnvironment.isDebug {
+                switch result {
+                case .success(let success):
+                    print("deleteFile \(filename) \(success ? "success":"failed")")
+                    
+                case .failure(let error):
+                    print("deleteFile  \(filename) error: \(error)")
+                }
+            }
+            
+            completion?(result)
+        }
+    }
+    
+    private func listDirectoryCommand(directory: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
+        print("start listDirectory \(directory)")
         blePeripheral?.listDirectory(directory) { result in
             switch result {
-            case .success:
-                print("listDirectory \(directory) success")
+            case .success(let entries):
+                print("listDirectory \(directory). \(entries != nil ? "Entries: \(entries!.count)" : "Directory does not exist")")
                 
             case .failure(let error):
                 print("listDirectory \(directory) error: \(error)")
             }
+            
+            completion?(result)
+        }
+    }
+    
+    private func makeDirectoryCommand(directory: String, completion: ((Result<Bool, Error>) -> Void)?) {
+        print("start makeDirectory \(directory)")
+        blePeripheral?.makeDirectory(directory) { result in
+            switch result {
+            case .success(let success):
+                print("makeDirectory \(directory) \(success ? "success":"failed")")
+                
+            case .failure(let error):
+                print("makeDirectory \(directory) error: \(error)")
+            }
+            
+            completion?(result)
         }
     }
     

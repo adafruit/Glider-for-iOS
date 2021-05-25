@@ -83,7 +83,7 @@ extension BlePeripheral {
             self.adafruitSetPeriod(timePeriod, serviceUuid: serviceUuid) { [weak self] _ in
                 guard let self = self else { return }
                 
-                if Config.isDebugEnabled {
+                if AppEnvironment.isDebug {
                     // Check period
                     self.adafruitPeriod(serviceUuid: serviceUuid) { period in
                         guard period != nil else { DLog("Error setting service period"); return }

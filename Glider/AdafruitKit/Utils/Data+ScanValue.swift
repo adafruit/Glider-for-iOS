@@ -11,7 +11,7 @@ import Foundation
 // MARK: - Data Scan
 extension Data {
     func scanValue<T>(start: Int, length: Int) -> T {
-        let subdata = self.subdata(in: start..<start+length)
+        let subdata = self.subdata(in: (self.startIndex + start)..<(self.startIndex + start + length))
         return subdata.withUnsafeBytes { $0.load(as: T.self) }
     }
 }

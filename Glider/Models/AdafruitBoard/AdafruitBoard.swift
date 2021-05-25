@@ -101,7 +101,7 @@ class AdafruitBoard {
         servicesGroup.notify(queue: DispatchQueue.main) { [unowned self] in
             DLog("setupServices finished")
             
-            if Config.isDebugEnabled {
+            if AppEnvironment.isDebug {
                 for service in services {
                     DLog(self.isEnabled(service: service) ? "\(service.debugName) reading enabled":"\(service.debugName) service not available")
                 }

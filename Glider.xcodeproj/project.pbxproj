@@ -41,11 +41,14 @@
 		A947FEA026543894007A5E5A /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7626543893007A5E5A /* LogHelper.swift */; };
 		A947FEA126543894007A5E5A /* Types+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7726543893007A5E5A /* Types+Data.swift */; };
 		A947FEA226543894007A5E5A /* Data+ScanValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7826543893007A5E5A /* Data+ScanValue.swift */; };
-		A947FEA326543894007A5E5A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7A26543893007A5E5A /* Config.swift */; };
 		A947FEA426543894007A5E5A /* GliderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7B26543893007A5E5A /* GliderApp.swift */; };
 		A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7C26543894007A5E5A /* AppDelegate.swift */; };
 		A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7E26543894007A5E5A /* AppEnvironment.swift */; };
 		A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FEA92654392F007A5E5A /* Assets.xcassets */; };
+		A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F225252659ED8400D3B2C6 /* FileChooserView.swift */; };
+		A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */; };
+		A9F2252A265BA80F00D3B2C6 /* FileTransferUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22529265BA80F00D3B2C6 /* FileTransferUtils.swift */; };
+		A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,11 +88,14 @@
 		A947FE7626543893007A5E5A /* LogHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogHelper.swift; sourceTree = "<group>"; };
 		A947FE7726543893007A5E5A /* Types+Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Types+Data.swift"; sourceTree = "<group>"; };
 		A947FE7826543893007A5E5A /* Data+ScanValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+ScanValue.swift"; sourceTree = "<group>"; };
-		A947FE7A26543893007A5E5A /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		A947FE7B26543893007A5E5A /* GliderApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderApp.swift; sourceTree = "<group>"; };
 		A947FE7C26543894007A5E5A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A947FE7E26543894007A5E5A /* AppEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		A947FEA92654392F007A5E5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A9F225252659ED8400D3B2C6 /* FileChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileChooserView.swift; sourceTree = "<group>"; };
+		A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileChooserViewModel.swift; sourceTree = "<group>"; };
+		A9F22529265BA80F00D3B2C6 /* FileTransferUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferUtils.swift; sourceTree = "<group>"; };
+		A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,8 +133,8 @@
 				A947FE5726543893007A5E5A /* ViewModels */,
 				A947FE5D26543893007A5E5A /* Models */,
 				A947FE7D26543894007A5E5A /* Utils */,
-				A947FE6526543893007A5E5A /* Resources */,
 				A947FE6726543893007A5E5A /* AdafruitKit */,
+				A947FE6526543893007A5E5A /* Resources */,
 				A947FEA92654392F007A5E5A /* Assets.xcassets */,
 				A947FE442654383A007A5E5A /* Info.plist */,
 				A947FE412654383A007A5E5A /* Preview Content */,
@@ -155,6 +161,8 @@
 				A947FE5626543893007A5E5A /* MainView.swift */,
 				A947FE5026543893007A5E5A /* AutoConnectView.swift */,
 				A947FE5526543893007A5E5A /* FileTransferView.swift */,
+				A947FE5826543893007A5E5A /* TodoView.swift */,
+				A9F225252659ED8400D3B2C6 /* FileChooserView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -180,6 +188,7 @@
 			children = (
 				A947FE5226543893007A5E5A /* View+If.swift */,
 				A947FE5326543893007A5E5A /* HideKeyboard.swift */,
+				A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -187,11 +196,11 @@
 		A947FE5726543893007A5E5A /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				A947FE5826543893007A5E5A /* TodoView.swift */,
 				A947FE5926543893007A5E5A /* RootViewModel.swift */,
 				A947FE5A26543893007A5E5A /* StartupViewModel.swift */,
 				A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */,
 				A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */,
+				A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -253,8 +262,8 @@
 		A947FE6926543893007A5E5A /* AdafruitSensors */ = {
 			isa = PBXGroup;
 			children = (
-				A947FE6A26543893007A5E5A /* BlePeripheral+AdafruitCommon.swift */,
 				A947FE6B26543893007A5E5A /* BlePeripheral+FileTransfer.swift */,
+				A947FE6A26543893007A5E5A /* BlePeripheral+AdafruitCommon.swift */,
 				A947FE6C26543893007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift */,
 			);
 			path = AdafruitSensors;
@@ -287,7 +296,7 @@
 		A947FE7926543893007A5E5A /* App */ = {
 			isa = PBXGroup;
 			children = (
-				A947FE7A26543893007A5E5A /* Config.swift */,
+				A947FE7E26543894007A5E5A /* AppEnvironment.swift */,
 				A947FE7B26543893007A5E5A /* GliderApp.swift */,
 				A947FE7C26543894007A5E5A /* AppDelegate.swift */,
 			);
@@ -297,7 +306,7 @@
 		A947FE7D26543894007A5E5A /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A947FE7E26543894007A5E5A /* AppEnvironment.swift */,
+				A9F22529265BA80F00D3B2C6 /* FileTransferUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -388,20 +397,23 @@
 				A947FE9926543894007A5E5A /* BlePeripheral.swift in Sources */,
 				A947FE9C26543894007A5E5A /* Data+LittleEndianTypes.swift in Sources */,
 				A947FE8426543894007A5E5A /* StartupView.swift in Sources */,
+				A9F2252A265BA80F00D3B2C6 /* FileTransferUtils.swift in Sources */,
 				A947FEA426543894007A5E5A /* GliderApp.swift in Sources */,
 				A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */,
 				A947FEA026543894007A5E5A /* LogHelper.swift in Sources */,
 				A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */,
 				A947FE8626543894007A5E5A /* View+If.swift in Sources */,
 				A947FEA126543894007A5E5A /* Types+Data.swift in Sources */,
+				A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */,
+				A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */,
 				A947FE8526543894007A5E5A /* AutoConnectView.swift in Sources */,
 				A947FE9A26543894007A5E5A /* BleManager.swift in Sources */,
+				A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */,
 				A947FE9E26543894007A5E5A /* Int+Bytes.swift in Sources */,
 				A947FEA226543894007A5E5A /* Data+ScanValue.swift in Sources */,
 				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
 				A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */,
 				A947FE9126543894007A5E5A /* AdafruitBoardsManager.swift in Sources */,
-				A947FEA326543894007A5E5A /* Config.swift in Sources */,
 				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
 				A947FE9F26543894007A5E5A /* CommandQueue.swift in Sources */,
 				A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */,
@@ -536,6 +548,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -545,7 +558,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -559,6 +572,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -568,7 +582,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

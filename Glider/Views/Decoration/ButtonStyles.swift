@@ -11,16 +11,18 @@ import SwiftUI
 // MARK: - PrimaryButtonStyle
 struct PrimaryButtonStyle: ButtonStyle {
     let paddingHorizontal: CGFloat = 12
+    var width: CGFloat? = nil
     var height: CGFloat = 40
     
     // To access the isEnabled property: https://stackoverflow.com/questions/59169436/swiftui-buttonstyle-how-to-check-if-button-is-disabled-or-enabled
     func makeBody(configuration: ButtonStyle.Configuration) -> some View {
-        PrimaryButton(configuration: configuration, paddingHorizontal: paddingHorizontal, height: height)
+        PrimaryButton(configuration: configuration, paddingHorizontal: paddingHorizontal, forcedWidth: width, height: height)
     }
 
     struct PrimaryButton: View {
         let configuration: ButtonStyle.Configuration
         let paddingHorizontal: CGFloat
+        let forcedWidth: CGFloat?
         let height: CGFloat
        
         @Environment(\.isEnabled) private var isEnabled: Bool
@@ -29,7 +31,11 @@ struct PrimaryButtonStyle: ButtonStyle {
                 .foregroundColor(Color.white)       // Animate foregroundColor: https://stackoverflow.com/questions/57832439/swiftui-animate-text-color-foregroundcolor
                 .colorMultiply(isEnabled ? (/*configuration.isPressed ? Color("button_primary_accent") :*/ Color("button_primary_text")) : Color.black)
                 .padding(.horizontal, paddingHorizontal)
-                .frame(height: height)
+                .ifelse(forcedWidth != nil, ifContent: {
+                    $0.frame(width: forcedWidth!, height: height)
+                }, elseContent: {
+                    $0.frame(height: height)
+                })
                 .contentShape(Rectangle())          // Add this to make the empty background clickable
                 .background(
                     RoundedRectangle(cornerRadius: 8)
