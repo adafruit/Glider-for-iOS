@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     @State private var isAutoConnectVisible = false
+//    @Environment(\.isKeyboardVisible) var isKeyboardVisible
     
     var body: some View {
         NavigationView {
@@ -30,9 +31,10 @@ struct MainView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())        // Use a single view also on iPad
-        .onTapGesture {
-            hideKeyboard()
-        }
+//        .gesture(TapGesture().onEnded{
+//            hideKeyboard()
+//        }, including: .none)
+
     }
 }
 
@@ -41,3 +43,4 @@ struct MainView_Previews: PreviewProvider {
         MainView()
     }
 }
+
