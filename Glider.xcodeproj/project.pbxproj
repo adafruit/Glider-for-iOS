@@ -23,7 +23,6 @@
 		A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */; };
 		A947FE8F26543894007A5E5A /* AutoConnectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */; };
 		A947FE9026543894007A5E5A /* AdafruitBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5F26543893007A5E5A /* AdafruitBoard.swift */; };
-		A947FE9126543894007A5E5A /* AdafruitBoardsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6026543893007A5E5A /* AdafruitBoardsManager.swift */; };
 		A947FE9226543894007A5E5A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
 		A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6326543893007A5E5A /* PeripheralList.swift */; };
 		A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */; };
@@ -70,7 +69,6 @@
 		A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferViewModel.swift; sourceTree = "<group>"; };
 		A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoConnectViewModel.swift; sourceTree = "<group>"; };
 		A947FE5F26543893007A5E5A /* AdafruitBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdafruitBoard.swift; sourceTree = "<group>"; };
-		A947FE6026543893007A5E5A /* AdafruitBoardsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdafruitBoardsManager.swift; sourceTree = "<group>"; };
 		A947FE6126543893007A5E5A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		A947FE6326543893007A5E5A /* PeripheralList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralList.swift; sourceTree = "<group>"; };
 		A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralAutoConnect.swift; sourceTree = "<group>"; };
@@ -219,7 +217,6 @@
 			isa = PBXGroup;
 			children = (
 				A947FE5F26543893007A5E5A /* AdafruitBoard.swift */,
-				A947FE6026543893007A5E5A /* AdafruitBoardsManager.swift */,
 			);
 			path = AdafruitBoard;
 			sourceTree = "<group>";
@@ -413,7 +410,6 @@
 				A947FEA226543894007A5E5A /* Data+ScanValue.swift in Sources */,
 				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
 				A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */,
-				A947FE9126543894007A5E5A /* AdafruitBoardsManager.swift in Sources */,
 				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
 				A947FE9F26543894007A5E5A /* CommandQueue.swift in Sources */,
 				A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */,

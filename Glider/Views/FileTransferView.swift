@@ -12,7 +12,7 @@ struct FileTransferView: View {
     private let helperButtonSize = CGSize(width: 40, height: 32)
     
     // Params
-    private let blePeripheral: BlePeripheral?
+    private let adafruitBoard: AdafruitBoard?
     
     // Data
     @Environment(\.presentationMode) var presentationMode
@@ -22,8 +22,8 @@ struct FileTransferView: View {
     @State private var isShowingFileChooser = false
     @State private var topViewsHeight: CGFloat = .zero
     
-    init(blePeripheral: BlePeripheral?) {
-        self.blePeripheral = blePeripheral
+    init(adafruitBoard: AdafruitBoard?) {
+        self.adafruitBoard = adafruitBoard
         //self.filename = model.fileNamePlaceholders.first!
     }
     
@@ -66,15 +66,15 @@ struct FileTransferView: View {
         //        .navigationBarTitleDisplayMode(.inline)
         .defaultBackground(hidesKeyboardOnTap: true)
         .sheet(isPresented: $isShowingFileChooser) {
-            FileChooserView(directory: $filename, blePeripheral: model.blePeripheral)
+            FileChooserView(directory: $filename, adafruitBoard: model.adafruitBoard)
         }
-        .onChange(of: model.blePeripheral) { blePeripheral in
-            if blePeripheral == nil {
+        .onChange(of: model.adafruitBoard) { adafruitBoard in
+            if adafruitBoard == nil {
                 self.presentationMode.wrappedValue.dismiss()
             }
         }
         .onAppear {
-            model.onAppear(blePeripheral: blePeripheral)
+            model.onAppear(adafruitBoard: adafruitBoard)
         }
         .onDisappear {
             model.onDissapear()
@@ -133,23 +133,6 @@ struct FileTransferView: View {
                             }
                             .buttonStyle(PrimaryButtonStyle(width: helperButtonSize.width, height: helperButtonSize.height))
                         }
-                        
-                        /*
-                        // Debug
-                        if AppEnvironment.isDebug {
-                            Spacer()
-                            
-                            Button("L") {
-                                model.listDirectory(filename: filename)
-                            }
-                            .buttonStyle(PrimaryButtonStyle(width: helperButtonSize.width, height: helperButtonSize.height))
-                            
-                            Button("M") {
-                                model.makeDirectory(filename: "/directory")
-                            }
-                            .buttonStyle(PrimaryButtonStyle(width: helperButtonSize.width, height: helperButtonSize.height))
-                            .padding(.bottom)
-                        }*/
                     }
                 }
             }
@@ -199,7 +182,6 @@ struct FileTransferView: View {
             }
         }
     }
-    
 }
 
 struct FileTransferView_Previews: PreviewProvider {
@@ -207,7 +189,7 @@ struct FileTransferView_Previews: PreviewProvider {
         
         NavigationView {
             ZStack {
-                FileTransferView(blePeripheral: nil)
+                FileTransferView(adafruitBoard: nil)
             }
             .defaultBackground()
         }

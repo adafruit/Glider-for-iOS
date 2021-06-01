@@ -140,8 +140,6 @@ extension BlePeripheral {
             objc_setAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferMakeDirectoryStatus, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
-
-
     
     // MARK: - Actions
     func adafruitFileTransferEnable(completion: ((Result<Void, Error>) -> Void)?) {
@@ -188,7 +186,7 @@ extension BlePeripheral {
     static let readDataHeaderLength = 16
     
     // MARK: - Commands
-    func readFile(filename: String, completion: ((Result<Data, Error>) -> Void)?) {
+    func readFile(path: String, completion: ((Result<Data, Error>) -> Void)?) {
         self.adafruitFileTransferReadStatus = FileTransferReadStatus(completion: completion)
         
         let mtu = self.maximumWriteValueLength(for: .withoutResponse)
@@ -196,10 +194,10 @@ extension BlePeripheral {
         let offset = 0
         let chunkSize = mtu - Self.readDataHeaderLength //self.maximumWriteValueLength(for: .withoutResponse)
         let data = ([UInt8]([0x10, 0x00])).data
-            + UInt16(filename.count).littleEndian.data
+            + UInt16(path.count).littleEndian.data
             + UInt32(offset).littleEndian.data
             + UInt32(chunkSize).littleEndian.data
-            + Data(filename.utf8)
+            + Data(path.utf8)
        
         sendCommand(data: data) { result in
             if case .failure(let error) = result {
@@ -216,7 +214,7 @@ extension BlePeripheral {
         sendCommand(data: data, completion: completion)
     }
     
-    func writeFile(data: Data, filename: String, completion: ((Result<Void, Error>) -> Void)?) {
+    func writeFile(path: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
         let fileStatus = FileTransferWriteStatus(data: data, completion: completion)
         self.adafruitFileTransferWriteStatus = fileStatus
 
@@ -224,10 +222,10 @@ extension BlePeripheral {
         let totalSize = fileStatus.data.count
         
         let data = ([UInt8]([0x20, 0x00])).data
-            + UInt16(filename.count).littleEndian.data
+            + UInt16(path.count).littleEndian.data
             + UInt32(offset).littleEndian.data
             + UInt32(totalSize).littleEndian.data
-            + Data(filename.utf8)
+            + Data(path.utf8)
        
         sendCommand(data: data) { result in
             if case .failure(let error) = result {
@@ -252,12 +250,12 @@ extension BlePeripheral {
         sendCommand(data: data, completion: completion)
     }
     
-    func deleteFile(filename: String, completion: ((Result<Bool, Error>) -> Void)?) {
+    func deleteFile(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
         self.adafruitFileTransferDeleteStatus = FileTransferDeleteStatus(completion: completion)
         
         let data = ([UInt8]([0x30, 0x00])).data
-            + UInt16(filename.count).littleEndian.data
-            + Data(filename.utf8)
+            + UInt16(path.count).littleEndian.data
+            + Data(path.utf8)
        
         sendCommand(data: data) { result in
             if case .failure(let error) = result {
@@ -266,12 +264,12 @@ extension BlePeripheral {
         }
     }
     
-    func listDirectory(_ directory: String, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
+    func listDirectory(path: String, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
         self.adafruitFileTransferListDirectoryStatus = FileTransferListDirectoryStatus(completion: completion)
                 
         let data = ([UInt8]([0x50, 0x00])).data
-            + UInt16(directory.count).littleEndian.data
-            + Data(directory.utf8)
+            + UInt16(path.count).littleEndian.data
+            + Data(path.utf8)
         
         sendCommand(data: data)  { result in
             if case .failure(let error) = result {
@@ -280,12 +278,12 @@ extension BlePeripheral {
         }
     }
     
-    func makeDirectory(_ directory: String, completion: ((Result<Bool, Error>) -> Void)?) {
+    func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
         self.adafruitFileTransferMakeDirectoryStatus = FileTransferMakeDirectoryStatus(completion: completion)
                 
         let data = ([UInt8]([0x40, 0x00])).data
-            + UInt16(directory.count).littleEndian.data
-            + Data(directory.utf8)
+            + UInt16(path.count).littleEndian.data
+            + Data(path.utf8)
         
         sendCommand(data: data)  { result in
             if case .failure(let error) = result {

@@ -28,6 +28,7 @@ class AutoConnectViewModel: ObservableObject {
         }
     }
     
+    @Published var adafruitBoard: AdafruitBoard? = nil
     @Published var selectedPeripheral: BlePeripheral? = nil
     @Published var detailText: String = "Starting..."
     @Published var numPeripheralsScanned = 0
@@ -170,18 +171,18 @@ class AutoConnectViewModel: ObservableObject {
         detailText = "Connected..."
 
         // Setup peripheral
-        AdafruitBoardsManager.shared.startBoard(connectedBlePeripheral: selectedPeripheral, services: [.filetransfer]) { [weak self] result in
+        adafruitBoard = AdafruitBoard(connectedBlePeripheral: selectedPeripheral, services: [.filetransfer]) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
-            case .success(let adafruitBoard):
+            case .success:
                 DLog("setupPeripheral finished")
-                
+
                 // Check if filetransfer was setup
-                guard adafruitBoard.isFileTransferEnabled else {
+                guard let adafruitBoard = self.adafruitBoard, adafruitBoard.isFileTransferEnabled else {
                     DLog("setupPeripheral fileTransfer not enabled")
                     self.detailText = "Error initializing FileTransfer"
-                    
+
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1)    {
                         self.disconnect(peripheral: selectedPeripheral)
                     }
