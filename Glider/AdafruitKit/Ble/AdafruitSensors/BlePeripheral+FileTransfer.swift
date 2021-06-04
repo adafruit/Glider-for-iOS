@@ -188,7 +188,7 @@ extension BlePeripheral {
     func readFile(path: String, completion: ((Result<Data, Error>) -> Void)?) {
         self.adafruitFileTransferReadStatus = FileTransferReadStatus(completion: completion)
         
-        let mtu = 513//self.maximumWriteValueLength(for: .withoutResponse)
+        let mtu = self.maximumWriteValueLength(for: .withoutResponse)
         
         let offset = 0
         let chunkSize = mtu - Self.readFileResponseHeaderSize
