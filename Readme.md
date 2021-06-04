@@ -1,6 +1,6 @@
 ## Introduction
 
-Swift API for [Adafruit CircytPhython BLE File Transfer protocol](https://github.com/adafruit/Adafruit_CircuitPython_BLE_File_Transfer)
+Swift API for [Adafruit CircuitPython BLE File Transfer protocol](https://github.com/adafruit/Adafruit_CircuitPython_BLE_File_Transfer)
 
 This BLE service is geared towards file transfer to and from a device running the service. A core part of the protocol is free space responses so that the server can be a memory limited device. The free space responses allow for small buffer sizes that won't be overwhelmed by the client.
 
