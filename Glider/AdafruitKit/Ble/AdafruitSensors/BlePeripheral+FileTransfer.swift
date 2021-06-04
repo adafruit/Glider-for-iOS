@@ -361,7 +361,7 @@ extension BlePeripheral {
             bytesProcessed = decodeListDirectory(data: data)
 
         default:
-            DLog("unknown command: \(command)")
+            DLog("Error: unknown command: \(HexUtils.hexDescription(bytes: [command], prefix: "0x")). Invalidating all received data...")
             bytesProcessed = Int.max        // Invalidate all received data
         }
 
@@ -414,8 +414,8 @@ extension BlePeripheral {
         let totalLenght: UInt32 = data.scanValue(start: 8, length: 4)
         let chunkSize: UInt32 = data.scanValue(start: 12, length: 4)
         
-        DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
         guard isStatusOk else {
+            DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
             completion?(.failure(FileTransferError.statusFailed))
             return Int.max      // invalidate all received data on error
         }
@@ -423,6 +423,7 @@ extension BlePeripheral {
         let packetSize = Self.readFileResponseHeaderSize + Int(chunkSize)
         guard data.count >= packetSize else { return 0 }        // The first chunk is still no available wait for it
 
+        DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
         let chunkData = data.subdata(in: Self.readFileResponseHeaderSize..<packetSize)
         self.adafruitFileTransferReadStatus!.data.append(chunkData)
 
@@ -503,7 +504,7 @@ extension BlePeripheral {
                     if pathLength > 0, let path = String(data: data[(data.startIndex + Self.listDirectoryResponseHeaderSize)..<(data.startIndex + Self.listDirectoryResponseHeaderSize + Int(pathLength))], encoding: .utf8) {
                         packetSize += Int(pathLength)        // chunk includes the variable length path, so add it
                         
-                        DLog("list: \(entryIndex+1)/\(entryCount) \(isDirectory ? "Directory":"File") size: \(fileSize) bytes path: /\(path)")
+                        DLog("list: \(entryIndex+1)/\(entryCount) \(isDirectory ? "directory":"file size: \(fileSize) bytes"), path: /\(path)")
                         let entry = DirectoryEntry(name: path, type: isDirectory ? .directory : .file(size: Int(fileSize)))
                         
                         // Add entry
