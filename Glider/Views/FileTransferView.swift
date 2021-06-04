@@ -70,6 +70,7 @@ struct FileTransferView: View {
         }
         .onChange(of: model.adafruitBoard) { adafruitBoard in
             if adafruitBoard == nil {
+                isShowingFileChooser = false
                 self.presentationMode.wrappedValue.dismiss()
             }
         }
