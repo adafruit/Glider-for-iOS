@@ -17,11 +17,15 @@ class RootViewModel: ObservableObject {
         case todo
     }
     
-    @Published var destination: Destination = AppEnvironment.isRunningTests ? .test : .main
+    @Published var destination: Destination = AppEnvironment.isRunningTests ? .test : .startup
     
     
     // MARK: - Actions
     func gotoMain() {
         destination = .main
+    }
+    
+    func gotoStartup() {
+        destination = .startup
     }
 }

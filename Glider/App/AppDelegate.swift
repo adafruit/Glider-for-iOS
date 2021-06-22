@@ -28,5 +28,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         UITableView.appearance().backgroundColor = UIColor.clear
         UITableView.appearance().separatorStyle = .none
         UITableViewCell.appearance().backgroundColor = .clear
+        
+        // Alerts
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .blue
     }
 }

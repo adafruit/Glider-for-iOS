@@ -13,10 +13,10 @@ class FileChooserViewModel: ObservableObject {
     @Published var directory = ""
     @Published var isTransmiting = false
 
-    private var adafruitBoard: AdafruitBoard?
+    private var fileTransferClient: FileTransferClient?
     
-    func setup(adafruitBoard: AdafruitBoard?, directory: String) {
-        self.adafruitBoard = adafruitBoard
+    func setup(fileTransferClient: FileTransferClient?, directory: String) {
+        self.fileTransferClient = fileTransferClient
         
         // Clean directory name
         let directoryName = FileTransferUtils.pathRemovingFilename(path: directory)
@@ -31,7 +31,7 @@ class FileChooserViewModel: ObservableObject {
         entries.removeAll()
         isTransmiting = true
         
-        adafruitBoard?.listDirectory(path: directory) { [weak self] result in
+        fileTransferClient?.listDirectory(path: directory) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -55,9 +55,11 @@ class FileChooserViewModel: ObservableObject {
     }
     
     func makeDirectory(path: String) {
-        print("makeDirectory: \(path)")
+        // Make sure that the path ends with the separator
+        let pathEndingWithSeparator = path.hasSuffix("/") ? path : path.appending("/")
+        print("makeDirectory: \(pathEndingWithSeparator)")
         isTransmiting = true
-        adafruitBoard?.makeDirectory(path: path) { [weak self] result in
+        fileTransferClient?.makeDirectory(path: pathEndingWithSeparator) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -97,7 +99,7 @@ class FileChooserViewModel: ObservableObject {
             print("delete: \(offset) - \(filename)")
 
             isTransmiting = true
-            adafruitBoard?.deleteFile(path: filename) { [weak self]  result in
+            fileTransferClient?.deleteFile(path: filename) { [weak self]  result in
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {

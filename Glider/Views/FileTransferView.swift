@@ -12,7 +12,7 @@ struct FileTransferView: View {
     private let helperButtonSize = CGSize(width: 40, height: 32)
     
     // Params
-    private let adafruitBoard: AdafruitBoard?
+    private let fileTransferClient: FileTransferClient?
     
     // Data
     @Environment(\.presentationMode) var presentationMode
@@ -22,8 +22,8 @@ struct FileTransferView: View {
     @State private var isShowingFileChooser = false
     @State private var topViewsHeight: CGFloat = .zero
     
-    init(adafruitBoard: AdafruitBoard?) {
-        self.adafruitBoard = adafruitBoard
+    init(fileTransferClient: FileTransferClient?) {
+        self.fileTransferClient = fileTransferClient
         //self.filename = model.fileNamePlaceholders.first!
     }
     
@@ -60,22 +60,22 @@ struct FileTransferView: View {
             ContentsView(model: model, fileContents: $fileContents, filename: $filename, helperButtonSize: helperButtonSize)
         }
         .accentColor(.gray)
-        .disabled(model.isTransmitting)
+        .disabled(model.transmissionProgress != nil)
         .padding()
         .navigationTitle("File Transfer")
         //        .navigationBarTitleDisplayMode(.inline)
         .defaultBackground(hidesKeyboardOnTap: true)
         .sheet(isPresented: $isShowingFileChooser) {
-            FileChooserView(directory: $filename, adafruitBoard: model.adafruitBoard)
+            FileChooserView(directory: $filename, fileTransferClient: model.fileTransferClient)
         }
-        .onChange(of: model.adafruitBoard) { adafruitBoard in
-            if adafruitBoard == nil {
+        .onChange(of: model.fileTransferClient) { fileTransferClient in
+            if fileTransferClient == nil {
                 isShowingFileChooser = false
                 self.presentationMode.wrappedValue.dismiss()
             }
         }
         .onAppear {
-            model.onAppear(adafruitBoard: adafruitBoard)
+            model.onAppear(fileTransferClient: fileTransferClient)
         }
         .onDisappear {
             model.onDissapear()
@@ -98,7 +98,7 @@ struct FileTransferView: View {
                     VStack {
                         TextEditor(text: $fileContents)
                             .cornerRadius(4)
-                            .if(model.isTransmitting) {
+                            .if(model.transmissionProgress != nil) {
                                 $0.colorMultiply(.gray)
                             }
                             .frame(minHeight: 0, maxHeight: .infinity)
@@ -108,18 +108,24 @@ struct FileTransferView: View {
                                     fileContents = String(data: data, encoding: .utf8) ?? ""
                                 }
                             }
-                        
-                        if let lastTransmit = model.lastTransmit {
-                            Text(lastTransmit.description)
-                                .foregroundColor(.white)
-                                .font(.caption)
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                                                
+                        Group {
+                            if let lastTransmit = model.lastTransmit {
+                                Text(lastTransmit.description)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                            }
+                            else if let progress = model.transmissionProgress, let totalBytes = progress.totalBytes {
+                                ProgressView(progress.description, value: Float(progress.transmittedBytes), total: Float(totalBytes))
+                                    .accentColor(Color.white)
+                            }
+                            else {
+                                Text("")
+                            }
                         }
-                        else {
-                            Text("")
-                        }
+                        .foregroundColor(.white)
+                        .font(.caption)
                     }
-                                        
+                    
                     VStack(spacing: 8) {
                         let fileContentPlaceholders = model.fileContentPlaceholders
                         
@@ -156,7 +162,7 @@ struct FileTransferView: View {
                     TextField("", text: $filename, onCommit:  {
                         hideKeyboard()
                     })
-                    .if(model.isTransmitting) {
+                    .if(model.transmissionProgress != nil) {
                         $0.colorMultiply(.gray)
                     }
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -190,7 +196,7 @@ struct FileTransferView_Previews: PreviewProvider {
         
         NavigationView {
             ZStack {
-                FileTransferView(adafruitBoard: nil)
+                FileTransferView(fileTransferClient: nil)
             }
             .defaultBackground()
         }
