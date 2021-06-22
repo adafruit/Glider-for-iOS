@@ -256,31 +256,26 @@ class BleManager: NSObject {
         }
     }
     
-    func reconnecToPeripherals(peripheralsData: [(identifier: UUID, advertisementData: [String: Any])], withServices services: [CBUUID], timeout: Double? = nil) -> Bool {
+    func reconnecToPeripherals(peripheralUUIDs identifiers: [UUID], withServices services: [CBUUID], timeout: Double? = nil) -> Bool {
         var reconnecting = false
         
-        let identifiers = peripheralsData.map({$0.identifier})
         let knownPeripherals = centralManager?.retrievePeripherals(withIdentifiers: identifiers)
         if let peripherals = knownPeripherals?.filter({identifiers.contains($0.identifier)}), !peripherals.isEmpty {
             for peripheral in peripherals {
-                if let peripheralData = peripheralsData.first(where: {$0.identifier == peripheral.identifier}) {
-                    discovered(peripheral: peripheral, advertisementData: peripheralData.advertisementData)
-                    if let blePeripheral = peripheralsFound[peripheral.identifier] {
-                        connect(to: blePeripheral, timeout: timeout)
-                        reconnecting = true
-                    }
+                discovered(peripheral: peripheral, advertisementData: nil)
+                if let blePeripheral = peripheralsFound[peripheral.identifier] {
+                    connect(to: blePeripheral, timeout: timeout)
+                    reconnecting = true
                 }
             }
         } else {
             let connectedPeripherals = centralManager?.retrieveConnectedPeripherals(withServices: services)
             if let peripherals = connectedPeripherals?.filter({identifiers.contains($0.identifier)}), !peripherals.isEmpty {
                 for peripheral in peripherals {
-                    if let peripheralData = peripheralsData.first(where: {$0.identifier == peripheral.identifier}) {
-                        discovered(peripheral: peripheral, advertisementData: peripheralData.advertisementData )
-                        if let blePeripheral = peripheralsFound[peripheral.identifier] {
-                            connect(to: blePeripheral, timeout: timeout)
-                            reconnecting = true
-                        }
+                    discovered(peripheral: peripheral, advertisementData: nil )
+                    if let blePeripheral = peripheralsFound[peripheral.identifier] {
+                        connect(to: blePeripheral, timeout: timeout)
+                        reconnecting = true
                     }
                 }
             }
@@ -312,6 +307,7 @@ class BleManager: NSObject {
         }
     }
 
+    
     // MARK: - Notifications
     func peripheral(from notification: Notification) -> BlePeripheral? {
         guard let uuid = notification.userInfo?[NotificationUserInfoKey.uuid.rawValue] as? UUID else { return nil }

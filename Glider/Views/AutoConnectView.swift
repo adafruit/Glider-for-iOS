@@ -13,7 +13,7 @@ struct AutoConnectView: View {
     
     var body: some View {
         
-        NavigationLink(destination: FileTransferView(adafruitBoard: model.adafruitBoard), tag: .fileTransfer, selection: $model.destination) { EmptyView() }
+        NavigationLink(destination: FileTransferView(fileTransferClient: AppState.shared.fileTransferClient), tag: .fileTransfer, selection: $model.destination) { EmptyView() }
         
         VStack {
             Spacer()

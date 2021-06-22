@@ -10,8 +10,20 @@ import Foundation
 class FileTransferViewModel: ObservableObject {
 
     // Published
-    @Published var adafruitBoard: AdafruitBoard?
-    @Published var isTransmitting = false
+    @Published var fileTransferClient: FileTransferClient?
+    
+    struct TransmissionProgress {
+        var description: String
+        var transmittedBytes: Int
+        var totalBytes: Int?
+        
+        init (description: String) {
+            self.description = description
+            transmittedBytes = 0
+        }
+    }
+    
+    @Published var transmissionProgress: TransmissionProgress?
     
     struct TransmissionLog: Equatable {
         enum TransmissionType: Equatable {
@@ -40,6 +52,7 @@ class FileTransferViewModel: ObservableObject {
     }
     @Published var lastTransmit: TransmissionLog? = nil
     
+    
     // Data
     private let bleManager = BleManager.shared
 
@@ -58,9 +71,9 @@ class FileTransferViewModel: ObservableObject {
     }()
     
     // MARK: - Setup
-    func onAppear(adafruitBoard: AdafruitBoard?) {
+    func onAppear(fileTransferClient: FileTransferClient?) {
         registerNotifications(enabled: true)
-        setup(adafruitBoard: adafruitBoard)
+        setup(fileTransferClient: fileTransferClient)
         
         // Debug
         // blePeripheral?.listDirectory("/") { result in}
@@ -70,18 +83,18 @@ class FileTransferViewModel: ObservableObject {
         registerNotifications(enabled: false)
     }
     
-    private func setup(adafruitBoard: AdafruitBoard?) {
-        guard let adafruitBoard = adafruitBoard else {
-            print("Error: undefined adafruitBoard")
+    private func setup(fileTransferClient: FileTransferClient?) {
+        guard let fileTransferClient = fileTransferClient else {
+            print("Error: undefined fileTransferClient")
             return
         }
         
-        self.adafruitBoard = adafruitBoard
+        self.fileTransferClient = fileTransferClient
     }
     
     // MARK: - Actions
     func readFile(filename: String) {
-        startCommand()
+        startCommand(description: "Reading \(filename)")
         readFileCommand(path: filename) { [weak self] result in
             guard let self = self else { return }
             
@@ -100,7 +113,7 @@ class FileTransferViewModel: ObservableObject {
     }
     
     func writeFile(filename: String, data: Data) {
-        startCommand()
+        startCommand(description: "Writing \(filename)")
         writeFileCommand(path: filename, data: data) { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
@@ -122,7 +135,7 @@ class FileTransferViewModel: ObservableObject {
     func listDirectory(filename: String) {
         let directory = FileTransferUtils.pathRemovingFilename(path: filename)
         
-        startCommand()
+        startCommand(description: "List directory")
 
         listDirectoryCommand(path: directory) { [weak self] result in
             guard let self = self else { return }
@@ -142,7 +155,7 @@ class FileTransferViewModel: ObservableObject {
     }
     
     func deleteFile(filename: String) {
-        startCommand()
+        startCommand(description: "Deleting \(filename)")
         
         deleteFileCommand(path: filename) { [weak self]  result in
             guard let self = self else { return }
@@ -162,7 +175,7 @@ class FileTransferViewModel: ObservableObject {
     }
     
     func makeDirectory(filename: String) {
-        startCommand()
+        startCommand(description: "Creating \(filename)")
         
         makeDirectoryCommand(path: filename) { [weak self]  result in
             guard let self = self else { return }
@@ -182,18 +195,25 @@ class FileTransferViewModel: ObservableObject {
     }
     
     // MARK: - Command Status
-    private func startCommand() {
-        isTransmitting = true
+    private func startCommand(description: String) {
+        transmissionProgress = TransmissionProgress(description: description)    // Start description with no progress 0 and undefined Total
         lastTransmit = nil
     }
     
     private func endCommand() {
-        isTransmitting = false
+        transmissionProgress = nil
     }
     
     private func readFileCommand(path: String, completion: ((Result<Data, Error>) -> Void)?) {
         print("start readFile \(path)")
-        adafruitBoard?.readFile(path: path) { result in
+        fileTransferClient?.readFile(path: path, progress: { [weak self] read, total in
+            print("reading progress: \( String(format: "%.1f%%", Float(read) * 100 / Float(total)) )")
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.transmissionProgress?.transmittedBytes = read
+                self.transmissionProgress?.totalBytes = total
+            }
+        }) { result in
             if AppEnvironment.isDebug {
                 switch result {
                 case .success(let data):
@@ -210,7 +230,14 @@ class FileTransferViewModel: ObservableObject {
     
     private func writeFileCommand(path: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
         print("start writeFile \(path)")
-        adafruitBoard?.writeFile(path: path, data: data) { result in
+        fileTransferClient?.writeFile(path: path, data: data, progress: { [weak self] written, total in
+            print("writing progress: \( String(format: "%.1f%%", Float(written) * 100 / Float(total)) )")
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.transmissionProgress?.transmittedBytes = written
+                self.transmissionProgress?.totalBytes = total
+            }
+        }) { result in
             if AppEnvironment.isDebug {
                 switch result {
                 case .success:
@@ -227,7 +254,7 @@ class FileTransferViewModel: ObservableObject {
     
     private func deleteFileCommand(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
         print("start deleteFile \(path)")
-        adafruitBoard?.deleteFile(path: path) { result in
+        fileTransferClient?.deleteFile(path: path) { result in
             if AppEnvironment.isDebug {
                 switch result {
                 case .success(let success):
@@ -244,7 +271,7 @@ class FileTransferViewModel: ObservableObject {
     
     private func listDirectoryCommand(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
         print("start listDirectory \(path)")
-        adafruitBoard?.listDirectory(path: path) { result in
+        fileTransferClient?.listDirectory(path: path) { result in
             switch result {
             case .success(let entries):
                 print("listDirectory \(path). \(entries != nil ? "Entries: \(entries!.count)" : "Directory does not exist")")
@@ -259,7 +286,7 @@ class FileTransferViewModel: ObservableObject {
     
     private func makeDirectoryCommand(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
         print("start makeDirectory \(path)")
-        adafruitBoard?.makeDirectory(path: path) { result in
+        fileTransferClient?.makeDirectory(path: path) { result in
             switch result {
             case .success(let success):
                 print("makeDirectory \(path) \(success ? "success":"failed")")
@@ -289,11 +316,11 @@ class FileTransferViewModel: ObservableObject {
         let peripheral = bleManager.peripheral(from: notification)
 
         let currentlyConnectedPeripheralsCount = bleManager.connectedPeripherals().count
-        guard let selectedPeripheral = adafruitBoard?.blePeripheral, selectedPeripheral.identifier == peripheral?.identifier || currentlyConnectedPeripheralsCount == 0 else {        // If selected peripheral is disconnected or if there are no peripherals connected (after a failed dfu update)
+        guard let selectedPeripheral = fileTransferClient?.blePeripheral, selectedPeripheral.identifier == peripheral?.identifier || currentlyConnectedPeripheralsCount == 0 else {        // If selected peripheral is disconnected or if there are no peripherals connected (after a failed dfu update)
             return
         }
 
         // Disconnect
-        adafruitBoard = nil
+        fileTransferClient = nil
     }
 }

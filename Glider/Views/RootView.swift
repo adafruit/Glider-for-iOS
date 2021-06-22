@@ -21,6 +21,7 @@ struct RootView: View {
                 TodoView()
             }
         }
+        .environmentObject(model)
    
     }
 }

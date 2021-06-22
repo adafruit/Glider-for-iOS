@@ -1,6 +1,6 @@
 //
-//  AdafruitBoard.swift
-//  BluefruitPlayground
+//  FileTransferClient.swift
+//  Glider
 //
 //  Created by Antonio García on 26/10/2019.
 //  Copyright © 2019 Adafruit. All rights reserved.
@@ -9,15 +9,11 @@
 import UIKit
 import CoreBluetooth
 
-/**
- Manages the sensors for a connected Adafruit Board
- 
- - Supported sensors:
- - FileTransfer
- 
- */
-class AdafruitBoard {
+
+class FileTransferClient {
     // Data structs
+    typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)
+    
     enum BoardError: Error {
         case errorBoardNotConnected
         case errorDiscoveringServices
@@ -41,10 +37,6 @@ class AdafruitBoard {
  
     // Data
     private(set) weak var blePeripheral: BlePeripheral?
-    /*
-    var model: BlePeripheral.AdafruitManufacturerData.BoardModel? {
-        return blePeripheral?.adafruitManufacturerData()?.boardModel
-    }*/
 
     // MARK: - Init
     /**
@@ -85,6 +77,7 @@ class AdafruitBoard {
             
             // Setup services
             let selectedServices = services != nil ? services! : BoardService.allCases   // If services is nil, select all services
+            
             self.setupServices(blePeripheral: blePeripheral, services: selectedServices, completion: completion)
         }
     }
@@ -106,10 +99,15 @@ class AdafruitBoard {
         }
         
         // Wait for all finished
-        servicesGroup.notify(queue: DispatchQueue.main) { [unowned self] in
+        servicesGroup.notify(queue: .main) { /*[weak self] in*/
             DLog("setupServices finished")
             
             if AppEnvironment.isDebug {
+                /*
+                guard let self = self else {
+                    DLog("Warning: FileTransferClient deallocated before finishing");
+                    return                    
+                }*/
                 for service in services {
                     DLog(self.isEnabled(service: service) ? "\(service.debugName) reading enabled":"\(service.debugName) service not available")
                 }
@@ -131,26 +129,34 @@ class AdafruitBoard {
     }
     
     // MARK: - File Transfer Commands
-    func readFile(path: String, completion: ((Result<Data, Error>) -> Void)?) {
-        blePeripheral?.readFile(path: path, completion: completion)
+    
+    /// Given a full path, returns the full contents of the file
+    func readFile(path: String, progress: ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+        blePeripheral?.readFile(path: path, progress: progress, completion: completion)
     }
 
-    func writeFile(path: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
-        blePeripheral?.writeFile(path: path, data: data, completion: completion)
+    ///  Writes the content to the given full path. If the file exists, it will be overwritten
+    func writeFile(path: String, data: Data, progress: ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+        blePeripheral?.writeFile(path: path, data: data, progress: progress, completion: completion)
     }
     
+    /// Deletes the file or directory at the given full path. Directories must be empty to be deleted
     func deleteFile(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
         blePeripheral?.deleteFile(path: path, completion: completion)
     }
 
+    /**
+     Creates a new directory at the given full path. If a parent directory does not exist, then it will also be created. If any name conflicts with an existing file, an error will be returned
+        - Parameter path: Full path. It should use a trailing slash.
+    */
     func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
         blePeripheral?.makeDirectory(path: path, completion: completion)
     }
 
+    /// Lists all of the contents in a directory given a full path. Returned paths are relative to the given path to reduce duplication
     func listDirectory(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
         blePeripheral?.listDirectory(path: path, completion: completion)
     }
-    
 }
 
 // MARK: - Custom Notifications
@@ -160,8 +166,8 @@ extension Notification.Name {
  }
 
 // MARK: - Equatable
-extension AdafruitBoard: Equatable {
-    static func ==(lhs: AdafruitBoard, rhs: AdafruitBoard) -> Bool {
+extension FileTransferClient: Equatable {
+    static func ==(lhs: FileTransferClient, rhs: FileTransferClient) -> Bool {
         return lhs.blePeripheral == rhs.blePeripheral
     }
 }
