@@ -39,30 +39,41 @@ struct FileChooserView: View {
                 List {
                     if !model.isRootDirectory {
                         Button(action: {
-                            let _ = print("TODO: Up directory")
+                            let path = FileTransferUtils.upPath(from: model.directory)
+                            let _ = print("Up directory: \(path)")
+                            $directory.wrappedValue = path
+                            model.listDirectory(directory: path)
+                            
                         }, label: {
                             ItemView(systemImageName: "arrow.up.doc", name: "..", size: nil)
-                                .listRowBackground(Color.clear)
                                 .foregroundColor(.white)
                         })
+                        .listRowBackground(Color.clear)
                     }
                     
                     ForEach(model.entries, id:\.name) { entry in
                         HStack {
-                            Button(action: {
-                                let _ = print("Selected: \(entry.name)")
-                                $directory.wrappedValue = FileTransferUtils.fileDirectory(filename: directory) + entry.name
-                                presentationMode.wrappedValue.dismiss()
-                                
-                            }, label: {
-                                switch entry.type {
-                                case .directory:
-                                    ItemView(systemImageName: "folder", name: entry.name, size: nil)
-                                    
-                                case .file(let size):
+                            switch entry.type {
+                            case .file(let size):
+                                Button(action: {
+                                    let _ = print("File: \(entry.name)")
+                                    $directory.wrappedValue = model.directory + entry.name
+                                    presentationMode.wrappedValue.dismiss()
+                                }, label: {
                                     ItemView(systemImageName: "doc", name: entry.name, size: size)
-                                }
-                            })
+                                })
+                                
+                            case .directory:
+                                Button(action: {
+                                    let _ = print("Directory: \(entry.name)")
+                                    let path = model.directory + entry.name + "/"
+                                    $directory.wrappedValue = path
+                                    model.listDirectory(directory: path)
+                                }, label: {
+                                    ItemView(systemImageName: "folder", name: entry.name, size: nil)
+                                })
+                                
+                            }
                         }
                     }
                     .onDelete(perform: model.delete)
@@ -106,7 +117,8 @@ struct FileChooserView: View {
         }
         .alert(isPresented: $showNewDirectoryDialog, TextFieldAlert(title: "New Directory", message: "Enter name for the new directory") { directoryName in
             if let directoryName = directoryName {
-                model.makeDirectory(directory: directoryName)
+                let path = model.directory + directoryName
+                model.makeDirectory(path: path)
             }
         })
     }

@@ -17,15 +17,21 @@ class FileChooserViewModel: ObservableObject {
     
     func setup(blePeripheral: BlePeripheral?, directory: String) {
         self.blePeripheral = blePeripheral
-        setDirectory(directory: directory)
+        
+        // Clean directory name
+        let directoryName = FileTransferUtils.pathRemovingFilename(path: directory)
+        self.directory = directoryName
+        
+        // List directory
+        listDirectory(directory: directoryName)
     }
     
-    func setDirectory(directory: String) {
-        let directoryName = FileTransferUtils.fileDirectory(filename: directory)
-        isRootDirectory = directoryName == "/"
+    func listDirectory(directory: String) {
+        isRootDirectory = directory == "/"
+        entries.removeAll()
         isTransmiting = true
         
-        blePeripheral?.listDirectory(directoryName) { [weak self] result in
+        blePeripheral?.listDirectory(directory) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -35,7 +41,7 @@ class FileChooserViewModel: ObservableObject {
                 case .success(let entries):
                     if let entries = entries {
                         self.setEntries(entries)
-                        self.directory = directoryName
+                        self.directory = directory
                     }
                     else {
                         print("listDirectory: nonexistent directory")
@@ -48,11 +54,10 @@ class FileChooserViewModel: ObservableObject {
         }
     }
     
-    func makeDirectory(directory: String) {
-        let fullName = self.directory + directory
-
+    func makeDirectory(path: String) {
+        print("makeDirectory: \(path)")
         isTransmiting = true
-        blePeripheral?.makeDirectory(fullName) { [weak self] result in
+        blePeripheral?.makeDirectory(path) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -60,11 +65,11 @@ class FileChooserViewModel: ObservableObject {
                 
                 switch result {
                 case .success(let success):
-                    print("makeDirectory \(fullName) success: \(success)")
-                    self.setDirectory(directory: self.directory)      // Force list again directory
+                    print("makeDirectory \(path) success: \(success)")
+                    self.listDirectory(directory: self.directory)      // Force list again directory
                     
                 case .failure(let error):
-                    print("makeDirectory \(fullName) error: \(error)")
+                    print("makeDirectory \(path) error: \(error)")
                 }
             }
         }
@@ -101,7 +106,7 @@ class FileChooserViewModel: ObservableObject {
                     switch result {
                     case .success(let success):
                         print("deleteFile \(filename) success: \(success)")
-                        self.setDirectory(directory: self.directory)      // Force list again directory
+                        self.listDirectory(directory: self.directory)      // Force list again directory
                         
                     case .failure(let error):
                         print("deleteFile \(filename) error: \(error)")

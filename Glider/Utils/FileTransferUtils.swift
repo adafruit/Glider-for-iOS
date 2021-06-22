@@ -8,11 +8,30 @@
 import Foundation
 
 struct FileTransferUtils {
-    static func fileDirectory(filename: String) -> String {
-        guard let filenameIndex = filename.lastIndex(of: "/") else {
-            return filename
+    static let pathSeparator: Character = "/"
+    
+    static func pathRemovingFilename(path: String) -> String {
+        guard let filenameIndex = path.lastIndex(of: Self.pathSeparator) else {
+            return path
         }
         
-        return String(filename[filename.startIndex...filenameIndex])
+        return String(path[path.startIndex...filenameIndex])
+    }
+    
+    static func upPath(from path: String) -> String {
+        
+        // Remove trailing separator if exists
+        let filenamePath: String
+        if path.last == Self.pathSeparator {
+            filenamePath = String(path.dropLast())
+        }
+        else {
+            filenamePath = path
+        }
+        
+        // Remove any filename
+        let pathWithoutFilename = FileTransferUtils.pathRemovingFilename(path: filenamePath)
+        return pathWithoutFilename
+        
     }
 }

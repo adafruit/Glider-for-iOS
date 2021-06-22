@@ -28,7 +28,11 @@ extension BlePeripheral {
         let name: String
         let type: EntryType
     }
+
     
+    private struct FileTransferReceivedData {
+        var data = Data()
+    }
  
     private struct FileTransferReadStatus {
         var data = Data()
@@ -64,6 +68,7 @@ extension BlePeripheral {
     // MARK: - Custom properties
     private struct CustomPropertiesKeys {
         static var adafruitFileTransferDataCharacteristic: CBCharacteristic?
+        //static var adafruitFileTransferReceivedData: FileTransferReceivedData?
         static var adafruitFileTransferReadStatus: FileTransferReadStatus?
         static var adafruitFileTransferWriteStatus: FileTransferWriteStatus?
         static var adafruitFileTransferDeleteStatus: FileTransferDeleteStatus?
@@ -71,6 +76,7 @@ extension BlePeripheral {
         static var adafruitFileTransferMakeDirectoryStatus: FileTransferMakeDirectoryStatus?
     }
 
+    
     private var adafruitFileTransferDataCharacteristic: CBCharacteristic? {
         get {
             return objc_getAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferDataCharacteristic) as? CBCharacteristic
@@ -80,6 +86,16 @@ extension BlePeripheral {
         }
     }
 
+    /*
+    private var adafruitFileTransferReceivedData: FileTransferReceivedData? {
+        get {
+            return objc_getAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferReceivedData) as? FileTransferReceivedData
+        }
+        set {
+            objc_setAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferReceivedData, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }*/
+    
     private var adafruitFileTransferReadStatus: FileTransferReadStatus? {
         get {
             return objc_getAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferReadStatus) as? FileTransferReadStatus
@@ -277,7 +293,7 @@ extension BlePeripheral {
             }
         }
     }
-    
+
     private func sendCommand(data: Data, completion: ((Result<Void, Error>) -> Void)?) {
         guard let adafruitFileTransferDataCharacteristic = adafruitFileTransferDataCharacteristic else {
             completion?(.failure(PeripheralAdafruitError.invalidCharacteristic))
@@ -298,6 +314,15 @@ extension BlePeripheral {
     private func receiveFileTransferData(response: Result<(Data, UUID), Error>) {
         switch response {
         case .success(let (data, _)):
+
+            /*
+            // Init received data
+            if self.adafruitFileTransferReceivedData == nil {
+                self.adafruitFileTransferReceivedData = FileTransferReceivedData(data: data)
+            }
+            else {
+                self.adafruitFileTransferReceivedData!.data.append(data)
+            }*/
             
             var remainingData: Data? = data
             while remainingData != nil && remainingData!.count > 0 {
@@ -310,7 +335,7 @@ extension BlePeripheral {
     }
     
     // TODO: return remaining data from each command
-    // Note: Take into accoutn that data can be a Data-slice
+    // Note: Take into account that data can be a Data-slice
     private func decodeResponseChunk(data: Data) -> Data? {
         guard let command = data.first else { DLog("Error: response invalid data"); return nil }
         
@@ -388,7 +413,10 @@ extension BlePeripheral {
             return
         }
 
-        let chunkData = data.subdata(in: Self.readDataHeaderLength..<Self.readDataHeaderLength + Int(chunkSize))
+        let packetSize = Self.readDataHeaderLength + Int(chunkSize)
+        guard data.count >= packetSize else { completion?(.failure(FileTransferError.invalidData)); return }
+
+        let chunkData = data.subdata(in: Self.readDataHeaderLength..<packetSize)
         self.adafruitFileTransferReadStatus!.data.append(chunkData)
         
         if offset + chunkSize < totalLenght {
