@@ -19,6 +19,9 @@ struct FileTransferUtils {
     }
     
     static func upPath(from path: String) -> String {
+        if path == "/" {
+            return path
+        }
         
         // Remove trailing separator if exists
         let filenamePath: String

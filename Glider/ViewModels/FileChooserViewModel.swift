@@ -39,12 +39,12 @@ class FileChooserViewModel: ObservableObject {
                 
                 switch result {
                 case .success(let entries):
+                    self.directory = directory
                     if let entries = entries {
                         self.setEntries(entries)
-                        self.directory = directory
                     }
                     else {
-                        print("listDirectory: nonexistent directory")
+                        print("listDirectory: empty directory")
                     }
                     
                 case .failure(let error):
