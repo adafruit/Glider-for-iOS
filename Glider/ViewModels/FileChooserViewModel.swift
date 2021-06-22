@@ -13,10 +13,10 @@ class FileChooserViewModel: ObservableObject {
     @Published var directory = ""
     @Published var isTransmiting = false
 
-    private var blePeripheral: BlePeripheral?
+    private var adafruitBoard: AdafruitBoard?
     
-    func setup(blePeripheral: BlePeripheral?, directory: String) {
-        self.blePeripheral = blePeripheral
+    func setup(adafruitBoard: AdafruitBoard?, directory: String) {
+        self.adafruitBoard = adafruitBoard
         
         // Clean directory name
         let directoryName = FileTransferUtils.pathRemovingFilename(path: directory)
@@ -31,7 +31,7 @@ class FileChooserViewModel: ObservableObject {
         entries.removeAll()
         isTransmiting = true
         
-        blePeripheral?.listDirectory(directory) { [weak self] result in
+        adafruitBoard?.listDirectory(path: directory) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -57,7 +57,7 @@ class FileChooserViewModel: ObservableObject {
     func makeDirectory(path: String) {
         print("makeDirectory: \(path)")
         isTransmiting = true
-        blePeripheral?.makeDirectory(path) { [weak self] result in
+        adafruitBoard?.makeDirectory(path: path) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -97,7 +97,7 @@ class FileChooserViewModel: ObservableObject {
             print("delete: \(offset) - \(filename)")
 
             isTransmiting = true
-            blePeripheral?.deleteFile(filename: filename) { [weak self]  result in
+            adafruitBoard?.deleteFile(path: filename) { [weak self]  result in
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
@@ -113,8 +113,6 @@ class FileChooserViewModel: ObservableObject {
                     }
                 }
             }
-            
-            
         }
     }
 }

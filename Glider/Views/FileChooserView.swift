@@ -13,7 +13,7 @@ struct FileChooserView: View {
     @State private var showNewDirectoryDialog = false
     
     @Binding var directory: String
-    var blePeripheral: BlePeripheral?
+    var adafruitBoard: AdafruitBoard?
     
     var body: some View {
         VStack {
@@ -113,7 +113,7 @@ struct FileChooserView: View {
         }
         .defaultBackground(hidesKeyboardOnTap: true)
         .onAppear {
-            model.setup(blePeripheral: blePeripheral, directory: directory)
+            model.setup(adafruitBoard: adafruitBoard, directory: directory)
         }
         .alert(isPresented: $showNewDirectoryDialog, TextFieldAlert(title: "New Directory", message: "Enter name for the new directory") { directoryName in
             if let directoryName = directoryName {
@@ -145,6 +145,6 @@ struct FileChooserView: View {
 
 struct DirectoryChooserView_Previews: PreviewProvider {
     static var previews: some View {
-        FileChooserView(directory: .constant("/"), blePeripheral: nil)
+        FileChooserView(directory: .constant("/"), adafruitBoard: nil)
     }
 }

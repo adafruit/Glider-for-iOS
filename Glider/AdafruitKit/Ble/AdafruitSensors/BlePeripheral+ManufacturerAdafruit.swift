@@ -23,6 +23,7 @@ extension BlePeripheral {
     }
     
     
+    /*
     // MARK: - Adafruit Specific Data
     struct AdafruitManufacturerData {
         // Types
@@ -118,4 +119,5 @@ extension BlePeripheral {
         
         return adafruitManufacturerData
     }
+ */
 }

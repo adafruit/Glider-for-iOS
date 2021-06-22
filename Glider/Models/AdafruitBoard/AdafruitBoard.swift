@@ -7,12 +7,10 @@
 //
 
 import UIKit
-
+import CoreBluetooth
 
 /**
  Manages the sensors for a connected Adafruit Board
- 
- Use setupPeripheral to bind it to a connected BlePeripheral. setupPeripheral verifies the that sensor firmware version is supported, sets the period for receving data and starts sending the recevied data to the delegate and the NotificationCenter
  
  - Supported sensors:
  - FileTransfer
@@ -40,27 +38,37 @@ class AdafruitBoard {
         case uuid = "uuid"
         case value = "value"
     }
-    
-    // Params - Delegates
  
     // Data
     private(set) weak var blePeripheral: BlePeripheral?
+    /*
     var model: BlePeripheral.AdafruitManufacturerData.BoardModel? {
         return blePeripheral?.adafruitManufacturerData()?.boardModel
-    }
+    }*/
 
-    
-    // MARK: - Setup
-    
+    // MARK: - Init
     /**
-     Setup the singleton to use a BlePeripheral
+     Init from CBPeripheral
      
      - parameters:
-     - blePeripheral: a *connected* BlePeripheral
+     - connectedCBPeripehral: a *connected* CBPeripheral
      - services: list of BoardServices that will be started. Use nil to select all the supported services
      - completion: completion handler
      */
-    func setupPeripheral(blePeripheral: BlePeripheral, services: [BoardService]? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
+    convenience init(connectedCBPeripheral peripheral: CBPeripheral, services: [BoardService]? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
+        let blePeripheral = BlePeripheral(peripheral: peripheral, advertisementData: nil, rssi: nil)
+        self.init(connectedBlePeripheral: blePeripheral, services: services, completion: completion)
+    }
+        
+    /**
+     Init from BlePeripheral
+     
+     - parameters:
+     - connectedBlePeripheral: a *connected* BlePeripheral
+     - services: list of BoardServices that will be started. Use nil to select all the supported services
+     - completion: completion handler
+     */
+    init(connectedBlePeripheral blePeripheral: BlePeripheral, services: [BoardService]? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
         
         DLog("Discovering services")
         let peripheralIdentifier = blePeripheral.identifier
@@ -76,7 +84,7 @@ class AdafruitBoard {
             }
             
             // Setup services
-            let selectedServices = /*Config.isDebugEnabled ? [.temperature] :*/ (services != nil ? services! : BoardService.allCases)   // If services is nil, select all services
+            let selectedServices = services != nil ? services! : BoardService.allCases   // If services is nil, select all services
             self.setupServices(blePeripheral: blePeripheral, services: selectedServices, completion: completion)
         }
     }
@@ -111,7 +119,6 @@ class AdafruitBoard {
         }
     }
 
-
     // MARK: - Sensor availability
     var isFileTransferEnabled: Bool {
         return blePeripheral?.adafruitFileTransferIsEnabled() ?? false
@@ -123,18 +130,38 @@ class AdafruitBoard {
         }
     }
     
+    // MARK: - File Transfer Commands
+    func readFile(path: String, completion: ((Result<Data, Error>) -> Void)?) {
+        blePeripheral?.readFile(path: path, completion: completion)
+    }
+
+    func writeFile(path: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
+        blePeripheral?.writeFile(path: path, data: data, completion: completion)
+    }
     
-    // MARK: - Receive Data
-   
+    func deleteFile(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
+        blePeripheral?.deleteFile(path: path, completion: completion)
+    }
+
+    func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
+        blePeripheral?.makeDirectory(path: path, completion: completion)
+    }
+
+    func listDirectory(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
+        blePeripheral?.listDirectory(path: path, completion: completion)
+    }
     
-    // MARK: - Send Commands
- 
 }
 
 // MARK: - Custom Notifications
 extension Notification.Name {
     private static let kNotificationsPrefix = Bundle.main.bundleIdentifier!
     static let willDiscoverServices = Notification.Name(kNotificationsPrefix+".willDiscoverServices")
-    
-//    static let didUpdateNeopixelLightSequence = Notification.Name(kNotificationsPrefix+".didUpdateNeopixelLightSequence")
  }
+
+// MARK: - Equatable
+extension AdafruitBoard: Equatable {
+    static func ==(lhs: AdafruitBoard, rhs: AdafruitBoard) -> Bool {
+        return lhs.blePeripheral == rhs.blePeripheral
+    }
+}
