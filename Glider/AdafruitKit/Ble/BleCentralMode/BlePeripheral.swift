@@ -433,7 +433,7 @@ class BlePeripheral: NSObject {
         if discoverAll || (serviceUuids != nil && serviceUuids!.count > 0) {
             peripheral.discoverServices(serviceUuids)
         } else {
-            // Everthing was already discovered
+            // Everything was already discovered
             finishedExecutingCommand(error: nil)
         }
     }

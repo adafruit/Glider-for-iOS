@@ -44,6 +44,7 @@
 		A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7C26543894007A5E5A /* AppDelegate.swift */; };
 		A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7E26543894007A5E5A /* AppEnvironment.swift */; };
 		A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FEA92654392F007A5E5A /* Assets.xcassets */; };
+		A9CCB9C1266A3CEE00E9FA28 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */; };
 		A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F225252659ED8400D3B2C6 /* FileChooserView.swift */; };
 		A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */; };
 		A9F2252A265BA80F00D3B2C6 /* FileTransferUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22529265BA80F00D3B2C6 /* FileTransferUtils.swift */; };
@@ -90,6 +91,7 @@
 		A947FE7C26543894007A5E5A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A947FE7E26543894007A5E5A /* AppEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		A947FEA92654392F007A5E5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleDataProcessingQueue.swift; sourceTree = "<group>"; };
 		A9F225252659ED8400D3B2C6 /* FileChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileChooserView.swift; sourceTree = "<group>"; };
 		A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileChooserViewModel.swift; sourceTree = "<group>"; };
 		A9F22529265BA80F00D3B2C6 /* FileTransferUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferUtils.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				A947FE6B26543893007A5E5A /* BlePeripheral+FileTransfer.swift */,
 				A947FE6A26543893007A5E5A /* BlePeripheral+AdafruitCommon.swift */,
 				A947FE6C26543893007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift */,
+				A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */,
 			);
 			path = AdafruitSensors;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A947FE9626543894007A5E5A /* BlePeripheral+AdafruitCommon.swift in Sources */,
+				A9CCB9C1266A3CEE00E9FA28 /* BleDataProcessingQueue.swift in Sources */,
 				A947FE8F26543894007A5E5A /* AutoConnectViewModel.swift in Sources */,
 				A947FE9826543894007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift in Sources */,
 				A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */,

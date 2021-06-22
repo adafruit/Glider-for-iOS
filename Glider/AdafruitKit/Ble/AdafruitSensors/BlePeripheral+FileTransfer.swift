@@ -8,15 +8,22 @@
 import Foundation
 import CoreBluetooth
 
+// TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconect events or/and have internal state
 extension BlePeripheral {
     // Config
     private static let kDebugLog = true
- 
+    
     // Constants
     static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
     private static let kFileTransferVersionCharacteristicUUID = CBUUID(string: "ADAF0100-4669-6C65-5472-616E73666572")
     private static let kFileTransferDataCharacteristicUUID = CBUUID(string: "ADAF0200-4669-6C65-5472-616E73666572")
     private static let kAdafruitFileTransferVersion = 1
+
+    private static let readFileResponseHeaderSize = 16      // (1+1+2+4+4+4+variable)
+    private static let writeFileResponseHeaderSize = 12     // (1+1+2+4+4)
+    private static let deleteFileResponseHeaderSize = 2     // (1+1)
+    private static let makeDirectoryResponseHeaderSize = 2  // (1+1)
+    private static let listDirectoryResponseHeaderSize = 20 // (1+1+2+4+4+4+4+variable)
 
     // Data types
     struct DirectoryEntry {
@@ -29,11 +36,6 @@ extension BlePeripheral {
         let type: EntryType
     }
 
-    
-    private struct FileTransferReceivedData {
-        var data = Data()
-    }
- 
     private struct FileTransferReadStatus {
         var data = Data()
         var completion: ((Result<Data, Error>) -> Void)?
@@ -68,7 +70,7 @@ extension BlePeripheral {
     // MARK: - Custom properties
     private struct CustomPropertiesKeys {
         static var adafruitFileTransferDataCharacteristic: CBCharacteristic?
-        //static var adafruitFileTransferReceivedData: FileTransferReceivedData?
+        static var adafruitFileTransferDataProcessingQueue: DataProcessingQueue?
         static var adafruitFileTransferReadStatus: FileTransferReadStatus?
         static var adafruitFileTransferWriteStatus: FileTransferWriteStatus?
         static var adafruitFileTransferDeleteStatus: FileTransferDeleteStatus?
@@ -85,16 +87,15 @@ extension BlePeripheral {
             objc_setAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferDataCharacteristic, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
-
-    /*
-    private var adafruitFileTransferReceivedData: FileTransferReceivedData? {
+    
+    private var adafruitFileTransferDataProcessingQueue: DataProcessingQueue? {
         get {
-            return objc_getAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferReceivedData) as? FileTransferReceivedData
+            return objc_getAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferDataProcessingQueue) as? DataProcessingQueue
         }
         set {
-            objc_setAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferReceivedData, newValue, .OBJC_ASSOCIATION_RETAIN)
+            objc_setAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferDataProcessingQueue, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
-    }*/
+    }
     
     private var adafruitFileTransferReadStatus: FileTransferReadStatus? {
         get {
@@ -183,8 +184,6 @@ extension BlePeripheral {
         adafruitFileTransferDataCharacteristic = nil
     }
     
-    static let readDataHeaderLength = 16
-    
     // MARK: - Commands
     func readFile(path: String, completion: ((Result<Data, Error>) -> Void)?) {
         self.adafruitFileTransferReadStatus = FileTransferReadStatus(completion: completion)
@@ -192,7 +191,7 @@ extension BlePeripheral {
         let mtu = self.maximumWriteValueLength(for: .withoutResponse)
         
         let offset = 0
-        let chunkSize = mtu - Self.readDataHeaderLength //self.maximumWriteValueLength(for: .withoutResponse)
+        let chunkSize = mtu - Self.readFileResponseHeaderSize
         let data = ([UInt8]([0x10, 0x00])).data
             + UInt16(path.count).littleEndian.data
             + UInt32(offset).littleEndian.data
@@ -245,8 +244,8 @@ extension BlePeripheral {
             + UInt32(chunkSize).littleEndian.data
             + chunkData
        
-        DLog("\twrite chunk at offset \(offset) chunkSize: \(chunkSize). message size: \(data.count) mtu: \(self.maximumWriteValueLength(for: .withoutResponse))")
-        //DLog("\t\t\(String(data: chunkData, encoding: .utf8))")
+        DLog("write chunk at offset \(offset) chunkSize: \(chunkSize). message size: \(data.count). mtu: \(self.maximumWriteValueLength(for: .withoutResponse))")
+        //DLog("\t\(String(data: chunkData, encoding: .utf8))")
         sendCommand(data: data, completion: completion)
     }
     
@@ -311,61 +310,69 @@ extension BlePeripheral {
     // MARK: - Receive Data
     private func receiveFileTransferData(response: Result<(Data, UUID), Error>) {
         switch response {
-        case .success(let (data, _)):
+        case .success(let (receivedData, peripheralIdentifier)):
 
-            /*
             // Init received data
-            if self.adafruitFileTransferReceivedData == nil {
-                self.adafruitFileTransferReceivedData = FileTransferReceivedData(data: data)
+            if adafruitFileTransferDataProcessingQueue == nil {
+                adafruitFileTransferDataProcessingQueue = DataProcessingQueue(uuid: peripheralIdentifier)
             }
-            else {
-                self.adafruitFileTransferReceivedData!.data.append(data)
-            }*/
             
+            processDataQueue(receivedData: receivedData)
+            
+            /*
             var remainingData: Data? = data
             while remainingData != nil && remainingData!.count > 0 {
                 remainingData = decodeResponseChunk(data: remainingData!)
-            }
+            }*/
                                 
         case .failure(let error):
             DLog("receiveFileTransferData error: \(error)")
         }
     }
     
-    // TODO: return remaining data from each command
+    private func processDataQueue(receivedData: Data?) {
+        guard let adafruitFileTransferDataProcessingQueue = adafruitFileTransferDataProcessingQueue else { return }
+        
+        adafruitFileTransferDataProcessingQueue.processQueue(receivedData: receivedData) { remainingData in
+            return decodeResponseChunk(data: remainingData)
+        }
+    }
+    
     // Note: Take into account that data can be a Data-slice
-    private func decodeResponseChunk(data: Data) -> Data? {
-        guard let command = data.first else { DLog("Error: response invalid data"); return nil }
+    private func decodeResponseChunk(data: Data) -> Int {       // Returns number of bytes processed (they will need to be discarded from the queue)
+        var bytesProcessed =  0
+        guard let command = data.first else { DLog("Error: response invalid data"); return bytesProcessed }
         
         //DLog("received command: \(command)")
         switch command {
         case 0x11:
-            decodeReadFile(data: data)
+            bytesProcessed = decodeReadFile(data: data)
 
         case 0x21:
-            decodeWriteFile(data: data)
+            bytesProcessed = decodeWriteFile(data: data)
 
         case 0x31:
-            decodeDeleteFile(data: data)
+            bytesProcessed = decodeDeleteFile(data: data)
 
         case 0x41:
-            decodeMakeDirectory(data: data)
+            bytesProcessed = decodeMakeDirectory(data: data)
 
         case 0x51:
-            return decodeListDirectory(data: data)
+            bytesProcessed = decodeListDirectory(data: data)
 
         default:
-            DLog("unknown command: \(command)")
+            DLog("Error: unknown command: \(HexUtils.hexDescription(bytes: [command], prefix: "0x")). Invalidating all received data...")
+            bytesProcessed = Int.max        // Invalidate all received data
         }
 
-        return nil
+        return bytesProcessed
     }
 
-    private func decodeWriteFile(data: Data) {
-        guard let adafruitFileTransferWriteStatus = adafruitFileTransferWriteStatus else { DLog("Error: invalid internal status"); return }
+    private func decodeWriteFile(data: Data) -> Int {
+        guard let adafruitFileTransferWriteStatus = adafruitFileTransferWriteStatus else { DLog("Error: invalid internal status"); return 0 }
         let completion = adafruitFileTransferWriteStatus.completion
         
-        guard data.count >= 12 else { completion?(.failure(FileTransferError.invalidData)); return }
+        guard data.count >= Self.writeFileResponseHeaderSize else {  return 0 }     // Header has not been fully received yet
         
         let status = data[1]
         let isStatusOk = status == 0x01
@@ -373,10 +380,10 @@ extension BlePeripheral {
         let offset: UInt32 = data.scanValue(start: 4, length: 4)
         let freeSpace: UInt32 = data.scanValue(start: 8, length: 4)
 
-        DLog("\twrite \(isStatusOk ? "ok":"error") at offset: \(offset) free space: \(freeSpace)")
+        DLog("write \(isStatusOk ? "ok":"error") at offset: \(offset). free space: \(freeSpace)")
         guard isStatusOk else {
             completion?(.failure(FileTransferError.statusFailed))
-            return
+            return Int.max      // invalidate all received data on error
         }
         
         if offset >= adafruitFileTransferWriteStatus.data.count  {
@@ -390,13 +397,15 @@ extension BlePeripheral {
                 }
             }
         }
+        
+        return Self.writeFileResponseHeaderSize       // Return processed bytes
     }
     
-    private func decodeReadFile(data: Data) {
-        guard let adafruitFileTransferReadStatus = adafruitFileTransferReadStatus else { DLog("Error: invalid internal status"); return }
+    private func decodeReadFile(data: Data) -> Int {        // Returns number of bytes processed
+        guard let adafruitFileTransferReadStatus = adafruitFileTransferReadStatus else { DLog("Error: invalid internal status"); return 0 }
         let completion = adafruitFileTransferReadStatus.completion
         
-        guard data.count > 3 else { completion?(.failure(FileTransferError.invalidData)); return }
+        guard data.count >= Self.readFileResponseHeaderSize else { return 0 }        // Header has not been fully received yet
 
         let status = data[1]
         let isStatusOk = status == 0x01
@@ -405,21 +414,22 @@ extension BlePeripheral {
         let totalLenght: UInt32 = data.scanValue(start: 8, length: 4)
         let chunkSize: UInt32 = data.scanValue(start: 12, length: 4)
         
-        DLog("\tread \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
         guard isStatusOk else {
+            DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
             completion?(.failure(FileTransferError.statusFailed))
-            return
+            return Int.max      // invalidate all received data on error
         }
 
-        let packetSize = Self.readDataHeaderLength + Int(chunkSize)
-        guard data.count >= packetSize else { completion?(.failure(FileTransferError.invalidData)); return }
+        let packetSize = Self.readFileResponseHeaderSize + Int(chunkSize)
+        guard data.count >= packetSize else { return 0 }        // The first chunk is still no available wait for it
 
-        let chunkData = data.subdata(in: Self.readDataHeaderLength..<packetSize)
+        DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
+        let chunkData = data.subdata(in: Self.readFileResponseHeaderSize..<packetSize)
         self.adafruitFileTransferReadStatus!.data.append(chunkData)
-        
+
         if offset + chunkSize < totalLenght {
             let mtu = self.maximumWriteValueLength(for: .withoutResponse)
-            let maxChunkLength = mtu - Self.readDataHeaderLength
+            let maxChunkLength = mtu - Self.readFileResponseHeaderSize
             readFileChunk(offset: offset + chunkSize, chunkSize: UInt32(maxChunkLength)) { result in
                 if case .failure(let error) = result {
                     completion?(.failure(error))
@@ -431,28 +441,45 @@ extension BlePeripheral {
             self.adafruitFileTransferReadStatus = nil
             completion?(.success(fileData))
         }
+        
+        return packetSize       // Return processed bytes
     }
     
-    private func decodeDeleteFile(data: Data) {
-        guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else { DLog("Error: invalid internal status"); return }
+    private func decodeDeleteFile(data: Data) -> Int {
+        guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else { DLog("Error: invalid internal status"); return 0 }
         let completion = adafruitFileTransferDeleteStatus.completion
 
-        guard data.count >= 1 else { completion?(.failure(FileTransferError.invalidData)); return }
+        guard data.count >= Self.deleteFileResponseHeaderSize else { return 0 }      // Header has not been fully received yet
 
         let status = data[1]
         let isDeleted = status == 0x01
         
         completion?(.success(isDeleted))
+        return Self.deleteFileResponseHeaderSize        // Return processed bytes
     }
     
-    private func decodeListDirectory(data: Data) -> Data? {
-        guard let adafruitFileTransferListDirectoryStatus = adafruitFileTransferListDirectoryStatus else { DLog("Error: invalid internal status"); return nil }
-        let completion = adafruitFileTransferListDirectoryStatus.completion
-        var chunkSize = 20      // Chunk size processed (can be less that data.count if several chunks are included in the data)
+    private func decodeMakeDirectory(data: Data) -> Int {
+        guard let adafruitFileTransferMakeDirectoryStatus = adafruitFileTransferMakeDirectoryStatus else { DLog("Error: invalid internal status"); return 0 }
+        let completion = adafruitFileTransferMakeDirectoryStatus.completion
+
+        guard data.count >= Self.makeDirectoryResponseHeaderSize else { return 0 }      // Header has not been fully received yet
+
+        let status = data[1]
+        let isCreated = status == 0x01
         
-        guard data.count > 1 else { completion?(.failure(FileTransferError.invalidData)); return nil }
+        completion?(.success(isCreated))
+        return Self.deleteFileResponseHeaderSize // Return processed bytes
+    }
+    
+    private func decodeListDirectory(data: Data) -> Int {
+        guard let adafruitFileTransferListDirectoryStatus = adafruitFileTransferListDirectoryStatus else { DLog("Error: invalid internal status"); return 0 }
+        let completion = adafruitFileTransferListDirectoryStatus.completion
+        
+        guard data.count >= Self.listDirectoryResponseHeaderSize else { return 0 }       // Header has not been fully received yet
+        var packetSize = Self.listDirectoryResponseHeaderSize      // Chunk size processed (can be less that data.count if several chunks are included in the data)
+        
         let directoryExists = data[data.startIndex + 1] == 0x1
-        if directoryExists, data.count >= 20 {
+        if directoryExists, data.count >= Self.listDirectoryResponseHeaderSize {
             let entryCount: UInt32 = data.scanValue(start: 8, length: 4)
             if entryCount == 0  {             // Empty directory
                 self.adafruitFileTransferListDirectoryStatus = nil
@@ -472,10 +499,12 @@ extension BlePeripheral {
                     let isDirectory = flags & 0x1 == 1
                     let fileSize: UInt32 = data.scanValue(start: 16, length: 4)        // Ignore for directories
                     
-                    if pathLength > 0, let path = String(data: data[(data.startIndex + 20)..<(data.startIndex + 20 + Int(pathLength))], encoding: .utf8) {
-                        chunkSize += Int(pathLength)        // chunk includes the variable length path, so add it
+                    guard data.count >= Self.listDirectoryResponseHeaderSize + Int(pathLength) else { return 0 } // Path is still no available wait for it
+                    
+                    if pathLength > 0, let path = String(data: data[(data.startIndex + Self.listDirectoryResponseHeaderSize)..<(data.startIndex + Self.listDirectoryResponseHeaderSize + Int(pathLength))], encoding: .utf8) {
+                        packetSize += Int(pathLength)        // chunk includes the variable length path, so add it
                         
-                        DLog("list: \(entryIndex+1)/\(entryCount) \(isDirectory ? "Directory":"File") size: \(fileSize) bytes path: /\(path)")
+                        DLog("list: \(entryIndex+1)/\(entryCount) \(isDirectory ? "directory":"file size: \(fileSize) bytes"), path: /\(path)")
                         let entry = DirectoryEntry(name: path, type: isDirectory ? .directory : .file(size: Int(fileSize)))
                         
                         // Add entry
@@ -494,18 +523,6 @@ extension BlePeripheral {
             completion?(.success(nil))      // nil means directory does not exist
         }
         
-        return data[(data.startIndex + chunkSize)..<(data.startIndex + data.count)]
-    }
-    
-    private func decodeMakeDirectory(data: Data) {
-        guard let adafruitFileTransferMakeDirectoryStatus = adafruitFileTransferMakeDirectoryStatus else { DLog("Error: invalid internal status"); return }
-        let completion = adafruitFileTransferMakeDirectoryStatus.completion
-
-        guard data.count >= 1 else { completion?(.failure(FileTransferError.invalidData)); return }
-
-        let status = data[1]
-        let isCreated = status == 0x01
-        
-        completion?(.success(isCreated))
+        return packetSize
     }
 }
