@@ -10,9 +10,6 @@ import CoreBluetooth
 
 // TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconect events or/and have internal state
 extension BlePeripheral {
-    // Config
-    private static let kDebugLog = true
-    
     // Constants
     static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
     private static let kFileTransferVersionCharacteristicUUID = CBUUID(string: "ADAF0100-4669-6C65-5472-616E73666572")
@@ -38,11 +35,13 @@ extension BlePeripheral {
 
     private struct FileTransferReadStatus {
         var data = Data()
+        var progress: FileTransferClient.ProgressHandler?
         var completion: ((Result<Data, Error>) -> Void)?
     }
     
     private struct FileTransferWriteStatus {
         var data: Data
+        var progress: FileTransferClient.ProgressHandler?
         var completion: ((Result<Void, Error>) -> Void)?
     }
 
@@ -185,8 +184,8 @@ extension BlePeripheral {
     }
     
     // MARK: - Commands
-    func readFile(path: String, completion: ((Result<Data, Error>) -> Void)?) {
-        self.adafruitFileTransferReadStatus = FileTransferReadStatus(completion: completion)
+    func readFile(path: String, progress: FileTransferClient.ProgressHandler?, completion: ((Result<Data, Error>) -> Void)?) {
+        self.adafruitFileTransferReadStatus = FileTransferReadStatus(progress: progress, completion: completion)
         
         let mtu = self.maximumWriteValueLength(for: .withoutResponse)
         
@@ -213,8 +212,8 @@ extension BlePeripheral {
         sendCommand(data: data, completion: completion)
     }
     
-    func writeFile(path: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
-        let fileStatus = FileTransferWriteStatus(data: data, completion: completion)
+    func writeFile(path: String, data: Data, progress: FileTransferClient.ProgressHandler?, completion: ((Result<Void, Error>) -> Void)?) {
+        let fileStatus = FileTransferWriteStatus(data: data, progress: progress, completion: completion)
         self.adafruitFileTransferWriteStatus = fileStatus
 
         let offset = 0
@@ -338,8 +337,9 @@ extension BlePeripheral {
         }
     }
     
+    /// Returns number of bytes processed (they will need to be discarded from the queue)
     // Note: Take into account that data can be a Data-slice
-    private func decodeResponseChunk(data: Data) -> Int {       // Returns number of bytes processed (they will need to be discarded from the queue)
+    private func decodeResponseChunk(data: Data) -> Int {
         var bytesProcessed =  0
         guard let command = data.first else { DLog("Error: response invalid data"); return bytesProcessed }
         
@@ -386,6 +386,8 @@ extension BlePeripheral {
             return Int.max      // invalidate all received data on error
         }
         
+        adafruitFileTransferWriteStatus.progress?(Int(offset), Int(adafruitFileTransferWriteStatus.data.count))
+        
         if offset >= adafruitFileTransferWriteStatus.data.count  {
             self.adafruitFileTransferWriteStatus = nil
             completion?(.success(()))
@@ -401,7 +403,8 @@ extension BlePeripheral {
         return Self.writeFileResponseHeaderSize       // Return processed bytes
     }
     
-    private func decodeReadFile(data: Data) -> Int {        // Returns number of bytes processed
+    /// Returns number of bytes processed
+    private func decodeReadFile(data: Data) -> Int {
         guard let adafruitFileTransferReadStatus = adafruitFileTransferReadStatus else { DLog("Error: invalid internal status"); return 0 }
         let completion = adafruitFileTransferReadStatus.completion
         
@@ -426,6 +429,8 @@ extension BlePeripheral {
         DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
         let chunkData = data.subdata(in: Self.readFileResponseHeaderSize..<packetSize)
         self.adafruitFileTransferReadStatus!.data.append(chunkData)
+        
+        adafruitFileTransferReadStatus.progress?(Int(offset + chunkSize), Int(totalLenght))
 
         if offset + chunkSize < totalLenght {
             let mtu = self.maximumWriteValueLength(for: .withoutResponse)

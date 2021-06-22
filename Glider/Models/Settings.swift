@@ -11,26 +11,40 @@ import Foundation
 class Settings {
     // Constants
     private static let autoconnectPeripheralIdentifierKey = "autoconnectPeripheralIdentifier"
-    private static let autoconnectPeripheralAdvertisementDataKey = "autoconnectPeripheralAdvertisementData"
+    //private static let autoconnectPeripheralAdvertisementDataKey = "autoconnectPeripheralAdvertisementData"
 
     // MARK: - AutoConnect
+    static var autoconnectPeripheralUUID: UUID? {
+        get {
+            guard let uuidString = UserDefaults.standard.string(forKey: Self.autoconnectPeripheralIdentifierKey), let uuid = UUID(uuidString: uuidString) else { return nil}
+            return uuid
+        }
+        
+        set {
+            let uuidString = newValue?.uuidString
+            DLog("Set autoconnect peripheral: \(uuidString ?? "<nil>")")
+            UserDefaults.standard.set(uuidString, forKey: Self.autoconnectPeripheralIdentifierKey)
+        }
+    }
+    /*
     static var autoconnectPeripheral: (identifier: UUID, advertisementData: [String: Any])? {
         get {
-            guard let uuidString = UserDefaults.standard.string(forKey: Settings.autoconnectPeripheralIdentifierKey), let uuid = UUID(uuidString: uuidString), let advertisementData = UserDefaults.standard.dictionary(forKey: Settings.autoconnectPeripheralAdvertisementDataKey) else { return nil}
+            guard let uuidString = UserDefaults.standard.string(forKey: Self.autoconnectPeripheralIdentifierKey), let uuid = UUID(uuidString: uuidString), let advertisementData = UserDefaults.standard.dictionary(forKey: Self.autoconnectPeripheralAdvertisementDataKey) else { return nil}
                         
             return (uuid, advertisementData)
         }
+        
         set {
             let uuidString = newValue?.identifier.uuidString
-            UserDefaults.standard.set(uuidString, forKey: Settings.autoconnectPeripheralIdentifierKey)
-            UserDefaults.standard.set(newValue?.advertisementData, forKey: Settings.autoconnectPeripheralAdvertisementDataKey)
-            
             DLog("Set autoconnect peripheral: \(uuidString ?? "<nil>")")
+
+            UserDefaults.standard.set(uuidString, forKey: Self.autoconnectPeripheralIdentifierKey)
+            UserDefaults.standard.set(newValue?.advertisementData, forKey: Self.autoconnectPeripheralAdvertisementDataKey)
         }
-    }
+    }*/
     
     static func clearAutoconnectPeripheral() {
-        autoconnectPeripheral = nil
+        autoconnectPeripheralUUID = nil
     }
 
     // Common load and save

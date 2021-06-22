@@ -20,7 +20,7 @@ import Foundation
 class PeripheralAutoConnect {
     // Config
     private static let kMinScanningTimeToAutoconnect: TimeInterval = 1.5 // 5
-    private static let kMinRssiToAutoConnect = -56      // in dBM
+    private static let kMinRssiToAutoConnect = -80      // in dBM
     private static let kMinTimeDetectingPeripheralForAutoconnect: TimeInterval = 1
 
     // Data

@@ -16,7 +16,11 @@ class AutoConnectViewModel: ObservableObject {
         case fileTransfer
     }
     
-    @Published var destination: Destination? = nil
+    @Published var destination: Destination? = nil {
+        didSet {
+            DLog("destination: \(String(describing: destination))")
+        }
+    }
     @Published var isScanning: Bool = false{
         didSet {
             if isScanning {
@@ -28,13 +32,13 @@ class AutoConnectViewModel: ObservableObject {
         }
     }
     
-    @Published var adafruitBoard: AdafruitBoard? = nil
     @Published var selectedPeripheral: BlePeripheral? = nil
     @Published var detailText: String = "Starting..."
     @Published var numPeripheralsScanned = 0
     @Published var numAdafruitPeripheralsScanned = 0
     @Published var numAdafruitPeripheralsWithFileTranferServiceScanned = 0
     @Published var numAdafruitPeripheralsWithFileTranferServiceNearby = 0
+    @Published var isRestoringConnection = false
     
     // Data
     private let bleManager = BleManager.shared
@@ -42,9 +46,32 @@ class AutoConnectViewModel: ObservableObject {
     private var peripheralAutoConnect = PeripheralAutoConnect()
     
     
+    init() {
+        // Check if we are reconnecting to a known Peripheral. If AppState.shared.fileTransferClient is not nil, no need to scan, just go to the FileTransfer screen
+        if AppState.shared.fileTransferClient != nil {
+            destination = .fileTransfer
+        }
+    }
+    
     func onAppear() {
         registerNotifications(enabled: true)
-        startScanning()
+        let wasConnected = disconnectPeripheralAndResetAutoConnect()
+        
+        if wasConnected {
+            // If it was connected, dont reconnect, just start scanning as usual
+            DLog("User forced disconnection. Don't try to reconnect")
+            AppState.shared.forceReconnect()
+            startScanning()
+        }
+        else {
+            let isTryingToReconnect = AppState.shared.forceReconnect()
+            if isTryingToReconnect {
+                detailText = "Restoring connection..."
+            }
+            else {
+                startScanning()
+            }
+        }
     }
     
     func onDissapear() {
@@ -53,24 +80,28 @@ class AutoConnectViewModel: ObservableObject {
     }
     
     // MARK: - Scanning
-    private func setup() {
+    
+    /// Returns true if it was connnected
+    private func disconnectPeripheralAndResetAutoConnect() -> Bool {
+        var isConnected = false
+        
         // Disconnect if needed
         let connectedPeripherals = bleManager.connectedPeripherals()
         if connectedPeripherals.count == 1, let peripheral = connectedPeripherals.first {
             DLog("Disconnect from previously connected peripheral")
             // Disconnect from peripheral
             disconnect(peripheral: peripheral)
+            isConnected = true
         }
         
-        // Ble Notifications
-//        registerNotifications(enabled: true)
-
         // Autoconnect
         peripheralAutoConnect.reset()
+        
+        return isConnected
     }
 
     private func startScanning() {
-        setup()
+        //setup()
         
         updateScannedPeripherals()
         
@@ -82,7 +113,7 @@ class AutoConnectViewModel: ObservableObject {
         }
         
         // Remove saved peripheral for autoconnect
-        Settings.clearAutoconnectPeripheral()
+        //Settings.clearAutoconnectPeripheral()
     }
     
     private func stopScanning() {
@@ -131,6 +162,8 @@ class AutoConnectViewModel: ObservableObject {
     private weak var didDisconnectFromPeripheralObserver: NSObjectProtocol?
     private weak var peripheralDidUpdateNameObserver: NSObjectProtocol?
     private weak var willDiscoverServicesObserver: NSObjectProtocol?
+    private weak var willReconnectToKnownPeripheralObserver: NSObjectProtocol?
+    private weak var didFailToReconnectToKnownPeripheralObserver: NSObjectProtocol?
 
     private func registerNotifications(enabled: Bool) {
         let notificationCenter = NotificationCenter.default
@@ -142,6 +175,9 @@ class AutoConnectViewModel: ObservableObject {
             didDisconnectFromPeripheralObserver = notificationCenter.addObserver(forName: .didDisconnectFromPeripheral, object: nil, queue: .main, using: {[weak self] notification in self?.didDisconnectFromPeripheral(notification: notification)})
             peripheralDidUpdateNameObserver = notificationCenter.addObserver(forName: .peripheralDidUpdateName, object: nil, queue: .main, using: {[weak self] notification in self?.peripheralDidUpdateName(notification: notification)})
             willDiscoverServicesObserver = notificationCenter.addObserver(forName: .willDiscoverServices, object: nil, queue: .main, using: {[weak self] notification in self?.willDiscoverServices(notification: notification)})
+            willReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .willReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.willReconnectToKnownPeripheral(notification)})
+            didFailToReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .didFailToReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.didFailToReconnectToKnownPeripheral(notification)})
+
 
         } else {
             if let didDiscoverPeripheralObserver = didDiscoverPeripheralObserver {notificationCenter.removeObserver(didDiscoverPeripheralObserver)}
@@ -151,9 +187,27 @@ class AutoConnectViewModel: ObservableObject {
             if let didDisconnectFromPeripheralObserver = didDisconnectFromPeripheralObserver {notificationCenter.removeObserver(didDisconnectFromPeripheralObserver)}
             if let peripheralDidUpdateNameObserver = peripheralDidUpdateNameObserver {notificationCenter.removeObserver(peripheralDidUpdateNameObserver)}
             if let willDiscoverServicesObserver = willDiscoverServicesObserver {notificationCenter.removeObserver(willDiscoverServicesObserver)}
+            if let willReconnectToKnownPeripheralObserver = willReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(willReconnectToKnownPeripheralObserver)}
+            if let didFailToReconnectToKnownPeripheralObserver = didFailToReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(didFailToReconnectToKnownPeripheralObserver)}
         }
     }
 
+    private func willReconnectToKnownPeripheral(_ notification: Notification) {
+        DLog("willReconnectToKnownPeripheral")
+        guard let peripheral = bleManager.peripheral(from: notification) else {
+            //DLog("willReconnectToKnownPeripheral detected with unknown peripheral")
+            return
+        }
+
+        DLog("Reconnect selected peripheral")
+        selectedPeripheral = peripheral
+    }
+    
+    private func didFailToReconnectToKnownPeripheral(_ notification: Notification) {
+        DLog("Reconnect Failed. Start Scanning")
+        startScanning()
+    }
+    
     private func willConnectToPeripheral(notification: Notification) {
         guard let selectedPeripheral = selectedPeripheral, let identifier = notification.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID, selectedPeripheral.identifier == identifier else {
                  DLog("willConnect to an unexpected peripheral")
@@ -171,15 +225,18 @@ class AutoConnectViewModel: ObservableObject {
         detailText = "Connected..."
 
         // Setup peripheral
-        adafruitBoard = AdafruitBoard(connectedBlePeripheral: selectedPeripheral, services: [.filetransfer]) { [weak self] result in
+        AppState.shared.fileTransferClient = FileTransferClient(connectedBlePeripheral: selectedPeripheral, services: [.filetransfer]) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success:
                 DLog("setupPeripheral finished")
 
+                // Save selected peripheral for autoconnect
+                //Settings.autoconnectPeripheralUUID = selectedPeripheral.identifier
+                
                 // Check if filetransfer was setup
-                guard let adafruitBoard = self.adafruitBoard, adafruitBoard.isFileTransferEnabled else {
+                guard let fileTransferClient = AppState.shared.fileTransferClient, fileTransferClient.isFileTransferEnabled else {
                     DLog("setupPeripheral fileTransfer not enabled")
                     self.detailText = "Error initializing FileTransfer"
 
@@ -190,9 +247,9 @@ class AutoConnectViewModel: ObservableObject {
                 }
 
                 DLog("setupPeripheral success")
-                self.detailText = "FileTransfer service ready"
                 
                 // Finished setup
+                self.detailText = "FileTransfer service ready"
                 self.gotoFileTransfer()
 
             case .failure(let error):

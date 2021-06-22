@@ -17,7 +17,7 @@ struct MainView: View {
                 AutoConnectView(isVisible: $isAutoConnectVisible)
             }
             //.defaultBackground()
-            .navigationViewStyle(StackNavigationViewStyle())
+            //.navigationViewStyle(StackNavigationViewStyle())
             .onAppear {
                 // onAppear doesnt work on navigationItem so pass the onAppear/onDissapear via a binding variable: https://developer.apple.com/forums/thread/655338
                 DispatchQueue.main.async {
