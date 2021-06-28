@@ -36,7 +36,6 @@ struct AutoConnectView: View {
         }
         .defaultBackground()
         .foregroundColor(Color.white)
-        .navigationTitle("Auto-Connect")
         .onChange(of: isVisible) { isVisible in
             // onAppear doesn't work on navigationItem so pass the onAppear/onDissapear via binding variable: https://developer.apple.com/forums/thread/655338
 
@@ -47,6 +46,8 @@ struct AutoConnectView: View {
                 model.onDissapear()
             }
         }
+        .navigationBarTitle("Auto-Connect", displayMode: .large)
+        .navigationBarHidden(false)
 
     }
 }

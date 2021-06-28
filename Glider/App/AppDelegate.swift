@@ -24,6 +24,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
         
+        // Navigation bar background
+        UINavigationBar.appearance().barTintColor = .clear
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        
         // List background
         UITableView.appearance().backgroundColor = UIColor.clear
         UITableView.appearance().separatorStyle = .none

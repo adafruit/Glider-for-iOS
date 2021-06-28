@@ -16,11 +16,8 @@ class AutoConnectViewModel: ObservableObject {
         case fileTransfer
     }
     
-    @Published var destination: Destination? = nil {
-        didSet {
-            DLog("destination: \(String(describing: destination))")
-        }
-    }
+    @Published var destination: Destination? = nil
+    
     @Published var isScanning: Bool = false{
         didSet {
             if isScanning {
@@ -111,9 +108,6 @@ class AutoConnectViewModel: ObservableObject {
             bleManager.startScan()
             detailText = "Scanning..."
         }
-        
-        // Remove saved peripheral for autoconnect
-        //Settings.clearAutoconnectPeripheral()
     }
     
     private func stopScanning() {
@@ -232,9 +226,6 @@ class AutoConnectViewModel: ObservableObject {
             case .success:
                 DLog("setupPeripheral finished")
 
-                // Save selected peripheral for autoconnect
-                //Settings.autoconnectPeripheralUUID = selectedPeripheral.identifier
-                
                 // Check if filetransfer was setup
                 guard let fileTransferClient = AppState.shared.fileTransferClient, fileTransferClient.isFileTransferEnabled else {
                     DLog("setupPeripheral fileTransfer not enabled")

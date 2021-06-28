@@ -50,7 +50,7 @@ class FileTransferViewModel: ObservableObject {
             return modeText
         }
     }
-    @Published var lastTransmit: TransmissionLog? = nil
+    @Published var lastTransmit: TransmissionLog? =  TransmissionLog(type: .write(size: 334))
     
     
     // Data
@@ -69,6 +69,15 @@ class FileTransferViewModel: ObservableObject {
         
         return [Self.defaultFileContentePlaceholder, longText, sortedText]
     }()
+    
+    init() {
+        /*
+        if AppEnvironment.inXcodePreviewMode {
+            transmissionProgress = TransmissionProgress(description: "test")
+            transmissionProgress?.transmittedBytes = 33
+            transmissionProgress?.totalBytes = 66
+        }*/
+    }
     
     // MARK: - Setup
     func onAppear(fileTransferClient: FileTransferClient?) {
@@ -93,6 +102,13 @@ class FileTransferViewModel: ObservableObject {
     }
     
     // MARK: - Actions
+    func disconnectAndForgetPairing() {
+        Settings.clearAutoconnectPeripheral()
+        if let blePeripheral = fileTransferClient?.blePeripheral {
+            bleManager.disconnect(from: blePeripheral)
+        }
+    }
+    
     func readFile(filename: String) {
         startCommand(description: "Reading \(filename)")
         readFileCommand(path: filename) { [weak self] result in
@@ -129,8 +145,6 @@ class FileTransferViewModel: ObservableObject {
             }
         }
     }
-    
-
     
     func listDirectory(filename: String) {
         let directory = FileTransferUtils.pathRemovingFilename(path: filename)

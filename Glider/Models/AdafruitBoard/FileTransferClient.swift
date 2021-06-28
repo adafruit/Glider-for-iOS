@@ -14,12 +14,13 @@ class FileTransferClient {
     // Data structs
     typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)
     
-    enum BoardError: Error {
-        case errorBoardNotConnected
+    enum ClientError: Error {
+        //case connectionFailed
         case errorDiscoveringServices
+        case serviceNotEnabled
     }
     
-    enum BoardService: CaseIterable {
+    enum Service: CaseIterable {
         case filetransfer
         
         var debugName: String {
@@ -47,7 +48,7 @@ class FileTransferClient {
      - services: list of BoardServices that will be started. Use nil to select all the supported services
      - completion: completion handler
      */
-    convenience init(connectedCBPeripheral peripheral: CBPeripheral, services: [BoardService]? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
+    convenience init(connectedCBPeripheral peripheral: CBPeripheral, services: [Service]? = nil, completion: @escaping (Result<FileTransferClient, Error>) -> Void) {
         let blePeripheral = BlePeripheral(peripheral: peripheral, advertisementData: nil, rssi: nil)
         self.init(connectedBlePeripheral: blePeripheral, services: services, completion: completion)
     }
@@ -60,7 +61,7 @@ class FileTransferClient {
      - services: list of BoardServices that will be started. Use nil to select all the supported services
      - completion: completion handler
      */
-    init(connectedBlePeripheral blePeripheral: BlePeripheral, services: [BoardService]? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
+    init(connectedBlePeripheral blePeripheral: BlePeripheral, services: [Service]? = nil, completion: @escaping (Result<FileTransferClient, Error>) -> Void) {
         
         DLog("Discovering services")
         let peripheralIdentifier = blePeripheral.identifier
@@ -70,19 +71,19 @@ class FileTransferClient {
             guard error == nil else {
                 DLog("Error discovering services")
                 DispatchQueue.main.async {
-                    completion(.failure(BoardError.errorDiscoveringServices))
+                    completion(.failure(ClientError.errorDiscoveringServices))
                 }
                 return
             }
             
             // Setup services
-            let selectedServices = services != nil ? services! : BoardService.allCases   // If services is nil, select all services
+            let selectedServices = services != nil ? services! : Service.allCases   // If services is nil, select all services
             
             self.setupServices(blePeripheral: blePeripheral, services: selectedServices, completion: completion)
         }
     }
     
-    private func setupServices(blePeripheral: BlePeripheral, services: [BoardService], completion: @escaping (Result<Void, Error>) -> Void) {
+    private func setupServices(blePeripheral: BlePeripheral, services: [Service], completion: @escaping (Result<FileTransferClient, Error>) -> Void) {
         
         // Set current peripheral
         self.blePeripheral = blePeripheral
@@ -113,7 +114,7 @@ class FileTransferClient {
                 }
             }
             
-            completion(.success(()))
+            completion(.success((self)))
         }
     }
 
@@ -122,7 +123,7 @@ class FileTransferClient {
         return blePeripheral?.adafruitFileTransferIsEnabled() ?? false
     }
     
-    func isEnabled(service: BoardService) -> Bool {
+    func isEnabled(service: Service) -> Bool {
         switch service {
         case .filetransfer: return isFileTransferEnabled
         }
