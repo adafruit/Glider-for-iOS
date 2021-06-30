@@ -98,16 +98,7 @@ class BleAutoReconnect {
             reconnectHandler?(peripheral) { result in
                 switch result {
                 case .success:
-                    DLog("Reconnected to peripheral successfully")
-                    
-                    // Check if filetransfer was setup
-                    guard let fileTransferClient = AppState.shared.fileTransferClient, fileTransferClient.isFileTransferEnabled else {
-                        DLog("setupPeripheral fileTransfer not enabled")
-                        NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil, userInfo: [BleManager.NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
-                        BleManager.shared.disconnect(from: peripheral)
-                        return
-                    }
-                    
+                    DLog("Reconnected to peripheral successfully")                            
                     NotificationCenter.default.post(name: .didReconnectToKnownPeripheral, object: nil, userInfo: [BleManager.NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
 
                 case .failure(let error):

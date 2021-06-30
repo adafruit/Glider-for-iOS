@@ -46,13 +46,86 @@
 		A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7C26543894007A5E5A /* AppDelegate.swift */; };
 		A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7E26543894007A5E5A /* AppEnvironment.swift */; };
 		A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FEA92654392F007A5E5A /* Assets.xcassets */; };
+		A96D27852687F9DB00D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
+		A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
+		A96D27872687FA3D00D6E247 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
 		A9CCB9C1266A3CEE00E9FA28 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */; };
+		A9ED1F292687530700B6C27F /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F282687530700B6C27F /* FileProviderExtension.swift */; };
+		A9ED1F2B2687530700B6C27F /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */; };
+		A9ED1F2D2687530700B6C27F /* FileProviderEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F2C2687530700B6C27F /* FileProviderEnumerator.swift */; };
+		A9ED1F372687530800B6C27F /* DocumentActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F362687530800B6C27F /* DocumentActionViewController.swift */; };
+		A9ED1F3A2687530800B6C27F /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9ED1F382687530800B6C27F /* MainInterface.storyboard */; };
+		A9ED1F3E2687530800B6C27F /* GliderFileProviderUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A9ED1F342687530800B6C27F /* GliderFileProviderUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A9ED1F412687530800B6C27F /* GliderFileProvider.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A9ED1F262687530700B6C27F /* GliderFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A9ED1F4A26875AB900B6C27F /* GliderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F4926875AB900B6C27F /* GliderClient.swift */; };
+		A9ED1F4B26875B7D00B6C27F /* BlePeripheral+FileTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6B26543893007A5E5A /* BlePeripheral+FileTransfer.swift */; };
+		A9ED1F4C26875B7D00B6C27F /* BlePeripheral+AdafruitCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6A26543893007A5E5A /* BlePeripheral+AdafruitCommon.swift */; };
+		A9ED1F4D26875B7D00B6C27F /* BlePeripheral+ManufacturerAdafruit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6C26543893007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift */; };
+		A9ED1F4E26875B7D00B6C27F /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */; };
+		A9ED1F4F26875B8100B6C27F /* BlePeripheral+Battery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7026543893007A5E5A /* BlePeripheral+Battery.swift */; };
+		A9ED1F5126875B8100B6C27F /* BlePeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6E26543893007A5E5A /* BlePeripheral.swift */; };
+		A9ED1F5226875B8100B6C27F /* BleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6F26543893007A5E5A /* BleManager.swift */; };
+		A9ED1F5326875B8600B6C27F /* Data+ScanValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7826543893007A5E5A /* Data+ScanValue.swift */; };
+		A9ED1F5426875B8600B6C27F /* Int+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7426543893007A5E5A /* Int+Bytes.swift */; };
+		A9ED1F5526875B8600B6C27F /* CommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7526543893007A5E5A /* CommandQueue.swift */; };
+		A9ED1F5626875B8600B6C27F /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7626543893007A5E5A /* LogHelper.swift */; };
+		A9ED1F5726875B8600B6C27F /* HexUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7326543893007A5E5A /* HexUtils.swift */; };
+		A9ED1F5826875B8600B6C27F /* Types+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7726543893007A5E5A /* Types+Data.swift */; };
+		A9ED1F5926875B8600B6C27F /* Data+LittleEndianTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7226543893007A5E5A /* Data+LittleEndianTypes.swift */; };
+		A9ED1F5A26875BB000B6C27F /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7E26543894007A5E5A /* AppEnvironment.swift */; };
+		A9ED1F5C26875C1E00B6C27F /* FileTransferClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5F26543893007A5E5A /* FileTransferClient.swift */; };
+		A9ED1F5E2687698800B6C27F /* BleAutoReconnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FEDC572680AC1200E409FA /* BleAutoReconnect.swift */; };
+		A9ED1F6126878ABF00B6C27F /* MetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F6026878ABF00B6C27F /* MetadataCache.swift */; };
+		A9ED1F632687EC1C00B6C27F /* String+DeletingPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */; };
+		A9F116F926895DC7006F8FE4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F116F826895DC7006F8FE4 /* ShareViewController.swift */; };
+		A9F116FC26895DC7006F8FE4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */; };
+		A9F1170026895DC7006F8FE4 /* GliderShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A9F116F626895DC7006F8FE4 /* GliderShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F225252659ED8400D3B2C6 /* FileChooserView.swift */; };
 		A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */; };
 		A9F2252A265BA80F00D3B2C6 /* FileTransferUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22529265BA80F00D3B2C6 /* FileTransferUtils.swift */; };
 		A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */; };
 		A9FEDC582680AC1200E409FA /* BleAutoReconnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FEDC572680AC1200E409FA /* BleAutoReconnect.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A9ED1F3C2687530800B6C27F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A947FE3026543839007A5E5A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9ED1F332687530800B6C27F;
+			remoteInfo = GliderFileProviderUI;
+		};
+		A9ED1F3F2687530800B6C27F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A947FE3026543839007A5E5A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9ED1F252687530700B6C27F;
+			remoteInfo = GliderFileProvider;
+		};
+		A9F116FE26895DC7006F8FE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A947FE3026543839007A5E5A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9F116F526895DC7006F8FE4;
+			remoteInfo = GliderShare;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A9ED1F482687530800B6C27F /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A9F1170026895DC7006F8FE4 /* GliderShare.appex in Embed App Extensions */,
+				A9ED1F412687530800B6C27F /* GliderFileProvider.appex in Embed App Extensions */,
+				A9ED1F3E2687530800B6C27F /* GliderFileProviderUI.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A905E1DE26824AD90051C558 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
@@ -96,7 +169,26 @@
 		A947FE7C26543894007A5E5A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A947FE7E26543894007A5E5A /* AppEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		A947FEA92654392F007A5E5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderUtils.swift; sourceTree = "<group>"; };
 		A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleDataProcessingQueue.swift; sourceTree = "<group>"; };
+		A9ED1F262687530700B6C27F /* GliderFileProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9ED1F282687530700B6C27F /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
+		A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderItem.swift; sourceTree = "<group>"; };
+		A9ED1F2C2687530700B6C27F /* FileProviderEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderEnumerator.swift; sourceTree = "<group>"; };
+		A9ED1F2E2687530700B6C27F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9ED1F2F2687530700B6C27F /* GliderFileProvider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GliderFileProvider.entitlements; sourceTree = "<group>"; };
+		A9ED1F342687530800B6C27F /* GliderFileProviderUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProviderUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9ED1F362687530800B6C27F /* DocumentActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActionViewController.swift; sourceTree = "<group>"; };
+		A9ED1F392687530800B6C27F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		A9ED1F3B2687530800B6C27F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9ED1F4926875AB900B6C27F /* GliderClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GliderClient.swift; sourceTree = "<group>"; };
+		A9ED1F5F26876FD300B6C27F /* Glider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Glider.entitlements; sourceTree = "<group>"; };
+		A9ED1F6026878ABF00B6C27F /* MetadataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataCache.swift; sourceTree = "<group>"; };
+		A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+DeletingPrefix.swift"; sourceTree = "<group>"; };
+		A9F116F626895DC7006F8FE4 /* GliderShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9F116F826895DC7006F8FE4 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		A9F116FB26895DC7006F8FE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		A9F116FD26895DC7006F8FE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9F225252659ED8400D3B2C6 /* FileChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileChooserView.swift; sourceTree = "<group>"; };
 		A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileChooserViewModel.swift; sourceTree = "<group>"; };
 		A9F22529265BA80F00D3B2C6 /* FileTransferUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferUtils.swift; sourceTree = "<group>"; };
@@ -112,6 +204,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9ED1F232687530700B6C27F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9ED1F312687530800B6C27F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9F116F326895DC7006F8FE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -119,6 +232,9 @@
 			isa = PBXGroup;
 			children = (
 				A947FE3A26543839007A5E5A /* Glider */,
+				A9ED1F272687530700B6C27F /* GliderFileProvider */,
+				A9ED1F352687530800B6C27F /* GliderFileProviderUI */,
+				A9F116F726895DC7006F8FE4 /* GliderShare */,
 				A947FE3926543839007A5E5A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -127,6 +243,9 @@
 			isa = PBXGroup;
 			children = (
 				A947FE3826543839007A5E5A /* Glider.app */,
+				A9ED1F262687530700B6C27F /* GliderFileProvider.appex */,
+				A9ED1F342687530800B6C27F /* GliderFileProviderUI.appex */,
+				A9F116F626895DC7006F8FE4 /* GliderShare.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,6 +253,7 @@
 		A947FE3A26543839007A5E5A /* Glider */ = {
 			isa = PBXGroup;
 			children = (
+				A9ED1F5F26876FD300B6C27F /* Glider.entitlements */,
 				A905E1DE26824AD90051C558 /* Readme.md */,
 				A947FE7926543893007A5E5A /* App */,
 				A947FE4A26543893007A5E5A /* Views */,
@@ -316,8 +436,44 @@
 			isa = PBXGroup;
 			children = (
 				A9F22529265BA80F00D3B2C6 /* FileTransferUtils.swift */,
+				A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		A9ED1F272687530700B6C27F /* GliderFileProvider */ = {
+			isa = PBXGroup;
+			children = (
+				A9ED1F282687530700B6C27F /* FileProviderExtension.swift */,
+				A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */,
+				A9ED1F2C2687530700B6C27F /* FileProviderEnumerator.swift */,
+				A9ED1F2E2687530700B6C27F /* Info.plist */,
+				A9ED1F2F2687530700B6C27F /* GliderFileProvider.entitlements */,
+				A9ED1F4926875AB900B6C27F /* GliderClient.swift */,
+				A9ED1F6026878ABF00B6C27F /* MetadataCache.swift */,
+				A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */,
+			);
+			path = GliderFileProvider;
+			sourceTree = "<group>";
+		};
+		A9ED1F352687530800B6C27F /* GliderFileProviderUI */ = {
+			isa = PBXGroup;
+			children = (
+				A9ED1F362687530800B6C27F /* DocumentActionViewController.swift */,
+				A9ED1F382687530800B6C27F /* MainInterface.storyboard */,
+				A9ED1F3B2687530800B6C27F /* Info.plist */,
+			);
+			path = GliderFileProviderUI;
+			sourceTree = "<group>";
+		};
+		A9F116F726895DC7006F8FE4 /* GliderShare */ = {
+			isa = PBXGroup;
+			children = (
+				A9F116F826895DC7006F8FE4 /* ShareViewController.swift */,
+				A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */,
+				A9F116FD26895DC7006F8FE4 /* Info.plist */,
+			);
+			path = GliderShare;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,15 +486,70 @@
 				A947FE3426543839007A5E5A /* Sources */,
 				A947FE3526543839007A5E5A /* Frameworks */,
 				A947FE3626543839007A5E5A /* Resources */,
+				A9ED1F482687530800B6C27F /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A9ED1F3D2687530800B6C27F /* PBXTargetDependency */,
+				A9ED1F402687530800B6C27F /* PBXTargetDependency */,
+				A9F116FF26895DC7006F8FE4 /* PBXTargetDependency */,
 			);
 			name = Glider;
 			productName = Glider;
 			productReference = A947FE3826543839007A5E5A /* Glider.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A9ED1F252687530700B6C27F /* GliderFileProvider */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9ED1F452687530800B6C27F /* Build configuration list for PBXNativeTarget "GliderFileProvider" */;
+			buildPhases = (
+				A9ED1F222687530700B6C27F /* Sources */,
+				A9ED1F232687530700B6C27F /* Frameworks */,
+				A9ED1F242687530700B6C27F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GliderFileProvider;
+			productName = GliderFileProvider;
+			productReference = A9ED1F262687530700B6C27F /* GliderFileProvider.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		A9ED1F332687530800B6C27F /* GliderFileProviderUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9ED1F422687530800B6C27F /* Build configuration list for PBXNativeTarget "GliderFileProviderUI" */;
+			buildPhases = (
+				A9ED1F302687530800B6C27F /* Sources */,
+				A9ED1F312687530800B6C27F /* Frameworks */,
+				A9ED1F322687530800B6C27F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GliderFileProviderUI;
+			productName = GliderFileProviderUI;
+			productReference = A9ED1F342687530800B6C27F /* GliderFileProviderUI.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		A9F116F526895DC7006F8FE4 /* GliderShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9F1170326895DC7006F8FE4 /* Build configuration list for PBXNativeTarget "GliderShare" */;
+			buildPhases = (
+				A9F116F226895DC7006F8FE4 /* Sources */,
+				A9F116F326895DC7006F8FE4 /* Frameworks */,
+				A9F116F426895DC7006F8FE4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GliderShare;
+			productName = GliderShare;
+			productReference = A9F116F626895DC7006F8FE4 /* GliderShare.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -351,6 +562,15 @@
 				TargetAttributes = {
 					A947FE3726543839007A5E5A = {
 						CreatedOnToolsVersion = 12.5;
+					};
+					A9ED1F252687530700B6C27F = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					A9ED1F332687530800B6C27F = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					A9F116F526895DC7006F8FE4 = {
+						CreatedOnToolsVersion = 12.5.1;
 					};
 				};
 			};
@@ -368,6 +588,9 @@
 			projectRoot = "";
 			targets = (
 				A947FE3726543839007A5E5A /* Glider */,
+				A9ED1F252687530700B6C27F /* GliderFileProvider */,
+				A9ED1F332687530800B6C27F /* GliderFileProviderUI */,
+				A9F116F526895DC7006F8FE4 /* GliderShare */,
 			);
 		};
 /* End PBXProject section */
@@ -381,6 +604,29 @@
 				A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */,
 				A905E1DF26824ADA0051C558 /* Readme.md in Resources */,
 				A947FE9526543894007A5E5A /* DefaultPreferences.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9ED1F242687530700B6C27F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9ED1F322687530800B6C27F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9ED1F3A2687530800B6C27F /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9F116F426895DC7006F8FE4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9F116FC26895DC7006F8FE4 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,6 +669,7 @@
 				A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */,
 				A947FE9E26543894007A5E5A /* Int+Bytes.swift in Sources */,
 				A947FEA226543894007A5E5A /* Data+ScanValue.swift in Sources */,
+				A96D27852687F9DB00D6E247 /* FileProviderUtils.swift in Sources */,
 				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
 				A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */,
 				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
@@ -435,7 +682,92 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9ED1F222687530700B6C27F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9ED1F5726875B8600B6C27F /* HexUtils.swift in Sources */,
+				A9ED1F5326875B8600B6C27F /* Data+ScanValue.swift in Sources */,
+				A9ED1F292687530700B6C27F /* FileProviderExtension.swift in Sources */,
+				A9ED1F4D26875B7D00B6C27F /* BlePeripheral+ManufacturerAdafruit.swift in Sources */,
+				A9ED1F2B2687530700B6C27F /* FileProviderItem.swift in Sources */,
+				A9ED1F5A26875BB000B6C27F /* AppEnvironment.swift in Sources */,
+				A9ED1F6126878ABF00B6C27F /* MetadataCache.swift in Sources */,
+				A9ED1F5826875B8600B6C27F /* Types+Data.swift in Sources */,
+				A9ED1F5926875B8600B6C27F /* Data+LittleEndianTypes.swift in Sources */,
+				A96D27872687FA3D00D6E247 /* Settings.swift in Sources */,
+				A9ED1F4F26875B8100B6C27F /* BlePeripheral+Battery.swift in Sources */,
+				A9ED1F5426875B8600B6C27F /* Int+Bytes.swift in Sources */,
+				A9ED1F5126875B8100B6C27F /* BlePeripheral.swift in Sources */,
+				A9ED1F5226875B8100B6C27F /* BleManager.swift in Sources */,
+				A9ED1F4C26875B7D00B6C27F /* BlePeripheral+AdafruitCommon.swift in Sources */,
+				A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */,
+				A9ED1F2D2687530700B6C27F /* FileProviderEnumerator.swift in Sources */,
+				A9ED1F5E2687698800B6C27F /* BleAutoReconnect.swift in Sources */,
+				A9ED1F4A26875AB900B6C27F /* GliderClient.swift in Sources */,
+				A9ED1F5626875B8600B6C27F /* LogHelper.swift in Sources */,
+				A9ED1F632687EC1C00B6C27F /* String+DeletingPrefix.swift in Sources */,
+				A9ED1F4E26875B7D00B6C27F /* BleDataProcessingQueue.swift in Sources */,
+				A9ED1F5C26875C1E00B6C27F /* FileTransferClient.swift in Sources */,
+				A9ED1F5526875B8600B6C27F /* CommandQueue.swift in Sources */,
+				A9ED1F4B26875B7D00B6C27F /* BlePeripheral+FileTransfer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9ED1F302687530800B6C27F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9ED1F372687530800B6C27F /* DocumentActionViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9F116F226895DC7006F8FE4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9F116F926895DC7006F8FE4 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A9ED1F3D2687530800B6C27F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9ED1F332687530800B6C27F /* GliderFileProviderUI */;
+			targetProxy = A9ED1F3C2687530800B6C27F /* PBXContainerItemProxy */;
+		};
+		A9ED1F402687530800B6C27F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9ED1F252687530700B6C27F /* GliderFileProvider */;
+			targetProxy = A9ED1F3F2687530800B6C27F /* PBXContainerItemProxy */;
+		};
+		A9F116FF26895DC7006F8FE4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9F116F526895DC7006F8FE4 /* GliderShare */;
+			targetProxy = A9F116FE26895DC7006F8FE4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A9ED1F382687530800B6C27F /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9ED1F392687530800B6C27F /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9F116FB26895DC7006F8FE4 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A947FE452654383A007A5E5A /* Debug */ = {
@@ -557,10 +889,12 @@
 		A947FE482654383A007A5E5A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -570,8 +904,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.test;
+				MARKETING_VERSION = 0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -581,10 +915,12 @@
 		A947FE492654383A007A5E5A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -594,9 +930,133 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.test;
+				MARKETING_VERSION = 0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A9ED1F432687530800B6C27F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9ED1F442687530800B6C27F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A9ED1F462687530800B6C27F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				INFOPLIST_FILE = GliderFileProvider/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9ED1F472687530800B6C27F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				INFOPLIST_FILE = GliderFileProvider/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A9F1170126895DC7006F8FE4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				INFOPLIST_FILE = GliderShare/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9F1170226895DC7006F8FE4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				INFOPLIST_FILE = GliderShare/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -619,6 +1079,33 @@
 			buildConfigurations = (
 				A947FE482654383A007A5E5A /* Debug */,
 				A947FE492654383A007A5E5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9ED1F422687530800B6C27F /* Build configuration list for PBXNativeTarget "GliderFileProviderUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9ED1F432687530800B6C27F /* Debug */,
+				A9ED1F442687530800B6C27F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9ED1F452687530800B6C27F /* Build configuration list for PBXNativeTarget "GliderFileProvider" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9ED1F462687530800B6C27F /* Debug */,
+				A9ED1F472687530800B6C27F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9F1170326895DC7006F8FE4 /* Build configuration list for PBXNativeTarget "GliderShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9F1170126895DC7006F8FE4 /* Debug */,
+				A9F1170226895DC7006F8FE4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -25,6 +25,10 @@ public struct AppEnvironment {
         #endif
     }
     
+    static var inXcodePreviewMode: Bool {
+        return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
+    }
+    
     static var appVersion: String? {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     }

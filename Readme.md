@@ -10,19 +10,11 @@ This BLE service is geared towards file transfer to and from a device running th
 TODO: Add Swift Package Manager Support
 
 
-
-## Peripheral Scanning and Connection
-
-TODO: Decide if we should provide an API for scanning and connection.
-Currently we have some code that needs to be cleaned from Circuit Playground that include scanning, connnecting, and autoconnecting
-
-
-
 ## Usage
 
-1. Create an AdafruitBoard object from a connected CBPeripheral
+1. Create an FileTransferClient object from a connected CBPeripheral
 
-		AdafruitBoard(connectedCBPeripheral: CBPeripheral, services: [BoardService]? = nil, completion: @escaping (Result<Void, Error>) -> Void)
+		FileTransferClient(connectedCBPeripheral: CBPeripheral, services: [BoardService]? = nil, completion: @escaping (Result<Void, Error>) -> Void)
 
 	Parameters: 
 		
@@ -37,16 +29,17 @@ Currently we have some code that needs to be cleaned from Circuit Playground tha
 
 - **readFile**: Given a full path, returns the full contents of the file
 
-		func readFile(path: String, progress: ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+		func readFile(path: String, progress: ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?)
 		
 	completion is called with  *.success* and the binary *Data* of the file or *.failure* with an *Error*
+        progress is called with the transmission status *typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)*
 
 - **writeFile**: Writes the content to the given full path. If the file exists, it will be overwritten.
 
-		func writeFile(path: String, data: Data, progress: ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+		func writeFile(path: String, data: Data, progress: ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?)
 		
 	completion is called with *.success* or *.failure* with an *Error*
-
+        progress is called with the transmission status *typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)*
 
 - **deleteFile**: Deletes the file or directory at the given full path. Directories must be empty to be deleted.
 
@@ -72,15 +65,15 @@ Currently we have some code that needs to be cleaned from Circuit Playground tha
 
 	A DirectoryEntry is a struct with the name of the file and the type: .file with a size in bytes or .directory
 	
-		struct DirectoryEntry {
-        enum EntryType {
-            case file(size: Int)
-            case directory
-        }
+        struct DirectoryEntry {
+            enum EntryType {
+                case file(size: Int)
+                case directory
+            }
         
-        let type: EntryType
-        let name: String
-    	}
+            let type: EntryType
+            let name: String
+        }
 
 
 
