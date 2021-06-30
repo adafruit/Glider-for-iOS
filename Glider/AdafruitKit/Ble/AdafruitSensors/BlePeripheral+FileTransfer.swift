@@ -31,6 +31,13 @@ extension BlePeripheral {
         
         let name: String
         let type: EntryType
+        
+        var isDirectory: Bool {
+            switch type {
+            case .directory: return true
+            default: return false
+            }
+        }
     }
 
     private struct FileTransferReadStatus {

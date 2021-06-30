@@ -37,7 +37,7 @@ struct FileTransferView: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("Actions:")
                     .foregroundColor(.white)
-                    .font(.caption)
+                    .font(.caption2)
                 
                 HStack {
                     Button("Write File") {
@@ -62,8 +62,7 @@ struct FileTransferView: View {
         .accentColor(.gray)
         .disabled(model.transmissionProgress != nil)
         .padding()
-        .navigationTitle("File Transfer")
-        //        .navigationBarTitleDisplayMode(.inline)
+        //.navigationTitle("File Transfer")
         .defaultBackground(hidesKeyboardOnTap: true)
         .sheet(isPresented: $isShowingFileChooser) {
             FileChooserView(directory: $filename, fileTransferClient: model.fileTransferClient)
@@ -80,6 +79,9 @@ struct FileTransferView: View {
         .onDisappear {
             model.onDissapear()
         }
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 
     private struct ContentsView: View {
@@ -92,10 +94,10 @@ struct FileTransferView: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("Contents:")
                     .foregroundColor(.white)
-                    .font(.caption)
+                    .font(.caption2)
                 
                 HStack(alignment: .top) {
-                    VStack {
+                    VStack(alignment: .leading) {
                         TextEditor(text: $fileContents)
                             .cornerRadius(4)
                             .if(model.transmissionProgress != nil) {
@@ -110,20 +112,46 @@ struct FileTransferView: View {
                             }
                                                 
                         Group {
-                            if let lastTransmit = model.lastTransmit {
-                                Text(lastTransmit.description)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                            }
-                            else if let progress = model.transmissionProgress, let totalBytes = progress.totalBytes {
+                            if let progress = model.transmissionProgress, let totalBytes = progress.totalBytes {
                                 ProgressView(progress.description, value: Float(progress.transmittedBytes), total: Float(totalBytes))
                                     .accentColor(Color.white)
+                                    .font(.callout)
                             }
                             else {
-                                Text("")
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    // Last transmit info
+                                    HStack {
+                                        if let lastTransmit = model.lastTransmit {
+                                            Spacer()
+                                            Text(lastTransmit.description)
+                                                .font(.caption2)
+                                        }
+                                    }
+                                    
+                                    HStack() {
+                                        Button(action: {
+                                            model.disconnectAndForgetPairing()
+                                        }, label: {
+                                            Text("Forget Pairing")
+                                                .bold()
+                                        })
+                                        .buttonStyle(PrimaryButtonStyle(foregroundColor: Color("button_warning_text")))
+                                        
+                                        
+                                        Button("FileProvider Resync") {
+                                            FileProviderUtils.signalFileProviderChanges()
+                                        }
+                                        .buttonStyle(PrimaryButtonStyle(foregroundColor: Color("button_warning_text")))
+                                        
+                                    }
+                                }
+                                
                             }
                         }
+                        .frame(maxWidth: .infinity, minHeight: 44)
                         .foregroundColor(.white)
-                        .font(.caption)
+                        
                     }
                     
                     VStack(spacing: 8) {
@@ -156,7 +184,7 @@ struct FileTransferView: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("File name:")
                     .foregroundColor(.white)
-                    .font(.caption)
+                    .font(.caption2)
                 
                 HStack {
                     TextField("", text: $filename, onCommit:  {
@@ -199,6 +227,7 @@ struct FileTransferView_Previews: PreviewProvider {
                 FileTransferView(fileTransferClient: nil)
             }
             .defaultBackground()
+            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
 }

@@ -42,6 +42,7 @@ struct TodoView_Previews: PreviewProvider {
         NavigationView {
             TodoView()
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         
     }
 }
