@@ -75,7 +75,7 @@
 		A9ED1F5A26875BB000B6C27F /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7E26543894007A5E5A /* AppEnvironment.swift */; };
 		A9ED1F5C26875C1E00B6C27F /* FileTransferClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5F26543893007A5E5A /* FileTransferClient.swift */; };
 		A9ED1F5E2687698800B6C27F /* BleAutoReconnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FEDC572680AC1200E409FA /* BleAutoReconnect.swift */; };
-		A9ED1F6126878ABF00B6C27F /* MetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F6026878ABF00B6C27F /* MetadataCache.swift */; };
+		A9ED1F6126878ABF00B6C27F /* FileMetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F6026878ABF00B6C27F /* FileMetadataCache.swift */; };
 		A9ED1F632687EC1C00B6C27F /* String+DeletingPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */; };
 		A9F116F926895DC7006F8FE4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F116F826895DC7006F8FE4 /* ShareViewController.swift */; };
 		A9F116FC26895DC7006F8FE4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */; };
@@ -183,7 +183,7 @@
 		A9ED1F3B2687530800B6C27F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9ED1F4926875AB900B6C27F /* GliderClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GliderClient.swift; sourceTree = "<group>"; };
 		A9ED1F5F26876FD300B6C27F /* Glider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Glider.entitlements; sourceTree = "<group>"; };
-		A9ED1F6026878ABF00B6C27F /* MetadataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataCache.swift; sourceTree = "<group>"; };
+		A9ED1F6026878ABF00B6C27F /* FileMetadataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMetadataCache.swift; sourceTree = "<group>"; };
 		A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+DeletingPrefix.swift"; sourceTree = "<group>"; };
 		A9F116F626895DC7006F8FE4 /* GliderShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F116F826895DC7006F8FE4 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -450,7 +450,7 @@
 				A9ED1F2E2687530700B6C27F /* Info.plist */,
 				A9ED1F2F2687530700B6C27F /* GliderFileProvider.entitlements */,
 				A9ED1F4926875AB900B6C27F /* GliderClient.swift */,
-				A9ED1F6026878ABF00B6C27F /* MetadataCache.swift */,
+				A9ED1F6026878ABF00B6C27F /* FileMetadataCache.swift */,
 				A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */,
 			);
 			path = GliderFileProvider;
@@ -692,7 +692,7 @@
 				A9ED1F4D26875B7D00B6C27F /* BlePeripheral+ManufacturerAdafruit.swift in Sources */,
 				A9ED1F2B2687530700B6C27F /* FileProviderItem.swift in Sources */,
 				A9ED1F5A26875BB000B6C27F /* AppEnvironment.swift in Sources */,
-				A9ED1F6126878ABF00B6C27F /* MetadataCache.swift in Sources */,
+				A9ED1F6126878ABF00B6C27F /* FileMetadataCache.swift in Sources */,
 				A9ED1F5826875B8600B6C27F /* Types+Data.swift in Sources */,
 				A9ED1F5926875B8600B6C27F /* Data+LittleEndianTypes.swift in Sources */,
 				A96D27872687FA3D00D6E247 /* Settings.swift in Sources */,

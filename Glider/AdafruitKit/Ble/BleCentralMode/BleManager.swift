@@ -219,9 +219,7 @@ class BleManager: NSObject {
         #endif
 
         if let timeout = timeout {
-            DispatchQueue.global(qos: .background).async {
-                self.connectionTimeoutTimers[peripheral.identifier] = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(self.connectionTimeoutFired), userInfo: peripheral.identifier, repeats: false)
-            }
+            self.connectionTimeoutTimers[peripheral.identifier] = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(self.connectionTimeoutFired), userInfo: peripheral.identifier, repeats: false)
         }
         centralManager?.connect(peripheral.peripheral, options: options)
     }

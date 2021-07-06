@@ -56,10 +56,9 @@ class FileChooserViewModel: ObservableObject {
     
     func makeDirectory(path: String) {
         // Make sure that the path ends with the separator
-        let pathEndingWithSeparator = path.hasSuffix("/") ? path : path.appending("/")
-        print("makeDirectory: \(pathEndingWithSeparator)")
+        print("makeDirectory: \(path)")
         isTransmiting = true
-        fileTransferClient?.makeDirectory(path: pathEndingWithSeparator) { [weak self] result in
+        fileTransferClient?.makeDirectory(path: path) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {

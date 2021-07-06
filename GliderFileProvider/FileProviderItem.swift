@@ -8,17 +8,24 @@
 import FileProvider
 import UniformTypeIdentifiers
 
-class FileProviderItem: NSObject, NSFileProviderItem {
+final class FileProviderItem: NSObject, NSFileProviderItem {
 
     private(set) var path: String
     private(set) var entry: BlePeripheral.DirectoryEntry
+    var lastUpdate: Date            // Used to keep track of which files has been modified locally
+    var creation: Date
+    
     var fullPath: String { path + entry.name }
     
     init(path: String, entry: BlePeripheral.DirectoryEntry) {
-        self.path = path
+        let pathEndingWithSeparator = path.hasSuffix("/") ? path : path.appending("/")      // Force a trailing separator
+        self.path = pathEndingWithSeparator
         self.entry = entry
+        self.creation = Date()
+        self.lastUpdate = self.creation
     }
     
+    // MARK: - Mandatory properties
     var itemIdentifier: NSFileProviderItemIdentifier {
         return itemIdentifier(from: fullPath)
     }
@@ -40,19 +47,24 @@ class FileProviderItem: NSObject, NSFileProviderItem {
         return itemIdentifier(from: parentPath)
         
     }
+    
+    var filename: String {
+        if fullPath == "/" {
+            return "root"
+        }
+        else {
+            return entry.name
+        }
+    }
 
     var capabilities: NSFileProviderItemCapabilities {
         if entry.isDirectory {
-            return [.allowsContentEnumerating]
+            return [.allowsContentEnumerating, .allowsAddingSubItems, .allowsRenaming, .allowsDeleting]
         }
         else {
-            return [.allowsReading]
+            return [.allowsReading, .allowsWriting, .allowsDeleting]
         }
 //        return .allowsAll
-    }
-    
-    var filename: String {
-        return entry.name
     }
     
     var contentType: UTType {
@@ -71,6 +83,32 @@ class FileProviderItem: NSObject, NSFileProviderItem {
         return size as NSNumber
     }
     
+    // MARK: - Optional properties
+    var contentModificationDate: Date? {
+        //  Note: the Bluetooth File protocol doesn't return the modification date, so we are using the last sync date as the modification date
+        return lastUpdate
+    }
+    
+    var isMostRecentVersionDownloaded: Bool {
+        do {
+            let attr = try FileManager.default.attributesOfItem(atPath: self.fullPath)
+            let localModificationDate = attr[FileAttributeKey.modificationDate] as? Date
+            return localModificationDate == self.lastUpdate
+        } catch {
+            return false
+        }
+    }
+    
+    var creationDate: Date? {
+        return creation
+    }
+    
+    /*
+    var childItemCount: NSNumber? {
+        DLog("childItemCount for: \(fullPath)")
+        return 0
+    }*/
+    
     
     // MARK: - Utils
     private func itemIdentifier(from path: String) -> NSFileProviderItemIdentifier {
@@ -84,3 +122,4 @@ class FileProviderItem: NSObject, NSFileProviderItem {
     }
 }
 
+extension FileProviderItem: Codable {}

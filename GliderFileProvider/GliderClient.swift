@@ -10,9 +10,7 @@ import Foundation
 class GliderClient {
     // Config
     private static let kMaxTimeToWaitForBleSupport: TimeInterval = 1.0
-    
-    // Singleton
-    //static let shared = GliderClient()
+    //private let clientSemaphore = DispatchSemaphore(value: 0)
     
     enum GliderError: Error {
         case bluetoothNotSupported
@@ -28,7 +26,8 @@ class GliderClient {
     private let bleSupportSemaphore = DispatchSemaphore(value: 0)
     private var startTime: CFAbsoluteTime!
     private var autoReconnect: BleAutoReconnect?
-
+    private var fileTransferLock = NSLock()         // Lock to avoid executing multipel setupFileTransfer concurrently
+    
     // Data - FileTransfer
     private var fileTransferClient: FileTransferClient?
 
@@ -36,20 +35,107 @@ class GliderClient {
     var metadataCache = FileMetadataCache()
     
     // MARK: -
+    init() {
+        registerDisconnectionNotifications(enabled: true)
+    }
+    
     deinit {
+        registerDisconnectionNotifications(enabled: false)
         disconnect()
         registerAutoReconnectNotifications(enabled: false)
     }
-
     
-    func setupFileTransferIfNeeded(completion: @escaping (Result<FileTransferClient, Error>)->Void ) {
-        self.completion = completion
-                
+    
+    // MARK: - Commands (with lock to avoid concurrent requests)
+    func readFile(path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+        fileTransferLock.lock()
+        setupFileTransferIfNeeded { result in
+            switch result {
+            case .success(let client):
+                client.readFile(path: path, progress: progress) {
+                    completion?($0)
+                    self.fileTransferLock.unlock()
+                }
+            case .failure(let error):
+                completion?(.failure(error))
+                self.fileTransferLock.unlock()
+            }
+        }
+    }
+    
+    func writeFile(path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+        fileTransferLock.lock()
+        setupFileTransferIfNeeded { result in
+            switch result {
+            case .success(let client):
+                client.writeFile(path: path, data: data, progress: progress) {
+                    completion?($0)
+                    self.fileTransferLock.unlock()
+                }
+            case .failure(let error):
+                completion?(.failure(error))
+                self.fileTransferLock.unlock()
+            }
+        }
+    }
+    
+    func deleteFile(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
+        fileTransferLock.lock()
+        setupFileTransferIfNeeded { result in
+            switch result {
+            case .success(let client):
+                client.deleteFile(path: path) {
+                    completion?($0)
+                    self.fileTransferLock.unlock()
+                }
+            case .failure(let error):
+                completion?(.failure(error))
+                self.fileTransferLock.unlock()
+            }
+        }
+    }
+
+    func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
+        fileTransferLock.lock()
+        setupFileTransferIfNeeded { result in
+            switch result {
+            case .success(let client):
+                client.makeDirectory(path: path) {
+                    completion?($0)
+                    self.fileTransferLock.unlock()
+                }
+            case .failure(let error):
+                completion?(.failure(error))
+                self.fileTransferLock.unlock()
+            }
+        }
+    }
+
+    func listDirectory(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
+        fileTransferLock.lock()
+        setupFileTransferIfNeeded { result in
+            switch result {
+            case .success(let client):
+                client.listDirectory(path: path) {
+                    completion?($0)
+                    self.fileTransferLock.unlock()
+                }
+            case .failure(let error):
+                completion?(.failure(error))
+                self.fileTransferLock.unlock()
+            }
+        }
+    }
+    
+    private func setupFileTransferIfNeeded(completion: @escaping (Result<FileTransferClient, Error>)->Void) {
         guard fileTransferClient == nil || !fileTransferClient!.isFileTransferEnabled else {
             // It is already setup
             completion(.success(fileTransferClient!))
+            self.fileTransferLock.unlock()
             return
         }
+
+        self.completion = completion
         
         // check Bluetooth status
         startTime = CFAbsoluteTimeGetCurrent()
@@ -70,7 +156,35 @@ class GliderClient {
             self.checkBleSupport()
         }
 
-        registerAutoReconnectNotifications(enabled: true)
+        if willReconnectToKnownPeripheralObserver == nil  { // Check that observer is null to avoid multiple observers
+            registerAutoReconnectNotifications(enabled: true)
+        }
+    }
+    
+    /// Convenience function that encapsulates the setupFileTransferIfNeeded
+    func readFileStartingFileTransferIfNeeded(path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+        setupFileTransferIfNeeded() {  result in
+            switch result {
+            case .success(let client):
+                client.readFile(path: path, progress: progress, completion: completion)
+                
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+    }
+    
+    /// Convenience function that encapsulates the setupFileTransferIfNeeded
+    func writeFileStartingFileTransferIfNeeded(path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+        setupFileTransferIfNeeded() {  result in
+            switch result {
+            case .success(let client):
+                client.writeFile(path: path, data: data, progress: progress, completion: completion)
+                
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
     }
     
     // MARK: - Check Ble Support
@@ -125,7 +239,7 @@ class GliderClient {
         fileTransferClient = nil
     }
     
-    // MARK: - Notifications
+    // MARK: - Autoreconect Notifications
     private var didUpdateBleStateObserver: NSObjectProtocol?
 
     private func registerBleStateNotifications(enabled: Bool) {
@@ -146,7 +260,7 @@ class GliderClient {
     private weak var didFailToReconnectToKnownPeripheralObserver: NSObjectProtocol?
     
     private func registerAutoReconnectNotifications(enabled: Bool) {
-        if enabled {
+        if enabled  {
             willReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .willReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.willReconnectToKnownPeripheral(notification)})
             didReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .didReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.didReconnectToKnownPeripheral(notification)})
             didFailToReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .didFailToReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.didFailToReconnectToKnownPeripheral(notification)})
@@ -159,12 +273,12 @@ class GliderClient {
     
     
     private func willReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("willReconnectToKnownPeripheral")
+        DLog("GliderClient willReconnectToKnownPeripheral")
         //isRestoringConnection = true
     }
 
     private func didReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("didReconnectToKnownPeripheral")
+        DLog("GliderClient didReconnectToKnownPeripheral")
         guard let fileTransferClient = fileTransferClient else {
             completion?(.failure(GliderError.invalidInternalState))
             return
@@ -174,7 +288,28 @@ class GliderClient {
     }
 
     private func didFailToReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("didFailToReconnectToKnownPeripheral")
+        DLog("GliderClient didFailToReconnectToKnownPeripheral")
         completion?(.failure(GliderError.connectionFailed))
     }
+    
+    // MARK: - Disconnection Notifications
+    private weak var didDisconnectFromPeripheralObserver: NSObjectProtocol?
+
+    private func registerDisconnectionNotifications(enabled: Bool) {
+        let notificationCenter = NotificationCenter.default
+        
+        DLog("Register disconnection notification enabled: \(enabled)")
+        if enabled {
+          didDisconnectFromPeripheralObserver = notificationCenter.addObserver(forName: .didDisconnectFromPeripheral, object: nil, queue: .main, using: {[weak self] notification in self?.didDisconnectFromPeripheral(notification: notification)})
+ 
+        } else {
+            if let didDisconnectFromPeripheralObserver = didDisconnectFromPeripheralObserver {notificationCenter.removeObserver(didDisconnectFromPeripheralObserver)}
+        }
+    }
+    
+    private func didDisconnectFromPeripheral(notification: Notification) {
+        DLog("Warning: peripheral has disconnected!!")
+        fileTransferClient = nil
+    }
 }
+
