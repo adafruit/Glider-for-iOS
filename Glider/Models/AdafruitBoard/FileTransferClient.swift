@@ -151,8 +151,7 @@ class FileTransferClient {
         - Parameter path: Full path
     */
     func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
-        let pathEndingWithSeparator = path.hasSuffix("/") ? path : path.appending("/")      // Force a trailing separator
-        blePeripheral?.makeDirectory(path: pathEndingWithSeparator, completion: completion)
+        blePeripheral?.makeDirectory(path: FileTransferPathUtils.pathWithTrailingSeparator(path: path), completion: completion)
     }
 
     /// Lists all of the contents in a directory given a full path. Returned paths are relative to the given path to reduce duplication

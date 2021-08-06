@@ -19,7 +19,7 @@ class FileChooserViewModel: ObservableObject {
         self.fileTransferClient = fileTransferClient
         
         // Clean directory name
-        let directoryName = FileTransferUtils.pathRemovingFilename(path: directory)
+        let directoryName = FileTransferPathUtils.pathRemovingFilename(path: directory)
         self.directory = directoryName
         
         // List directory
@@ -27,7 +27,7 @@ class FileChooserViewModel: ObservableObject {
     }
     
     func listDirectory(directory: String) {
-        isRootDirectory = directory == "/"
+        isRootDirectory = FileTransferPathUtils.isRootDirectory(path: directory)
         entries.removeAll()
         isTransmiting = true
         

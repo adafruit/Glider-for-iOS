@@ -10,7 +10,7 @@ import UniformTypeIdentifiers
 
 final class FileProviderItem: NSObject, NSFileProviderItem {
 
-    private(set) var path: String
+    private(set) var path: String   // Always includes a trailing separator
     private(set) var entry: BlePeripheral.DirectoryEntry
     var lastUpdate: Date            // Used to keep track of which files has been modified locally
     var creation: Date
@@ -18,7 +18,7 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     var fullPath: String { path + entry.name }
     
     init(path: String, entry: BlePeripheral.DirectoryEntry) {
-        let pathEndingWithSeparator = path.hasSuffix("/") ? path : path.appending("/")      // Force a trailing separator
+        let pathEndingWithSeparator = FileTransferPathUtils.pathWithTrailingSeparator(path: path)
         self.path = pathEndingWithSeparator
         self.entry = entry
         self.creation = Date()
@@ -31,25 +31,13 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     }
     
     var parentItemIdentifier: NSFileProviderItemIdentifier {
-        let parentPath: String
-        
-        // Remove leading '/' and find the next one. Keep anything after the one found
-        let pathWithoutLeadingSlash = path.deletingPrefix("/")
-        if let indexOfFirstSlash = (pathWithoutLeadingSlash.range(of: "/")?.lowerBound) {
-            let parentPathWithoutLeadingSlash = String(pathWithoutLeadingSlash.prefix(upTo: indexOfFirstSlash))
-            parentPath = "/"+parentPathWithoutLeadingSlash
-        }
-        else {      // Is root (only the leading '/' found)
-            parentPath = path       // The parent for root is root
-        }
-        
+        let parentPath = FileTransferPathUtils.parentPath(from: path)
         //DLog("parent for: '\(fullPath)' -> '\(parentPath)'")
         return itemIdentifier(from: parentPath)
-        
     }
     
     var filename: String {
-        if fullPath == "/" {
+        if FileTransferPathUtils.isRootDirectory(path: fullPath) {
             return "root"
         }
         else {
@@ -112,7 +100,7 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     
     // MARK: - Utils
     private func itemIdentifier(from path: String) -> NSFileProviderItemIdentifier {
-        let isRootDirectory = path == "/"
+        let isRootDirectory = FileTransferPathUtils.isRootDirectory(path: path)
         if isRootDirectory {
             return .rootContainer
         }

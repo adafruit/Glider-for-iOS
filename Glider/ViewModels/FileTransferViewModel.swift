@@ -144,7 +144,7 @@ class FileTransferViewModel: ObservableObject {
     }
     
     func listDirectory(filename: String) {
-        let directory = FileTransferUtils.pathRemovingFilename(path: filename)
+        let directory = FileTransferPathUtils.pathRemovingFilename(path: filename)
         
         startCommand(description: "List directory")
 

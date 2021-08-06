@@ -39,8 +39,8 @@ struct FileChooserView: View {
                 List {
                     if !model.isRootDirectory {
                         Button(action: {
-                            let path = FileTransferUtils.upPath(from: model.directory)
-                            let _ = print("Up directory: \(path)")
+                            let path = FileTransferPathUtils.upPath(from: model.directory)
+                            let _ = DLog("Up directory: \(path)")
                             $directory.wrappedValue = path
                             model.listDirectory(directory: path)
                             
@@ -56,7 +56,7 @@ struct FileChooserView: View {
                             switch entry.type {
                             case .file(let size):
                                 Button(action: {
-                                    let _ = print("File: \(entry.name)")
+                                    let _ = DLog("File: \(entry.name)")
                                     $directory.wrappedValue = model.directory + entry.name
                                     presentationMode.wrappedValue.dismiss()
                                 }, label: {
@@ -65,7 +65,7 @@ struct FileChooserView: View {
                                 
                             case .directory:
                                 Button(action: {
-                                    let _ = print("Directory: \(entry.name)")
+                                    let _ = DLog("Directory: \(entry.name)")
                                     let path = model.directory + entry.name + "/"
                                     $directory.wrappedValue = path
                                     model.listDirectory(directory: path)
@@ -145,6 +145,6 @@ struct FileChooserView: View {
 
 struct DirectoryChooserView_Previews: PreviewProvider {
     static var previews: some View {
-        FileChooserView(directory: .constant("/"), fileTransferClient: nil)
+        FileChooserView(directory: .constant(FileTransferPathUtils.rootDirectory), fileTransferClient: nil)
     }
 }

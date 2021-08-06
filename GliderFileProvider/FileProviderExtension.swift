@@ -42,23 +42,16 @@ class FileProviderExtension: NSFileProviderExtension {
         }
     
         let manager = NSFileProviderManager.default
-        let partialPath = item.fullPath.deletingPrefix("/")
+        let partialPath = item.fullPath.deletingPrefix(FileTransferPathUtils.pathSeparator)
         let url = manager.documentStorageURL.appendingPathComponent(partialPath, isDirectory: item.entry.isDirectory)
         //DLog("urlForItem at: \(identifier.rawValue) -> \(url.absoluteString)")
         return url
     }
     
     override func persistentIdentifierForItem(at url: URL) -> NSFileProviderItemIdentifier? {
-        /*
-        // exploit the fact that the path structure has been defined as
-        // <base storage directory>/<item identifier>/<item file name> above
-        assert(pathComponents.count > 2)
-        
-        return NSFileProviderItemIdentifier(pathComponents[pathComponents.count - 2])
- */
-        
+
         let pathComponents = url.pathComponents
-        let fullPath = "/" + pathComponents[pathComponents.count - 1]
+        let fullPath = FileTransferPathUtils.pathSeparator + pathComponents[pathComponents.count - 1]
         let persistentIdentifier = NSFileProviderItemIdentifier(fullPath)
         //DLog("persistentIdentifierForItem at: \(url.absoluteString) -> \(persistentIdentifier.rawValue)")
         return persistentIdentifier
@@ -268,7 +261,7 @@ class FileProviderExtension: NSFileProviderExtension {
         if (containerItemIdentifier == NSFileProviderItemIdentifier.rootContainer) {
             // instantiate an enumerator for the container root
             DLog("enumerator for rootContainer")
-            return FileProviderEnumerator(gliderClient: gliderClient, path: "/", filename: nil )
+            return FileProviderEnumerator(gliderClient: gliderClient, path: FileTransferPathUtils.rootDirectory, filename: nil )
             
         } else if (containerItemIdentifier == NSFileProviderItemIdentifier.workingSet) {
             // TODO: instantiate an enumerator for the working set
@@ -283,7 +276,7 @@ class FileProviderExtension: NSFileProviderExtension {
             if let item = try item(for: containerItemIdentifier) as? FileProviderItem  {
                 if item.entry.isDirectory {
                     DLog("enumerator for directory: \(containerItemIdentifier.rawValue)")
-                    let path = item.path + item.entry.name + "/"
+                    let path = item.path + item.entry.name + FileTransferPathUtils.pathSeparator
                     return FileProviderEnumerator(gliderClient: gliderClient, path: path, filename: nil )
                 }
                 else {
