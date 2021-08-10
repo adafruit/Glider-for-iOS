@@ -82,6 +82,7 @@ struct FileTransferView: View {
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .modifier(Alerts(activeAlert: $model.activeAlert))
     }
 
     private struct ContentsView: View {
@@ -171,6 +172,25 @@ struct FileTransferView: View {
                     }
                 }
             }
+        }
+    }
+    
+    private struct Alerts: ViewModifier {
+        @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+        @Binding var activeAlert: FileTransferViewModel.ActiveAlert?
+        
+        func body(content: Content) -> some View {
+            content
+                .alert(item: $activeAlert, content:  { alert in
+                    switch alert {
+                    case .error(let error):
+                        return Alert(
+                            title: Text("Error"),
+                            message: Text(error.localizedDescription),
+                            dismissButton: .default(Text("ok")) {
+                            })
+                    }
+                })
         }
     }
     

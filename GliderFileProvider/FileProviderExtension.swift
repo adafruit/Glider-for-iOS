@@ -161,28 +161,7 @@ class FileProviderExtension: NSFileProviderExtension {
                 // The local files has changes, so upload it to the peripheral
                 DLog("File \(fileProviderItem.fullPath) has local changes. Send to peripheral")
                 
-                do {
-                    let localData = try Data(contentsOf: url)
-                    gliderClient.writeFileStartingFileTransferIfNeeded(path: fileProviderItem.fullPath, data: localData) { result in
-                        switch result {
-                        case .success:
-                            // Save sync date
-                            let localModificationDate = self.fileModificationDate(url: url)
-                            fileProviderItem.lastUpdate = localModificationDate ?? Date()
-                            self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
-                            
-                            // Finished
-                            completionHandler(nil)
-                            
-                        case .failure:
-                            completionHandler(NSFileProviderError(.serverUnreachable))
-                        }
-                    }
-                }
-                catch(let error) {
-                    DLog("syncFile \(fileProviderItem.fullPath) load from disk error: \(error)")
-                    completionHandler(NSFileProviderError(.noSuchItem))
-                }
+                uploadFile(localURL: url, item: fileProviderItem, completionHandler: completionHandler)
             }
             else {
                 checkIfRemoteFileChangedAndDownload(url: url, fileProviderItem: fileProviderItem) { result in
@@ -209,12 +188,35 @@ class FileProviderExtension: NSFileProviderExtension {
         
         // Called at some point after the file has changed; the provider may then trigger an upload
         
-        /* TODO:
+        /*
          - mark file at <url> as needing an update in the model
          - if there are existing NSURLSessionTasks uploading this file, cancel them
          - create a fresh background NSURLSessionTask and schedule it to upload the current modifications
          - register the NSURLSessionTask with NSFileProviderManager to provide progress updates
          */
+        
+        guard let identifier = persistentIdentifierForItem(at: url) else {
+            DLog("itemChanged. Unknown identifier")
+            return
+        }
+
+        guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else {
+            DLog("itemChanged. Unknown fileProviderItem")
+            return
+        }
+        
+        // TODO: check if the file was already being uploaded int the queue and cancel it
+        // Schedule upload in background
+        backgroundQueue.async {
+            self.uploadFile(localURL: url, item: fileProviderItem) { error in
+                if let error = error {
+                    DLog("itemChanged upload \(fileProviderItem.fullPath) error: \(error.localizedDescription)")
+                }
+                else {
+                    DLog("itemChanged uploaded \(fileProviderItem.fullPath)")
+                }
+            }
+        }
     }
     
     override func stopProvidingItem(at url: URL) {
@@ -242,16 +244,7 @@ class FileProviderExtension: NSFileProviderExtension {
             })
         }
     }
-    
-    private func hasLocalChanges(url: URL) -> Bool {
-        guard let identifier = persistentIdentifierForItem(at: url) else { return false }
-        guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else { return false }
-        
-        let localModificationDate = self.fileModificationDate(url: url)
-        let localFileHasChanges = (localModificationDate ?? Date.distantPast) > fileProviderItem.lastUpdate
-        return localFileHasChanges
-     
-    }
+
     
     // MARK: - Actions
     
@@ -607,5 +600,40 @@ class FileProviderExtension: NSFileProviderExtension {
             completionHandler(error)
         }
          */
+    }
+    
+    private func uploadFile(localURL url: URL, item fileProviderItem: FileProviderItem, completionHandler: @escaping ((_ error: Error?) -> Void)) {
+        do {
+            let localData = try Data(contentsOf: url)
+            gliderClient.writeFileStartingFileTransferIfNeeded(path: fileProviderItem.fullPath, data: localData) { result in
+                switch result {
+                case .success:
+                    // Save sync date
+                    let localModificationDate = self.fileModificationDate(url: url)
+                    fileProviderItem.lastUpdate = localModificationDate ?? Date()
+                    self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
+                    
+                    // Finished
+                    completionHandler(nil)
+                    
+                case .failure:
+                    completionHandler(NSFileProviderError(.serverUnreachable))
+                }
+            }
+        }
+        catch(let error) {
+            DLog("syncFile \(fileProviderItem.fullPath) load from disk error: \(error)")
+            completionHandler(NSFileProviderError(.noSuchItem))
+        }
+    }
+    
+    private func hasLocalChanges(url: URL) -> Bool {
+        guard let identifier = persistentIdentifierForItem(at: url) else { return false }
+        guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else { return false }
+        
+        let localModificationDate = self.fileModificationDate(url: url)
+        let localFileHasChanges = (localModificationDate ?? Date.distantPast) > fileProviderItem.lastUpdate
+        return localFileHasChanges
+     
     }
 }

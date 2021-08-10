@@ -11,7 +11,7 @@ import CoreBluetooth
 // TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconect events or/and have internal state
 extension BlePeripheral {
     // Config
-    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && true
+    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && false
     
     // Constants
     static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
@@ -389,7 +389,7 @@ extension BlePeripheral {
         guard let adafruitFileTransferWriteStatus = adafruitFileTransferWriteStatus else { DLog("Error: invalid internal status"); return 0 }
         let completion = adafruitFileTransferWriteStatus.completion
         
-        guard data.count >= Self.writeFileResponseHeaderSize else {  return 0 }     // Header has not been fully received yet
+        guard data.count >= Self.writeFileResponseHeaderSize else { return 0 }     // Header has not been fully received yet
         
         let status = data[1]
         let isStatusOk = status == 0x01
