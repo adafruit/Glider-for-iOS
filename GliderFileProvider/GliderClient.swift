@@ -19,6 +19,9 @@ class GliderClient {
         case undefinedFileProviderItem(identifier: String)
     }
     
+    // Singleton (used to manage concurrency)
+    static let shared = GliderClient()
+    
     // Data
     private var completion: ((Result<FileTransferClient, Error>)->Void)?
 
@@ -26,7 +29,8 @@ class GliderClient {
     private let bleSupportSemaphore = DispatchSemaphore(value: 0)
     private var startTime: CFAbsoluteTime!
     private var autoReconnect: BleAutoReconnect?
-    private var fileTransferLock = NSLock()         // Lock to avoid executing multipel setupFileTransfer concurrently
+    //private var fileTransferLock = NSLock()         // Lock to avoid executing multiple setupFileTransfer concurrently
+    private let fileTransferSemaphore = DispatchSemaphore(value: 1)
     
     // Data - FileTransfer
     private var fileTransferClient: FileTransferClient?
@@ -34,8 +38,10 @@ class GliderClient {
     // Data - Metadata Cache
     var metadataCache = FileMetadataCache()
     
+    
     // MARK: -
-    init() {
+    private init() {
+        DLog("GliderClient init")
         registerDisconnectionNotifications(enabled: true)
     }
     
@@ -48,81 +54,85 @@ class GliderClient {
     
     // MARK: - Commands (with lock to avoid concurrent requests)
     func readFile(path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
-        fileTransferLock.lock()
+        fileTransferSemaphore.wait()
         setupFileTransferIfNeeded { result in
             switch result {
             case .success(let client):
                 client.readFile(path: path, progress: progress) {
                     completion?($0)
-                    self.fileTransferLock.unlock()
+                    self.fileTransferSemaphore.signal()
                 }
             case .failure(let error):
                 completion?(.failure(error))
-                self.fileTransferLock.unlock()
+                self.fileTransferSemaphore.signal()
             }
         }
     }
     
     func writeFile(path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
-        fileTransferLock.lock()
+        fileTransferSemaphore.wait()
         setupFileTransferIfNeeded { result in
             switch result {
             case .success(let client):
                 client.writeFile(path: path, data: data, progress: progress) {
                     completion?($0)
-                    self.fileTransferLock.unlock()
+                    self.fileTransferSemaphore.signal()
                 }
             case .failure(let error):
                 completion?(.failure(error))
-                self.fileTransferLock.unlock()
+                self.fileTransferSemaphore.signal()
             }
         }
     }
     
     func deleteFile(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
-        fileTransferLock.lock()
+        fileTransferSemaphore.wait()
         setupFileTransferIfNeeded { result in
             switch result {
             case .success(let client):
                 client.deleteFile(path: path) {
                     completion?($0)
-                    self.fileTransferLock.unlock()
+                    self.fileTransferSemaphore.signal()
                 }
             case .failure(let error):
                 completion?(.failure(error))
-                self.fileTransferLock.unlock()
+                self.fileTransferSemaphore.signal()
             }
         }
     }
 
     func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
-        fileTransferLock.lock()
+        fileTransferSemaphore.wait()
         setupFileTransferIfNeeded { result in
             switch result {
             case .success(let client):
                 client.makeDirectory(path: path) {
                     completion?($0)
-                    self.fileTransferLock.unlock()
+                    self.fileTransferSemaphore.signal()
                 }
             case .failure(let error):
                 completion?(.failure(error))
-                self.fileTransferLock.unlock()
+                self.fileTransferSemaphore.signal()
             }
         }
     }
 
     func listDirectory(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
-        fileTransferLock.lock()
+        DLog("listDirectory prelock: \(path)")
+        fileTransferSemaphore.wait()
+        DLog("listDirectory postlock: \(path)")
         setupFileTransferIfNeeded { result in
             switch result {
             case .success(let client):
                 client.listDirectory(path: path) {
                     completion?($0)
-                    self.fileTransferLock.unlock()
+                    DLog("listDirectory unlock: \(path)")
+                    self.fileTransferSemaphore.signal()
                 }
             case .failure(let error):
                 completion?(.failure(error))
-                self.fileTransferLock.unlock()
+                DLog("listDirectory unlock: \(path)")
+                self.fileTransferSemaphore.signal()
             }
         }
     }
@@ -131,7 +141,7 @@ class GliderClient {
         guard fileTransferClient == nil || !fileTransferClient!.isFileTransferEnabled else {
             // It is already setup
             completion(.success(fileTransferClient!))
-            self.fileTransferLock.unlock()
+            self.bleSupportSemaphore.signal()
             return
         }
 

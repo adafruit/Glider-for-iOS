@@ -11,7 +11,7 @@ import CoreBluetooth
 // TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconect events or/and have internal state
 extension BlePeripheral {
     // Config
-    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && false
+    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && true
     
     // Constants
     static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
@@ -279,6 +279,7 @@ extension BlePeripheral {
     }
     
     func listDirectory(path: String, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
+        if self.adafruitFileTransferListDirectoryStatus != nil { DLog("Warning: concurrent listDirectory") }
         self.adafruitFileTransferListDirectoryStatus = FileTransferListDirectoryStatus(completion: completion)
                 
         let data = ([UInt8]([0x50, 0x00])).data
@@ -398,6 +399,7 @@ extension BlePeripheral {
 
         if Self.kDebugMessagesEnabled { DLog("write \(isStatusOk ? "ok":"error") at offset: \(offset). free space: \(freeSpace)")}
         guard isStatusOk else {
+            self.adafruitFileTransferWriteStatus = nil
             completion?(.failure(FileTransferError.statusFailed))
             return Int.max      // invalidate all received data on error
         }
@@ -411,6 +413,7 @@ extension BlePeripheral {
         else {
             writeFileChunk(offset: offset, chunkSize: freeSpace) { result in
                 if case .failure(let error) = result {
+                    self.adafruitFileTransferWriteStatus = nil
                     completion?(.failure(error))
                 }
             }
@@ -435,6 +438,7 @@ extension BlePeripheral {
         
         guard isStatusOk else {
             if Self.kDebugMessagesEnabled { DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)") }
+            self.adafruitFileTransferReadStatus = nil
             completion?(.failure(FileTransferError.statusFailed))
             return Int.max      // invalidate all received data on error
         }
@@ -453,6 +457,7 @@ extension BlePeripheral {
             let maxChunkLength = mtu - Self.readFileResponseHeaderSize
             readFileChunk(offset: offset + chunkSize, chunkSize: UInt32(maxChunkLength)) { result in
                 if case .failure(let error) = result {
+                    self.adafruitFileTransferReadStatus = nil
                     completion?(.failure(error))
                 }
             }
@@ -475,6 +480,7 @@ extension BlePeripheral {
         let status = data[1]
         let isDeleted = status == 0x01
         
+        self.adafruitFileTransferDeleteStatus = nil
         completion?(.success(isDeleted))
         return Self.deleteFileResponseHeaderSize        // Return processed bytes
     }
@@ -488,12 +494,14 @@ extension BlePeripheral {
         let status = data[1]
         let isCreated = status == 0x01
         
+        self.adafruitFileTransferMakeDirectoryStatus = nil
         completion?(.success(isCreated))
         return Self.deleteFileResponseHeaderSize // Return processed bytes
     }
     
     private func decodeListDirectory(data: Data) -> Int {
-        guard let adafruitFileTransferListDirectoryStatus = adafruitFileTransferListDirectoryStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferListDirectoryStatus = adafruitFileTransferListDirectoryStatus else {
+            DLog("Error: invalid internal status"); return 0 }
         let completion = adafruitFileTransferListDirectoryStatus.completion
         
         guard data.count >= Self.listDirectoryResponseHeaderSize else { return 0 }       // Header has not been fully received yet
@@ -511,9 +519,10 @@ extension BlePeripheral {
                 let entryIndex: UInt32 = data.scanValue(start: 4, length: 4)
                 
                 if entryIndex >= entryCount  {     // Finished. Return entries
-                    if Self.kDebugMessagesEnabled { DLog("list: finished") }
-                    completion?(.success(self.adafruitFileTransferListDirectoryStatus!.entries))
+                    let entries = self.adafruitFileTransferListDirectoryStatus!.entries
                     self.adafruitFileTransferListDirectoryStatus = nil
+                    if Self.kDebugMessagesEnabled { DLog("list: finished") }
+                    completion?(.success(entries))
                 }
                 else {
                     let flags: UInt32 = data.scanValue(start: 12, length: 4)

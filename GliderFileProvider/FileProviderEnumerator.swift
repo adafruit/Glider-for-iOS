@@ -57,7 +57,7 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
         
         
         // Enumerate items for .rootDirectory
-        DLog("Enumerate for \(self.fullPath) started")
+        DLog("Enumerate for '\(self.fullPath)' requested")
         
         gliderClient.listDirectory(path: self.path) { [weak self] result in
             guard let self = self else { return }
@@ -79,7 +79,7 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
                             observer.finishEnumerating(upTo: nil)
                         }
                         else {
-                            DLog("Enumeration for a specific file failed to find that file: \(self.fullPath)")
+                            DLog("Enumeration for a specific file failed to find that file: '\(self.fullPath)'")
                             observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem))
                         }
                     }
@@ -96,10 +96,10 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
                 
             case .failure(let error):
                 observer.finishEnumerating(upTo: nil)
-                DLog("listDirectory \(self.path) error: \(error)")
+                DLog("listDirectory '\(self.path)' error: \(error)")
             }
             
-            DLog("Enumerate for \(self.fullPath) finished")
+            DLog("Enumerate for '\(self.fullPath)' finished")
         }
     }
     

@@ -9,7 +9,7 @@ import FileProvider
 
 class FileProviderExtension: NSFileProviderExtension {
     // Data
-    private let gliderClient = GliderClient()
+    private let gliderClient = GliderClient.shared
     private var fileManager = FileManager()
     private var backgroundQueue = DispatchQueue.global(qos: .utility)
     
@@ -41,24 +41,32 @@ class FileProviderExtension: NSFileProviderExtension {
             return nil
         }
     
-        let manager = NSFileProviderManager.default
         let partialPath = item.fullPath.deletingPrefix(FileTransferPathUtils.pathSeparator)
-        let url = manager.documentStorageURL.appendingPathComponent(partialPath, isDirectory: item.entry.isDirectory)
+        let url = NSFileProviderManager.default.documentStorageURL.appendingPathComponent(partialPath, isDirectory: item.entry.isDirectory)
         //DLog("urlForItem at: \(identifier.rawValue) -> \(url.absoluteString)")
         return url
     }
     
     override func persistentIdentifierForItem(at url: URL) -> NSFileProviderItemIdentifier? {
 
-        let pathComponents = url.pathComponents
-        let fullPath = FileTransferPathUtils.pathSeparator + pathComponents[pathComponents.count - 1]
+        var pathComponents = url.pathComponents
+
+        // Remove all common elements with the FileProvider documents storage to get the specific components used as identifier
+        let documentsStorageComponents = NSFileProviderManager.default.documentStorageURL.pathComponents
+        for component in documentsStorageComponents {
+            if component == pathComponents.first {
+                pathComponents.removeFirst()
+            }
+        }
+        
+        let fullPath = FileTransferPathUtils.pathSeparator + pathComponents.joined(separator: FileTransferPathUtils.pathSeparator)
         let persistentIdentifier = NSFileProviderItemIdentifier(fullPath)
         //DLog("persistentIdentifierForItem at: \(url.absoluteString) -> \(persistentIdentifier.rawValue)")
         return persistentIdentifier
     }
     
     override func providePlaceholder(at url: URL, completionHandler: @escaping (Error?) -> Void) {
-        DLog("providePlaceholder at: \(url.absoluteString)")
+        // DLog("providePlaceholder at: \(url.absoluteString)")
         
         guard let identifier = persistentIdentifierForItem(at: url) else {
             completionHandler(NSFileProviderError(.noSuchItem))
@@ -128,7 +136,7 @@ class FileProviderExtension: NSFileProviderExtension {
                 case .success(let data):
                     do {
                         // Write data locally
-                        try self.writeReceivedFile(url: url, fileProviderItem: fileProviderItem ,receivedData: data)
+                        try self.writeReceivedFileLocally(url: url, fileProviderItem: fileProviderItem, receivedData: data)
 
                         // Finished sync
                         DLog("syncFile \(fileProviderItem.fullPath) success")
@@ -240,7 +248,7 @@ class FileProviderExtension: NSFileProviderExtension {
         guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else { return false }
         
         let localModificationDate = self.fileModificationDate(url: url)
-        let localFileHasChanges = localModificationDate != fileProviderItem.lastUpdate
+        let localFileHasChanges = (localModificationDate ?? Date.distantPast) > fileProviderItem.lastUpdate
         return localFileHasChanges
      
     }
@@ -305,23 +313,114 @@ class FileProviderExtension: NSFileProviderExtension {
 
         // Create fileProviderItem
         let fileProviderItem = FileProviderItem(path: parentFileProviderItem.fullPath, entry: BlePeripheral.DirectoryEntry(name: directoryName, type: .directory))
-        self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
         
-        // Schedule create in background
-        backgroundQueue.async {
-            self.gliderClient.makeDirectory(path: fileProviderItem.fullPath) { result in
-                switch result {
-                case .success(let success):
-                    DLog("createDirectory '\(fileProviderItem.fullPath)' result successful: \(success)")
-                    
-                case .failure(let error):
-                    DLog("createDirectory error: \(error)")
+        createDirectoryLocally(fileProviderItem: fileProviderItem) { result in
+            switch result {
+            case .success:
+                
+                // Schedule create in background
+                backgroundQueue.async {
+                    self.gliderClient.makeDirectory(path: fileProviderItem.fullPath) { result in
+                        switch result {
+                        case .success(let success):
+                            DLog("createDirectory '\(fileProviderItem.fullPath)' result successful: \(success)")
+                            
+                        case .failure(let error):
+                            DLog("createDirectory error: \(error)")
+                        }
+                    }
                 }
+                
+                // Return inmediately (before the directory is even created)
+                completionHandler(fileProviderItem, nil)
+                
+            case .failure(let error):
+                DLog("Error creating local directory: \(fileProviderItem.fullPath). Error: \(error.localizedDescription)")
+                completionHandler(nil, error)
             }
         }
 
-        // Return inmediately (before the directory is even created)
-        completionHandler(fileProviderItem, nil)
+    }
+    
+    override func deleteItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (Error?) -> Void) {
+        
+        guard let fileProviderItem = try? item(for: itemIdentifier) as? FileProviderItem else {
+            DLog("deleteItem. Unknown fileProviderItem")
+            completionHandler(NSFileProviderError(.noSuchItem))
+            return
+        }
+        
+        deleteItemLocally(itemIdentifier: itemIdentifier) { result in
+            // Note: .failure not checked to avoid irresoluble situations when in an inconsist internal state (i.e. item exists in metadata but not locally)
+            
+            // Schedule delete in background
+            backgroundQueue.async {
+                self.gliderClient.deleteFile(path: fileProviderItem.fullPath) { result in
+                    switch result {
+                    case .success(let success):
+                        DLog("deleteFile '\(fileProviderItem.fullPath)' result successful: \(success)")
+                        
+                    case .failure(let error):
+                        DLog("deleteFile error: \(error)")
+                    }
+                }
+            }
+            
+            // Return inmediately (before the file is deleted)
+            completionHandler(nil)
+        }
+
+    }
+    
+    override func importDocument(at fileURL: URL, toParentItemIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
+        
+        guard let parentFileProviderItem = try? item(for: parentItemIdentifier) as? FileProviderItem else {
+            completionHandler(nil, NSFileProviderError(.noSuchItem))
+            return
+        }
+        
+        guard fileURL.startAccessingSecurityScopedResource() else { DLog("Error accesing security scoped resource for: \(fileURL.absoluteString)"); return }
+        
+        do {
+            let fileAttributes = try fileURL.resourceValues(forKeys:[.nameKey, .creationDateKey, .contentModificationDateKey])
+            let data = try Data(contentsOf: fileURL)
+            let filename = fileAttributes.name ?? "imported"            // Default name for unknown imported documents
+            
+            // Create fileProviderItem
+            let fileProviderItem = FileProviderItem(path: parentFileProviderItem.fullPath, entry: BlePeripheral.DirectoryEntry(name: filename, type: .file(size: data.count)))
+            if let creationDate = fileAttributes.creationDate {
+                fileProviderItem.creation = creationDate
+            }
+            if let lastUpdate = fileAttributes.contentModificationDate {
+                fileProviderItem.lastUpdate = lastUpdate
+            }
+            self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])     // Set before  urlForItem
+
+            guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else { DLog("Error obtaining local url for imported document \(fileURL.absoluteString)"); return }
+
+            // Write data locally
+            try data.write(to: localUrl, options: .atomic)
+            
+            // Schedule updload in background
+            backgroundQueue.async {
+                
+                self.gliderClient.writeFileStartingFileTransferIfNeeded(path: fileProviderItem.fullPath, data: data) { result in
+                    switch result {
+                    case .success:
+                        DLog("importDocument '\(fileProviderItem.fullPath)' successful. (\(data.count) bytes")
+                    case .failure(let error):
+                        DLog("importDocument error: \(error)")
+                    }
+                }
+            }
+            
+            completionHandler(fileProviderItem, nil)
+        } catch (let error) {
+            DLog("Error importing data from fileURL: \(fileURL.absoluteString). Error: \(error.localizedDescription)")
+            completionHandler(nil, error)
+        }
+        
+        fileURL.stopAccessingSecurityScopedResource()
     }
     
     override func renameItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, toName itemName: String, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
@@ -342,67 +441,51 @@ class FileProviderExtension: NSFileProviderExtension {
         let renamedEntry = BlePeripheral.DirectoryEntry(name: itemName, type: fileProviderItem.entry.type)
         let renamedItem = FileProviderItem(path: fileProviderItem.path, entry: renamedEntry)
         renamedItem.creation = fileProviderItem.creation        // Maintain creation date
-        self.gliderClient.metadataCache.setFileProviderItems(items: [renamedItem])
-        self.gliderClient.metadataCache.deleteFileProviderItem(identifier: itemIdentifier)
-        
-        // Schedule delete in background
-        backgroundQueue.async {
-
-            self.gliderClient.makeDirectory(path: renamedItem.fullPath) { result in
-                switch result {
-                case .success(let success):
-                    DLog("rename step 1: createDirectory '\(renamedItem.fullPath)' result successful: \(success)")
+         
+        createDirectoryLocally(fileProviderItem: renamedItem) { result in
+            switch result {
+            case .success:
+    
+                deleteItemLocally(itemIdentifier: itemIdentifier) { result in
+                    // Note: .failure not checked to avoid irresoluble situations when in an inconsist internal state (i.e. item exists in metadata but not locally)
                     
-                    self.gliderClient.deleteFile(path: fileProviderItem.fullPath) { result in
-                        switch result {
-                        case .success(let success):
-                            DLog("rename step 2: deleteFile \(fileProviderItem.fullPath) result successful: \(success)")
-                            
-                            
-                        case .failure(let error):
-                            DLog("rename step 2: deleteFile error: \(error)")
+                    // Schedule delete in background
+                    backgroundQueue.async {
+                        
+                        self.gliderClient.makeDirectory(path: renamedItem.fullPath) { result in
+                            switch result {
+                            case .success(let success):
+                                DLog("rename step 1: createDirectory '\(renamedItem.fullPath)' result successful: \(success)")
+                                
+                                self.gliderClient.deleteFile(path: fileProviderItem.fullPath) { result in
+                                    switch result {
+                                    case .success(let success):
+                                        DLog("rename step 2: deleteFile \(fileProviderItem.fullPath) result successful: \(success)")
+                                        
+                                        
+                                    case .failure(let error):
+                                        DLog("rename step 2: deleteFile error: \(error)")
+                                    }
+                                }
+                                
+                            case .failure(let error):
+                                DLog("rename step 1: createDirectory error: \(error)")
+                            }
                         }
                     }
                     
-                case .failure(let error):
-                    DLog("rename step 1: createDirectory error: \(error)")
-                }
-            }
-        }
-
-        // Return inmediately (before the file is deleted)
-        completionHandler(renamedItem, nil)
-    }
-    
-    override func deleteItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (Error?) -> Void) {
-        
-        guard let fileProviderItem = try? item(for: itemIdentifier) as? FileProviderItem else {
-            DLog("deleteItem. Unknown fileProviderItem")
-            completionHandler(NSFileProviderError(.noSuchItem))
-            return
-        }
-        
-        // Delete fileproviderItem
-        self.gliderClient.metadataCache.deleteFileProviderItem(identifier: itemIdentifier)
-        
-        // Schedule delete in background
-        backgroundQueue.async {
-            self.gliderClient.deleteFile(path: fileProviderItem.fullPath) { result in
-                switch result {
-                case .success(let success):
-                    DLog("deleteFile '\(fileProviderItem.fullPath)' result successful: \(success)")
+                    // Return inmediately (before the file is deleted)
+                    completionHandler(renamedItem, nil)
                     
-                case .failure(let error):
-                    DLog("deleteFile error: \(error)")
                 }
+                
+            case .failure(let error):
+                DLog("Error creating local directory: \(fileProviderItem.fullPath). Error: \(error.localizedDescription)")
+                completionHandler(nil, error)
             }
         }
-
-        // Return inmediately (before the file is deleted)
-        completionHandler(nil)
     }
     
-    /*
     override func setLastUsedDate(_ lastUsedDate: Date?, forItemIdentifier itemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
         
         DLog("setLastUsedDate: \(itemIdentifier.rawValue) to \(String(describing: lastUsedDate))")
@@ -412,17 +495,19 @@ class FileProviderExtension: NSFileProviderExtension {
         }
         
         // Save sync date
-        fileProviderItem.syncDate = lastUsedDate
-        self.gliderClient.metadataCache.updateMetadata(items: [fileProviderItem])
-
+        fileProviderItem.lastUpdate = lastUsedDate ?? fileProviderItem.creation     // If no lastUsedDate is provided, we set the creation date
+        self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
         
+        // Upload lastUpdate to the peripheral
+        // TODO: there is no API available on the FileTransfer protocol to do it
+
+        /*
         NSFileProviderManager.default.signalEnumerator(for: itemIdentifier) { error in
             DLog("signalFileProviderChanges for \(itemIdentifier.rawValue) completed. Error?: \(String(describing: error))")
-        }
+        }*/
         
         completionHandler(fileProviderItem, nil)
-    }*/
-
+    }
     
     // MARK: - Utils
     func fileModificationDate(url: URL) -> Date? {
@@ -434,7 +519,7 @@ class FileProviderExtension: NSFileProviderExtension {
         }
     }
     
-    private func writeReceivedFile(url: URL, fileProviderItem: FileProviderItem, receivedData: Data) throws {
+    private func writeReceivedFileLocally(url: URL, fileProviderItem: FileProviderItem, receivedData: Data) throws {
         try receivedData.write(to: url, options: .atomic)
         
         // Update metadata with the date used on the modification date on the written file. It will be used to keep track of the local changes. If the metadata stored data is older than the file's modification date, then the file has been changed locally and needs to be updated on the peripheral
@@ -460,7 +545,7 @@ class FileProviderExtension: NSFileProviderExtension {
                     
                     if isRemoFileChanged {
                         do {
-                            try self.writeReceivedFile(url: url, fileProviderItem: fileProviderItem, receivedData: data)
+                            try self.writeReceivedFileLocally(url: url, fileProviderItem: fileProviderItem, receivedData: data)
                             completion(.success(true))
                         }
                         catch(let error) {
@@ -481,5 +566,46 @@ class FileProviderExtension: NSFileProviderExtension {
         catch {
             completion(.failure(NSFileProviderError(.noSuchItem)))
         }
+    }
+    
+    private func createDirectoryLocally(fileProviderItem: FileProviderItem, completion: (Result<Void, Error>)->Void) {
+        // Update metadata
+        self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
+        
+        guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else { DLog("Error obtaining local url for createDirectory: \(fileProviderItem.fullPath)"); return }
+        
+        guard !fileManager.fileExists(atPath: localUrl.path) else { completion(.success(())); return }
+        
+        do {
+            try fileManager.createDirectory(at: localUrl, withIntermediateDirectories: true, attributes: [:])
+            completion(.success(()))
+        } catch(let error) {
+            self.gliderClient.metadataCache.deleteFileProviderItem(identifier: fileProviderItem.itemIdentifier)     // Undo creation
+            DLog("Error creating local directory: \(fileProviderItem.fullPath). Error: \(error.localizedDescription)")
+            completion(.failure(error))
+        }
+    }
+    
+    private func deleteItemLocally(itemIdentifier: NSFileProviderItemIdentifier, completion: (Result<Void, Error>)->Void) {
+        guard let localUrl = self.urlForItem(withPersistentIdentifier: itemIdentifier) else { DLog("Error obtaining local url for deleteItem: \(itemIdentifier.rawValue)"); return }
+
+        // Update metadata (before real delete)
+        self.gliderClient.metadataCache.deleteFileProviderItem(identifier: itemIdentifier)
+
+        // Delete local directory
+        try? fileManager.removeItem(at: localUrl)
+        completion(.success(()))
+        
+        /* Note: commented to always return delete successful in case we are in a inconsistent state
+        let isLocalItemDeleted: Bool
+        do {
+            try fileManager.removeItem(atPath: fileProviderItem.fullPath)
+            isLocalItemDeleted = true
+        } catch(let error) {
+            DLog("Error deleting local item: \(fileProviderItem.fullPath). Error: \(error.localizedDescription)")
+            isLocalItemDeleted = false
+            completionHandler(error)
+        }
+         */
     }
 }

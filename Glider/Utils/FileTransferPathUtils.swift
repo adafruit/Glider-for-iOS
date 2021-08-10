@@ -7,6 +7,7 @@
 
 import Foundation
 
+// TODO: FileProvider should not use this utils because even if the separators for FileProvider and URLs are the same, it could change in the future
 struct FileTransferPathUtils {
     static let pathSeparatorCharacter: Character = "/"
     static let pathSeparator = String(pathSeparatorCharacter)
