@@ -82,7 +82,6 @@
 		A9ED1F632687EC1C00B6C27F /* String+DeletingPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */; };
 		A9F116F926895DC7006F8FE4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F116F826895DC7006F8FE4 /* ShareViewController.swift */; };
 		A9F116FC26895DC7006F8FE4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */; };
-		A9F1170026895DC7006F8FE4 /* GliderShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A9F116F626895DC7006F8FE4 /* GliderShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F225252659ED8400D3B2C6 /* FileChooserView.swift */; };
 		A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */; };
 		A9F2252A265BA80F00D3B2C6 /* FileTransferPathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22529265BA80F00D3B2C6 /* FileTransferPathUtils.swift */; };
@@ -105,13 +104,6 @@
 			remoteGlobalIDString = A9ED1F252687530700B6C27F;
 			remoteInfo = GliderFileProvider;
 		};
-		A9F116FE26895DC7006F8FE4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A947FE3026543839007A5E5A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A9F116F526895DC7006F8FE4;
-			remoteInfo = GliderShare;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -121,7 +113,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A9F1170026895DC7006F8FE4 /* GliderShare.appex in Embed App Extensions */,
 				A9ED1F412687530800B6C27F /* GliderFileProvider.appex in Embed App Extensions */,
 				A9ED1F3E2687530800B6C27F /* GliderFileProviderUI.appex in Embed App Extensions */,
 			);
@@ -496,7 +487,6 @@
 			dependencies = (
 				A9ED1F3D2687530800B6C27F /* PBXTargetDependency */,
 				A9ED1F402687530800B6C27F /* PBXTargetDependency */,
-				A9F116FF26895DC7006F8FE4 /* PBXTargetDependency */,
 			);
 			name = Glider;
 			productName = Glider;
@@ -748,11 +738,6 @@
 			isa = PBXTargetDependency;
 			target = A9ED1F252687530700B6C27F /* GliderFileProvider */;
 			targetProxy = A9ED1F3F2687530800B6C27F /* PBXContainerItemProxy */;
-		};
-		A9F116FF26895DC7006F8FE4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A9F116F526895DC7006F8FE4 /* GliderShare */;
-			targetProxy = A9F116FE26895DC7006F8FE4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
