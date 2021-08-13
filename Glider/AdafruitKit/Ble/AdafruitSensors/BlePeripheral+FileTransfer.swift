@@ -8,10 +8,10 @@
 import Foundation
 import CoreBluetooth
 
-// TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconect events or/and have internal state
+// TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconnect events or/and maintain an internal state
 extension BlePeripheral {
     // Config
-    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && true
+    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && false
     
     // Constants
     static let kFileTransferServiceUUID = CBUUID(string: "FEBB")

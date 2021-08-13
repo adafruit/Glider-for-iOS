@@ -95,8 +95,8 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
                 }
                 
             case .failure(let error):
-                //observer.finishEnumeratingWithError(NSFileProviderError(.serverUnreachable))
-                observer.finishEnumeratingWithError(NSFileProviderError(.notAuthenticated))
+                observer.finishEnumeratingWithError(NSFileProviderError(.serverUnreachable))
+                //observer.finishEnumeratingWithError(NSFileProviderError(.notAuthenticated))
                 DLog("listDirectory '\(self.path)' error: \(error)")
             }
             

@@ -416,6 +416,9 @@ class FileProviderExtension: NSFileProviderExtension {
                         DLog("importDocument '\(fileProviderItem.fullPath)' successful. (\(data.count) bytes")
                     case .failure(let error):
                         DLog("importDocument error: \(error)")
+                        NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                            DLog("importDocument parent enumerator signal finished. Error?: \(error?.localizedDescription ?? "<nil>")")
+                        }
                     }
                 }
             }

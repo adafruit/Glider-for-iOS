@@ -9,7 +9,8 @@ import Foundation
 
 class GliderClient {
     // Config
-    private static let kMaxTimeToWaitForBleSupport: TimeInterval = 1.0
+    private static let maxTimeToWaitForBleSupport: TimeInterval = 1.0
+    private static let willDeviceDisconnectAfterWrite = true    // If the device automatically disconnects after a write, dont signal on write. Wait for the disconnection to happen
     //private let clientSemaphore = DispatchSemaphore(value: 0)
     
     enum GliderError: LocalizedError {
@@ -17,8 +18,6 @@ class GliderClient {
         case connectionFailed
         case invalidInternalState
         case undefinedFileProviderItem(identifier: String)
-        
-        
     }
     
     // Singleton (used to manage concurrency)
@@ -74,14 +73,25 @@ class GliderClient {
         fileTransferSemaphore.wait()
         DLog("writeFile setup: \(path)")
         setupFileTransferIfNeeded { result in
-            DLog("writeFile finished: \(result)")
             switch result {
             case .success(let client):
-                client.writeFile(path: path, data: data, progress: progress) {
-                    self.fileTransferSemaphore.signal()
-                    completion?($0)
+                client.writeFile(path: path, data: data, progress: progress) { result in
+                    switch result {
+                    case .success:
+                        DLog("writeFile finished successfully. Waiting for disconnect")
+                        if !Self.willDeviceDisconnectAfterWrite {
+                            self.fileTransferSemaphore.signal()
+                        }
+                        completion?(.success(()))
+                        
+                    case .failure(let error):
+                        DLog("writeFile finished with error")
+                        self.fileTransferSemaphore.signal()
+                        completion?(.failure(error))
+                    }
                 }
             case .failure(let error):
+                DLog("writeFile setup finished with error")
                 self.fileTransferSemaphore.signal()
                 completion?(.failure(error))
             }
@@ -153,7 +163,7 @@ class GliderClient {
         if bleState == .unknown || bleState == .resetting {
             registerBleStateNotifications(enabled: true)
 
-            let semaphoreResult = bleSupportSemaphore.wait(timeout: .now() + Self.kMaxTimeToWaitForBleSupport)
+            let semaphoreResult = bleSupportSemaphore.wait(timeout: .now() + Self.maxTimeToWaitForBleSupport)
             if semaphoreResult == .timedOut {
                 DLog("Bluetooth support check time-out. status: \(BleManager.shared.state.rawValue)")
             }
@@ -293,7 +303,9 @@ class GliderClient {
     private func didDisconnectFromPeripheral(notification: Notification) {
         DLog("Warning: peripheral has disconnected!!")
         fileTransferClient = nil
-//        fileTransferSemaphore.signal()
+        if Self.willDeviceDisconnectAfterWrite {
+            fileTransferSemaphore.signal()
+        }
     }
 }
 
