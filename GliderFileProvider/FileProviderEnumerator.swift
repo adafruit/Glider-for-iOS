@@ -69,7 +69,7 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
                     // Always update all items returned, even if we are enumerating an specific file
                     let items = entries.map { FileProviderItem(path: self.path, entry: $0) }
                     //DLog("listDirectory returned \(items.count) items")
-                    self.gliderClient.metadataCache.setFileProviderItems(items: items)
+                    self.gliderClient.metadataCache.setDirectoryItems(items: items)
                     self.lastUpdateDate = Date()
                     
                     if let filename = self.filename {   // If the enumerator only asked for a specific file, then return only that file
@@ -95,7 +95,8 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
                 }
                 
             case .failure(let error):
-                observer.finishEnumerating(upTo: nil)
+                //observer.finishEnumeratingWithError(NSFileProviderError(.serverUnreachable))
+                observer.finishEnumeratingWithError(NSFileProviderError(.notAuthenticated))
                 DLog("listDirectory '\(self.path)' error: \(error)")
             }
             
@@ -115,6 +116,9 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
          */
         
         DLog("enumerateChanges for anchor: \(anchor.rawValue)")
+        guard let data = TimeInterval(data: anchor.rawValue) else { return }
+        let anchorDate = Date(timeIntervalSince1970: data)
+        DLog("enumerateChanges for anchor date: \(anchorDate)")
     }
 
     

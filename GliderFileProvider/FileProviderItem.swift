@@ -31,14 +31,14 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     }
     
     var parentItemIdentifier: NSFileProviderItemIdentifier {
-        let parentPath = FileTransferPathUtils.parentPath(from: path)
-        //DLog("parent for: '\(fullPath)' -> '\(parentPath)'")
+        let parentPath = FileTransferPathUtils.parentPath(from: fullPath)
+        DLog("parent for: '\(fullPath)' -> '\(parentPath)'")
         return itemIdentifier(from: parentPath)
     }
     
     var filename: String {
         if FileTransferPathUtils.isRootDirectory(path: fullPath) {
-            return "root"
+            return "/"
         }
         else {
             return entry.name

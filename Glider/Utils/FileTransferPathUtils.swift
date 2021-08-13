@@ -38,15 +38,17 @@ struct FileTransferPathUtils {
     }
     
     static func parentPath(from path: String) -> String {
+        guard !isRootDirectory(path: path) else { return rootDirectory }     // Root parent is root
+        
         let parentPath: String
         // Remove leading '/' and find the next one. Keep anything after the one found
-        let pathWithoutLeadingSlash = path.deletingPrefix("/")
-        if let indexOfFirstSlash = (pathWithoutLeadingSlash.range(of: "/")?.lowerBound) {
-            let parentPathWithoutLeadingSlash = String(pathWithoutLeadingSlash.prefix(upTo: indexOfFirstSlash))
-            parentPath = "/"+parentPathWithoutLeadingSlash
+        let pathWithoutLeadingSlash = path.deletingPrefix(rootDirectory)
+        if let indexOfLastSlash = pathWithoutLeadingSlash.lastIndex(of: "/") {//(pathWithoutLeadingSlash.range(of: "/")?.lowerBound) {
+            let parentPathWithoutLeadingSlash = String(pathWithoutLeadingSlash.prefix(upTo: indexOfLastSlash))
+            parentPath = rootDirectory + parentPathWithoutLeadingSlash
         }
         else {      // Is root (only the leading '/' found)
-            parentPath = path       // The parent for root is root
+            parentPath = rootDirectory
         }
         
         return parentPath

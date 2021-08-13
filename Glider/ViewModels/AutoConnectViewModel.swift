@@ -213,7 +213,7 @@ class AutoConnectViewModel: ObservableObject {
 
     private func didConnectToPeripheral(notification: Notification) {
         guard let selectedPeripheral = selectedPeripheral, let identifier = notification.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID, selectedPeripheral.identifier == identifier else {
-            DLog("didConnect to an unexpected peripheral")
+            DLog("didConnect to an unexpected peripheral: \(String(describing: notification.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID))")
             return
         }
         detailText = "Connected..."

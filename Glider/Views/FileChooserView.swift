@@ -65,7 +65,7 @@ struct FileChooserView: View {
                                 
                             case .directory:
                                 Button(action: {
-                                    let _ = DLog("Directory: \(entry.name)")
+                                    let _ = DLog("Directory: '\(entry.name)'")
                                     let path = model.directory + entry.name + "/"
                                     $directory.wrappedValue = path
                                     model.listDirectory(directory: path)

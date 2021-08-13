@@ -318,6 +318,12 @@ class FileProviderExtension: NSFileProviderExtension {
                         case .success(let success):
                             DLog("createDirectory '\(fileProviderItem.fullPath)' result successful: \(success)")
                             
+                            if !success {
+                                DLog("createDirectory signal parent enumerator")
+                                NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                    DLog("createDirectory parent enumerator signal finished")
+                                }
+                            }
                         case .failure(let error):
                             DLog("createDirectory error: \(error)")
                         }
@@ -342,7 +348,7 @@ class FileProviderExtension: NSFileProviderExtension {
             completionHandler(NSFileProviderError(.noSuchItem))
             return
         }
-        
+
         deleteItemLocally(itemIdentifier: itemIdentifier) { result in
             // Note: .failure not checked to avoid irresoluble situations when in an inconsist internal state (i.e. item exists in metadata but not locally)
             
@@ -351,7 +357,13 @@ class FileProviderExtension: NSFileProviderExtension {
                 self.gliderClient.deleteFile(path: fileProviderItem.fullPath) { result in
                     switch result {
                     case .success(let success):
-                        DLog("deleteFile '\(fileProviderItem.fullPath)' result successful: \(success)")
+                        DLog("deleteFile '\(fileProviderItem.fullPath)' result successful: \(success)")                        
+                        if !success {
+                            DLog("deleteFile signal parent enumerator")
+                            NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                DLog("deleteFile parent enumerator signal finished")
+                            }
+                        }
                         
                     case .failure(let error):
                         DLog("deleteFile error: \(error)")
@@ -387,7 +399,7 @@ class FileProviderExtension: NSFileProviderExtension {
             if let lastUpdate = fileAttributes.contentModificationDate {
                 fileProviderItem.lastUpdate = lastUpdate
             }
-            self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])     // Set before  urlForItem
+            self.gliderClient.metadataCache.setFileProviderItem(item: fileProviderItem)     // Set before  urlForItem
 
             guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else { DLog("Error obtaining local url for imported document \(fileURL.absoluteString)"); return }
 
@@ -450,14 +462,28 @@ class FileProviderExtension: NSFileProviderExtension {
                             case .success(let success):
                                 DLog("rename step 1: createDirectory '\(renamedItem.fullPath)' result successful: \(success)")
                                 
-                                self.gliderClient.deleteFile(path: fileProviderItem.fullPath) { result in
-                                    switch result {
-                                    case .success(let success):
-                                        DLog("rename step 2: deleteFile \(fileProviderItem.fullPath) result successful: \(success)")
-                                        
-                                        
-                                    case .failure(let error):
-                                        DLog("rename step 2: deleteFile error: \(error)")
+                                if success {
+                                    self.gliderClient.deleteFile(path: fileProviderItem.fullPath) { result in
+                                        switch result {
+                                        case .success(let success):
+                                            DLog("rename step 2: deleteFile \(fileProviderItem.fullPath) result successful: \(success)")
+                                            
+                                            if !success {
+                                                DLog("rename step 2 signal parent enumerator")
+                                                NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                                    DLog("rename step 2 parent enumerator signal finished")
+                                                }
+                                            }
+                                            
+                                        case .failure(let error):
+                                            DLog("rename step 2: deleteFile error: \(error)")
+                                        }
+                                    }
+                                }
+                                else {
+                                    DLog("rename step 1 signal parent enumerator")
+                                    NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                        DLog("rename step 1 parent enumerator signal finished")
                                     }
                                 }
                                 
@@ -469,7 +495,6 @@ class FileProviderExtension: NSFileProviderExtension {
                     
                     // Return inmediately (before the file is deleted)
                     completionHandler(renamedItem, nil)
-                    
                 }
                 
             case .failure(let error):
@@ -478,6 +503,7 @@ class FileProviderExtension: NSFileProviderExtension {
             }
         }
     }
+    
     
     override func setLastUsedDate(_ lastUsedDate: Date?, forItemIdentifier itemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
         
@@ -489,7 +515,7 @@ class FileProviderExtension: NSFileProviderExtension {
         
         // Save sync date
         fileProviderItem.lastUpdate = lastUsedDate ?? fileProviderItem.creation     // If no lastUsedDate is provided, we set the creation date
-        self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
+        self.gliderClient.metadataCache.setFileProviderItem(item: fileProviderItem)
         
         // Upload lastUpdate to the peripheral
         // TODO: there is no API available on the FileTransfer protocol to do it
@@ -518,7 +544,7 @@ class FileProviderExtension: NSFileProviderExtension {
         // Update metadata with the date used on the modification date on the written file. It will be used to keep track of the local changes. If the metadata stored data is older than the file's modification date, then the file has been changed locally and needs to be updated on the peripheral
         let modificationDate = self.fileModificationDate(url: url)
         fileProviderItem.lastUpdate = modificationDate ?? Date()
-        self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
+        self.gliderClient.metadataCache.setFileProviderItem(item: fileProviderItem)
     }
     
     private func checkIfRemoteFileChangedAndDownload(url: URL, fileProviderItem: FileProviderItem, completion: @escaping((Result<Bool, Error>) -> Void) ) {
@@ -563,7 +589,7 @@ class FileProviderExtension: NSFileProviderExtension {
     
     private func createDirectoryLocally(fileProviderItem: FileProviderItem, completion: (Result<Void, Error>)->Void) {
         // Update metadata
-        self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
+        self.gliderClient.metadataCache.setFileProviderItem(item: fileProviderItem)
         
         guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else { DLog("Error obtaining local url for createDirectory: \(fileProviderItem.fullPath)"); return }
         
@@ -589,7 +615,7 @@ class FileProviderExtension: NSFileProviderExtension {
         try? fileManager.removeItem(at: localUrl)
         completion(.success(()))
         
-        /* Note: commented to always return delete successful in case we are in a inconsistent state
+        /* Note: commented to always return delete successful in case we are in an inconsistent state
         let isLocalItemDeleted: Bool
         do {
             try fileManager.removeItem(atPath: fileProviderItem.fullPath)
@@ -611,7 +637,7 @@ class FileProviderExtension: NSFileProviderExtension {
                     // Save sync date
                     let localModificationDate = self.fileModificationDate(url: url)
                     fileProviderItem.lastUpdate = localModificationDate ?? Date()
-                    self.gliderClient.metadataCache.setFileProviderItems(items: [fileProviderItem])
+                    self.gliderClient.metadataCache.setFileProviderItem(item: fileProviderItem)
                     
                     // Finished
                     completionHandler(nil)
@@ -632,7 +658,7 @@ class FileProviderExtension: NSFileProviderExtension {
         guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else { return false }
         
         let localModificationDate = self.fileModificationDate(url: url)
-        let localFileHasChanges = (localModificationDate ?? Date.distantPast) > fileProviderItem.lastUpdate
+        let localFileHasChanges = (localModificationDate ?? Date.distantPast) != fileProviderItem.lastUpdate
         return localFileHasChanges
      
     }

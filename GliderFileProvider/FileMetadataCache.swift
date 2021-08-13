@@ -26,7 +26,44 @@ struct FileMetadataCache {
         }
     }
     
+    /*
     mutating func setFileProviderItems(items: [FileProviderItem]) {
+        for item in items {
+            metadata[item.itemIdentifier] = item
+        }
+        
+        // Update user Defaults
+        saveToUserDefaults()
+    }*/
+    
+    mutating func setFileProviderItem(item: FileProviderItem) {
+        metadata[item.itemIdentifier] = item
+                
+        // Update user Defaults
+        saveToUserDefaults()
+    }
+    
+    mutating func setDirectoryItems(items: [FileProviderItem]) {
+        guard let commonPath = items.first?.path else { return }
+        let areAllDirectoriesEqual = items.map{$0.path}.allSatisfy{$0 == commonPath}
+        guard areAllDirectoriesEqual else {
+            DLog("setDirectoryItems error: all items should have the same directory ")
+            return
+        }
+        
+        // Sync: Delete any previous contents of the directory that is not present in the new items array
+        let itemsIdentifiers = items.map {$0.itemIdentifier}
+        let itemsToDelete = metadata.filter({(fileProviderItemIdentifier, fileProviderItem) in
+            let alreadyExists = fileProviderItem.path == commonPath
+            let isInNewSet =  itemsIdentifiers.contains(fileProviderItem.itemIdentifier)    // This check could be elminated because we are going to add all new elements later. So we could just delete all of the current elements in the directory
+            return alreadyExists && !isInNewSet
+        })
+        let _ = itemsToDelete.map { metadata.removeValue(forKey: $0.key) }
+        if itemsToDelete.count > 0 {
+            DLog("Metadata: deleted \(itemsToDelete.count) items that are no longer present in directory: \(commonPath)")
+        }
+                
+        // Insert updated items
         for item in items {
             metadata[item.itemIdentifier] = item
         }
@@ -36,7 +73,8 @@ struct FileMetadataCache {
     }
     
     mutating func deleteFileProviderItem(identifier: NSFileProviderItemIdentifier) {
-        metadata[identifier] = nil
+        metadata.removeValue(forKey: identifier)
+        //metadata[identifier] = nil
     }
     
     func fileProviderItem(for identifier: NSFileProviderItemIdentifier) -> FileProviderItem? {

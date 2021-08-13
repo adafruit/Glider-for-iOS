@@ -14,11 +14,14 @@ class DocumentActionViewController: FPUIActionExtensionViewController {
     @IBOutlet weak var actionTypeLabel: UILabel!
     
     override func prepare(forAction actionIdentifier: String, itemIdentifiers: [NSFileProviderItemIdentifier]) {
+        DLog("prepare for action: \(actionIdentifier)")
+
         identifierLabel?.text = actionIdentifier
         actionTypeLabel?.text = "Custom action"
     }
     
     override func prepare(forError error: Error) {
+        DLog("prepare for error: \(error)")
         identifierLabel?.text = error.localizedDescription
         actionTypeLabel?.text = "Authenticate"
     }

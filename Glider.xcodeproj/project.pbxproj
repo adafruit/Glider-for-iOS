@@ -52,6 +52,7 @@
 		A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
 		A96D27872687FA3D00D6E247 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
 		A9CCB9C1266A3CEE00E9FA28 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */; };
+		A9E7EB9726C3005E00C09C8B /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7626543893007A5E5A /* LogHelper.swift */; };
 		A9ED1F292687530700B6C27F /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F282687530700B6C27F /* FileProviderExtension.swift */; };
 		A9ED1F2B2687530700B6C27F /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */; };
 		A9ED1F2D2687530700B6C27F /* FileProviderEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F2C2687530700B6C27F /* FileProviderEnumerator.swift */; };
@@ -722,6 +723,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9E7EB9726C3005E00C09C8B /* LogHelper.swift in Sources */,
 				A9ED1F372687530800B6C27F /* DocumentActionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,7 +11,7 @@ import CoreBluetooth
 // TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconect events or/and have internal state
 extension BlePeripheral {
     // Config
-    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && false
+    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && true
     
     // Constants
     static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
@@ -386,7 +386,7 @@ extension BlePeripheral {
     }
 
     private func decodeWriteFile(data: Data) -> Int {
-        guard let adafruitFileTransferWriteStatus = adafruitFileTransferWriteStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferWriteStatus = adafruitFileTransferWriteStatus else { DLog("Error: write invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferWriteStatus.completion
         
         guard data.count >= Self.writeFileResponseHeaderSize else { return 0 }     // Header has not been fully received yet
@@ -424,7 +424,7 @@ extension BlePeripheral {
     
     /// Returns number of bytes processed
     private func decodeReadFile(data: Data) -> Int {
-        guard let adafruitFileTransferReadStatus = adafruitFileTransferReadStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferReadStatus = adafruitFileTransferReadStatus else { DLog("Error: read invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferReadStatus.completion
         
         guard data.count >= Self.readFileResponseHeaderSize else { return 0 }        // Header has not been fully received yet
@@ -472,7 +472,7 @@ extension BlePeripheral {
     }
     
     private func decodeDeleteFile(data: Data) -> Int {
-        guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else { DLog("Error: delete invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferDeleteStatus.completion
 
         guard data.count >= Self.deleteFileResponseHeaderSize else { return 0 }      // Header has not been fully received yet
@@ -486,7 +486,7 @@ extension BlePeripheral {
     }
     
     private func decodeMakeDirectory(data: Data) -> Int {
-        guard let adafruitFileTransferMakeDirectoryStatus = adafruitFileTransferMakeDirectoryStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferMakeDirectoryStatus = adafruitFileTransferMakeDirectoryStatus else { DLog("Error: makeDirectory invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferMakeDirectoryStatus.completion
 
         guard data.count >= Self.makeDirectoryResponseHeaderSize else { return 0 }      // Header has not been fully received yet
@@ -501,7 +501,7 @@ extension BlePeripheral {
     
     private func decodeListDirectory(data: Data) -> Int {
         guard let adafruitFileTransferListDirectoryStatus = adafruitFileTransferListDirectoryStatus else {
-            DLog("Error: invalid internal status"); return 0 }
+            DLog("Error: list invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferListDirectoryStatus.completion
         
         guard data.count >= Self.listDirectoryResponseHeaderSize else { return 0 }       // Header has not been fully received yet
@@ -534,7 +534,7 @@ extension BlePeripheral {
                     if pathLength > 0, let path = String(data: data[(data.startIndex + Self.listDirectoryResponseHeaderSize)..<(data.startIndex + Self.listDirectoryResponseHeaderSize + Int(pathLength))], encoding: .utf8) {
                         packetSize += Int(pathLength)        // chunk includes the variable length path, so add it
                         
-                        if Self.kDebugMessagesEnabled { DLog("list: \(entryIndex+1)/\(entryCount) \(isDirectory ? "directory":"file size: \(fileSize) bytes"), path: /\(path)")}
+                        if Self.kDebugMessagesEnabled { DLog("list: \(entryIndex+1)/\(entryCount) \(isDirectory ? "directory":"file size: \(fileSize) bytes"), path: '/\(path)'")}
                         let entry = DirectoryEntry(name: path, type: isDirectory ? .directory : .file(size: Int(fileSize)))
                         
                         // Add entry

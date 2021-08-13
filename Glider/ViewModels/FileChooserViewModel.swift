@@ -45,6 +45,7 @@ class FileChooserViewModel: ObservableObject {
                     }
                     else {
                         print("listDirectory: nonexistent directory")
+                        self.directory = directory
                     }
                     
                 case .failure(let error):
