@@ -111,8 +111,11 @@ class BleAutoReconnect {
             }
 
         } else {
-            Settings.clearAutoconnectPeripheral()
-            NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil)
+            // Don't assume that it failed. It could have restored the connection but the internal database in BleManager does not have the BlePeripheral
+            NotificationCenter.default.post(name: .didReconnectToKnownPeripheral, object: nil, userInfo: nil)
+            
+           // Settings.clearAutoconnectPeripheral()
+           // NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil)
         }
     }
     

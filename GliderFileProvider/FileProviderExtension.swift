@@ -390,10 +390,21 @@ class FileProviderExtension: NSFileProviderExtension {
         do {
             let fileAttributes = try fileURL.resourceValues(forKeys:[.nameKey, .creationDateKey, .contentModificationDateKey])
             let data = try Data(contentsOf: fileURL)
-            let filename = fileAttributes.name ?? "imported"            // Default name for unknown imported documents
+            let completeFilename = fileAttributes.name ?? "imported"            // Default name for unknown imported documents
+            let fileExtension = URL(fileURLWithPath: completeFilename).pathExtension
+            let fileName = (completeFilename as NSString).deletingPathExtension
+            
+            // Check if the filename already exists and change it to prevent overwrite
+            var disambiguationIndex = 1
+            var disambiguationFilename = completeFilename
+            while self.gliderClient.metadataCache.fileProviderItem(for: NSFileProviderItemIdentifier(parentFileProviderItem.fullPath + disambiguationFilename)) != nil {
+                
+                disambiguationIndex += 1
+                disambiguationFilename = "\(fileName) \(disambiguationIndex).\(fileExtension)"
+            }
             
             // Create fileProviderItem
-            let fileProviderItem = FileProviderItem(path: parentFileProviderItem.fullPath, entry: BlePeripheral.DirectoryEntry(name: filename, type: .file(size: data.count)))
+            let fileProviderItem = FileProviderItem(path: parentFileProviderItem.fullPath, entry: BlePeripheral.DirectoryEntry(name: disambiguationFilename, type: .file(size: data.count)))
             if let creationDate = fileAttributes.creationDate {
                 fileProviderItem.creation = creationDate
             }
@@ -434,6 +445,8 @@ class FileProviderExtension: NSFileProviderExtension {
     
     override func renameItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, toName itemName: String, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
         
+        DLog("renameItem: \(itemIdentifier.rawValue) toName: \(itemName)")
+   
         guard let fileProviderItem = try? item(for: itemIdentifier) as? FileProviderItem else {
             DLog("renameItem. Unknown fileProviderItem")
             completionHandler(nil, NSFileProviderError(.noSuchItem))
@@ -508,6 +521,11 @@ class FileProviderExtension: NSFileProviderExtension {
         }
     }
     
+    override func reparentItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, toParentItemWithIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, newName: String?, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
+        DLog("reparentItem: \(itemIdentifier.rawValue) toParent: \(parentItemIdentifier.rawValue) with newName: \(newName ?? "<nil>")")
+        
+        completionHandler(nil, NSFileProviderError(.noSuchItem))
+    }
     
     override func setLastUsedDate(_ lastUsedDate: Date?, forItemIdentifier itemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
         
@@ -662,7 +680,7 @@ class FileProviderExtension: NSFileProviderExtension {
         guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else { return false }
         
         let localModificationDate = self.fileModificationDate(url: url)
-        let localFileHasChanges = (localModificationDate ?? Date.distantPast) != fileProviderItem.lastUpdate
+        let localFileHasChanges = (localModificationDate ?? Date.distantPast) > fileProviderItem.lastUpdate
         return localFileHasChanges
      
     }
