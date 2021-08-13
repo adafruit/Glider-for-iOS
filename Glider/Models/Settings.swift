@@ -54,6 +54,8 @@ class Settings {
         autoconnectPeripheralUUID = nil
     }
 
+    
+
     // Common load and save
     static func getBoolPreference(key: String) -> Bool {
         return userDefaults.bool(forKey: key)

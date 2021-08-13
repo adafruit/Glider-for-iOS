@@ -148,10 +148,10 @@ class FileTransferClient {
 
     /**
      Creates a new directory at the given full path. If a parent directory does not exist, then it will also be created. If any name conflicts with an existing file, an error will be returned
-        - Parameter path: Full path. It should use a trailing slash.
+        - Parameter path: Full path
     */
     func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
-        blePeripheral?.makeDirectory(path: path, completion: completion)
+        blePeripheral?.makeDirectory(path: FileTransferPathUtils.pathWithTrailingSeparator(path: path), completion: completion)
     }
 
     /// Lists all of the contents in a directory given a full path. Returned paths are relative to the given path to reduce duplication

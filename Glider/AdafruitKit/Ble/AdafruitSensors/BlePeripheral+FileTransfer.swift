@@ -8,8 +8,11 @@
 import Foundation
 import CoreBluetooth
 
-// TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconect events or/and have internal state
+// TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconnect events or/and maintain an internal state
 extension BlePeripheral {
+    // Config
+    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && false
+    
     // Constants
     static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
     private static let kFileTransferVersionCharacteristicUUID = CBUUID(string: "ADAF0100-4669-6C65-5472-616E73666572")
@@ -27,6 +30,11 @@ extension BlePeripheral {
         enum EntryType {
             case file(size: Int)
             case directory
+
+            enum CodingKeys: String, CodingKey {
+                case file
+                case directory
+            }
         }
         
         let name: String
@@ -39,6 +47,7 @@ extension BlePeripheral {
             }
         }
     }
+
 
     private struct FileTransferReadStatus {
         var data = Data()
@@ -219,8 +228,8 @@ extension BlePeripheral {
         sendCommand(data: data, completion: completion)
     }
     
-    func writeFile(path: String, data: Data, progress: FileTransferClient.ProgressHandler?, completion: ((Result<Void, Error>) -> Void)?) {
-        let fileStatus = FileTransferWriteStatus(data: data, progress: progress, completion: completion)
+    func writeFile(path: String, data fileData: Data, progress: FileTransferClient.ProgressHandler?, completion: ((Result<Void, Error>) -> Void)?) {
+        let fileStatus = FileTransferWriteStatus(data: fileData, progress: progress, completion: completion)
         self.adafruitFileTransferWriteStatus = fileStatus
 
         let offset = 0
@@ -250,7 +259,7 @@ extension BlePeripheral {
             + UInt32(chunkSize).littleEndian.data
             + chunkData
        
-        DLog("write chunk at offset \(offset) chunkSize: \(chunkSize). message size: \(data.count). mtu: \(self.maximumWriteValueLength(for: .withoutResponse))")
+        if Self.kDebugMessagesEnabled { DLog("write chunk at offset \(offset) chunkSize: \(chunkSize). message size: \(data.count). mtu: \(self.maximumWriteValueLength(for: .withoutResponse))") }
         //DLog("\t\(String(data: chunkData, encoding: .utf8))")
         sendCommand(data: data, completion: completion)
     }
@@ -270,6 +279,7 @@ extension BlePeripheral {
     }
     
     func listDirectory(path: String, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
+        if self.adafruitFileTransferListDirectoryStatus != nil { DLog("Warning: concurrent listDirectory") }
         self.adafruitFileTransferListDirectoryStatus = FileTransferListDirectoryStatus(completion: completion)
                 
         let data = ([UInt8]([0x50, 0x00])).data
@@ -376,10 +386,10 @@ extension BlePeripheral {
     }
 
     private func decodeWriteFile(data: Data) -> Int {
-        guard let adafruitFileTransferWriteStatus = adafruitFileTransferWriteStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferWriteStatus = adafruitFileTransferWriteStatus else { DLog("Error: write invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferWriteStatus.completion
         
-        guard data.count >= Self.writeFileResponseHeaderSize else {  return 0 }     // Header has not been fully received yet
+        guard data.count >= Self.writeFileResponseHeaderSize else { return 0 }     // Header has not been fully received yet
         
         let status = data[1]
         let isStatusOk = status == 0x01
@@ -387,8 +397,9 @@ extension BlePeripheral {
         let offset: UInt32 = data.scanValue(start: 4, length: 4)
         let freeSpace: UInt32 = data.scanValue(start: 8, length: 4)
 
-        DLog("write \(isStatusOk ? "ok":"error") at offset: \(offset). free space: \(freeSpace)")
+        if Self.kDebugMessagesEnabled { DLog("write \(isStatusOk ? "ok":"error") at offset: \(offset). free space: \(freeSpace)")}
         guard isStatusOk else {
+            self.adafruitFileTransferWriteStatus = nil
             completion?(.failure(FileTransferError.statusFailed))
             return Int.max      // invalidate all received data on error
         }
@@ -402,6 +413,7 @@ extension BlePeripheral {
         else {
             writeFileChunk(offset: offset, chunkSize: freeSpace) { result in
                 if case .failure(let error) = result {
+                    self.adafruitFileTransferWriteStatus = nil
                     completion?(.failure(error))
                 }
             }
@@ -412,7 +424,7 @@ extension BlePeripheral {
     
     /// Returns number of bytes processed
     private func decodeReadFile(data: Data) -> Int {
-        guard let adafruitFileTransferReadStatus = adafruitFileTransferReadStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferReadStatus = adafruitFileTransferReadStatus else { DLog("Error: read invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferReadStatus.completion
         
         guard data.count >= Self.readFileResponseHeaderSize else { return 0 }        // Header has not been fully received yet
@@ -425,7 +437,8 @@ extension BlePeripheral {
         let chunkSize: UInt32 = data.scanValue(start: 12, length: 4)
         
         guard isStatusOk else {
-            DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
+            if Self.kDebugMessagesEnabled { DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)") }
+            self.adafruitFileTransferReadStatus = nil
             completion?(.failure(FileTransferError.statusFailed))
             return Int.max      // invalidate all received data on error
         }
@@ -433,7 +446,7 @@ extension BlePeripheral {
         let packetSize = Self.readFileResponseHeaderSize + Int(chunkSize)
         guard data.count >= packetSize else { return 0 }        // The first chunk is still no available wait for it
 
-        DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)")
+        if Self.kDebugMessagesEnabled { DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)") }
         let chunkData = data.subdata(in: Self.readFileResponseHeaderSize..<packetSize)
         self.adafruitFileTransferReadStatus!.data.append(chunkData)
         
@@ -444,6 +457,7 @@ extension BlePeripheral {
             let maxChunkLength = mtu - Self.readFileResponseHeaderSize
             readFileChunk(offset: offset + chunkSize, chunkSize: UInt32(maxChunkLength)) { result in
                 if case .failure(let error) = result {
+                    self.adafruitFileTransferReadStatus = nil
                     completion?(.failure(error))
                 }
             }
@@ -458,7 +472,7 @@ extension BlePeripheral {
     }
     
     private func decodeDeleteFile(data: Data) -> Int {
-        guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else { DLog("Error: delete invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferDeleteStatus.completion
 
         guard data.count >= Self.deleteFileResponseHeaderSize else { return 0 }      // Header has not been fully received yet
@@ -466,12 +480,13 @@ extension BlePeripheral {
         let status = data[1]
         let isDeleted = status == 0x01
         
+        self.adafruitFileTransferDeleteStatus = nil
         completion?(.success(isDeleted))
         return Self.deleteFileResponseHeaderSize        // Return processed bytes
     }
     
     private func decodeMakeDirectory(data: Data) -> Int {
-        guard let adafruitFileTransferMakeDirectoryStatus = adafruitFileTransferMakeDirectoryStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferMakeDirectoryStatus = adafruitFileTransferMakeDirectoryStatus else { DLog("Error: makeDirectory invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferMakeDirectoryStatus.completion
 
         guard data.count >= Self.makeDirectoryResponseHeaderSize else { return 0 }      // Header has not been fully received yet
@@ -479,12 +494,14 @@ extension BlePeripheral {
         let status = data[1]
         let isCreated = status == 0x01
         
+        self.adafruitFileTransferMakeDirectoryStatus = nil
         completion?(.success(isCreated))
         return Self.deleteFileResponseHeaderSize // Return processed bytes
     }
     
     private func decodeListDirectory(data: Data) -> Int {
-        guard let adafruitFileTransferListDirectoryStatus = adafruitFileTransferListDirectoryStatus else { DLog("Error: invalid internal status"); return 0 }
+        guard let adafruitFileTransferListDirectoryStatus = adafruitFileTransferListDirectoryStatus else {
+            DLog("Error: list invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferListDirectoryStatus.completion
         
         guard data.count >= Self.listDirectoryResponseHeaderSize else { return 0 }       // Header has not been fully received yet
@@ -502,9 +519,10 @@ extension BlePeripheral {
                 let entryIndex: UInt32 = data.scanValue(start: 4, length: 4)
                 
                 if entryIndex >= entryCount  {     // Finished. Return entries
-                    DLog("list: finished")
-                    completion?(.success(self.adafruitFileTransferListDirectoryStatus!.entries))
+                    let entries = self.adafruitFileTransferListDirectoryStatus!.entries
                     self.adafruitFileTransferListDirectoryStatus = nil
+                    if Self.kDebugMessagesEnabled { DLog("list: finished") }
+                    completion?(.success(entries))
                 }
                 else {
                     let flags: UInt32 = data.scanValue(start: 12, length: 4)
@@ -516,7 +534,7 @@ extension BlePeripheral {
                     if pathLength > 0, let path = String(data: data[(data.startIndex + Self.listDirectoryResponseHeaderSize)..<(data.startIndex + Self.listDirectoryResponseHeaderSize + Int(pathLength))], encoding: .utf8) {
                         packetSize += Int(pathLength)        // chunk includes the variable length path, so add it
                         
-                        DLog("list: \(entryIndex+1)/\(entryCount) \(isDirectory ? "directory":"file size: \(fileSize) bytes"), path: /\(path)")
+                        if Self.kDebugMessagesEnabled { DLog("list: \(entryIndex+1)/\(entryCount) \(isDirectory ? "directory":"file size: \(fileSize) bytes"), path: '/\(path)'")}
                         let entry = DirectoryEntry(name: path, type: isDirectory ? .directory : .file(size: Int(fileSize)))
                         
                         // Add entry
@@ -538,3 +556,29 @@ extension BlePeripheral {
         return packetSize
     }
 }
+
+// MARK: - Codable extension for DirectoryEntry
+extension BlePeripheral.DirectoryEntry.EntryType: Encodable {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .directory:
+            try container.encodeNil(forKey: .directory)
+        case .file(let size):
+            try container.encode(size, forKey: .file)
+        }
+    }
+}
+
+extension BlePeripheral.DirectoryEntry.EntryType: Decodable {
+    init(from decoder: Decoder) throws {
+        if let size = try? decoder.singleValueContainer().decode(Int.self) {
+            self = .file(size: size)
+        }
+        else {
+            self = .directory
+        }
+    }
+}
+
+extension BlePeripheral.DirectoryEntry: Codable { }
