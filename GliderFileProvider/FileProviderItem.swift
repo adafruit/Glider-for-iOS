@@ -32,7 +32,7 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     
     var parentItemIdentifier: NSFileProviderItemIdentifier {
         let parentPath = FileTransferPathUtils.parentPath(from: fullPath)
-        DLog("parent for: '\(fullPath)' -> '\(parentPath)'")
+        //DLog("parent for: '\(fullPath)' -> '\(parentPath)'")
         return itemIdentifier(from: parentPath)
     }
     

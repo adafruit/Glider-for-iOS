@@ -20,7 +20,7 @@ struct FileMetadataCache {
         loadFromUserDefaults()
         
         // If is the first time add root container
-        if metadata.isEmpty {
+        if metadata[.rootContainer] == nil {
             metadata[.rootContainer] = FileProviderItem(path: FileTransferPathUtils.rootDirectory, entry: BlePeripheral.DirectoryEntry(name: "", type: .directory))
             saveToUserDefaults()
         }
@@ -56,7 +56,7 @@ struct FileMetadataCache {
         let itemsToDelete = metadata.filter({(fileProviderItemIdentifier, fileProviderItem) in
             let alreadyExists = fileProviderItem.path == commonPath
             let isInNewSet =  itemsIdentifiers.contains(fileProviderItem.itemIdentifier)    // This check could be elminated because we are going to add all new elements later. So we could just delete all of the current elements in the directory
-            return alreadyExists && !isInNewSet
+            return alreadyExists && !isInNewSet && fileProviderItemIdentifier != .rootContainer
         })
         let _ = itemsToDelete.map { metadata.removeValue(forKey: $0.key) }
         if itemsToDelete.count > 0 {
