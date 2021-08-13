@@ -25,7 +25,7 @@ class GliderClient {
     static let shared = GliderClient()
     
     // Data
-    private var completion: ((Result<FileTransferClient, Error>)->Void)?
+    private var setupFileTransferCompletion: ((Result<FileTransferClient, Error>)->Void)?       // Saved completion handler when setupFileTransferIfNeeded is in progress
 
     // Data - Bluetooth support
     private let bleSupportSemaphore = DispatchSemaphore(value: 0)
@@ -59,28 +59,31 @@ class GliderClient {
             switch result {
             case .success(let client):
                 client.readFile(path: path, progress: progress) {
-                    completion?($0)
                     self.fileTransferSemaphore.signal()
+                    completion?($0)
                 }
             case .failure(let error):
-                completion?(.failure(error))
                 self.fileTransferSemaphore.signal()
+                completion?(.failure(error))
             }
         }
     }
     
     func writeFile(path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+        DLog("writeFile requested: \(path)")
         fileTransferSemaphore.wait()
+        DLog("writeFile setup: \(path)")
         setupFileTransferIfNeeded { result in
+            DLog("writeFile finished: \(result)")
             switch result {
             case .success(let client):
                 client.writeFile(path: path, data: data, progress: progress) {
-                    completion?($0)
                     self.fileTransferSemaphore.signal()
+                    completion?($0)
                 }
             case .failure(let error):
-                completion?(.failure(error))
                 self.fileTransferSemaphore.signal()
+                completion?(.failure(error))
             }
         }
     }
@@ -91,12 +94,12 @@ class GliderClient {
             switch result {
             case .success(let client):
                 client.deleteFile(path: path) { isDeleted in
-                    completion?(isDeleted)
                     self.fileTransferSemaphore.signal()
+                    completion?(isDeleted)
                 }
             case .failure(let error):
-                completion?(.failure(error))
                 self.fileTransferSemaphore.signal()
+                completion?(.failure(error))
             }
         }
     }
@@ -107,12 +110,12 @@ class GliderClient {
             switch result {
             case .success(let client):
                 client.makeDirectory(path: path) {
-                    completion?($0)
                     self.fileTransferSemaphore.signal()
+                    completion?($0)
                 }
             case .failure(let error):
-                completion?(.failure(error))
                 self.fileTransferSemaphore.signal()
+                completion?(.failure(error))
             }
         }
     }
@@ -123,12 +126,12 @@ class GliderClient {
             switch result {
             case .success(let client):
                 client.listDirectory(path: path) {
-                    completion?($0)
                     self.fileTransferSemaphore.signal()
+                    completion?($0)
                 }
             case .failure(let error):
-                completion?(.failure(error))
                 self.fileTransferSemaphore.signal()
+                completion?(.failure(error))
             }
         }
     }
@@ -136,12 +139,12 @@ class GliderClient {
     private func setupFileTransferIfNeeded(completion: @escaping (Result<FileTransferClient, Error>)->Void) {
         guard fileTransferClient == nil || !fileTransferClient!.isFileTransferEnabled else {
             // It is already setup
-            completion(.success(fileTransferClient!))
             self.bleSupportSemaphore.signal()
+            completion(.success(fileTransferClient!))
             return
         }
 
-        self.completion = completion
+        self.setupFileTransferCompletion = completion
         
         // check Bluetooth status
         startTime = CFAbsoluteTimeGetCurrent()
@@ -167,37 +170,11 @@ class GliderClient {
         }
     }
     
-    /// Convenience function that encapsulates the setupFileTransferIfNeeded
-    func readFileStartingFileTransferIfNeeded(path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
-        setupFileTransferIfNeeded() {  result in
-            switch result {
-            case .success(let client):
-                client.readFile(path: path, progress: progress, completion: completion)
-                
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
-    
-    /// Convenience function that encapsulates the setupFileTransferIfNeeded
-    func writeFileStartingFileTransferIfNeeded(path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
-        setupFileTransferIfNeeded() {  result in
-            switch result {
-            case .success(let client):
-                client.writeFile(path: path, data: data, progress: progress, completion: completion)
-                
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
-    
     // MARK: - Check Ble Support
     private func checkBleSupport() {
         if BleManager.shared.state == .unsupported {
             DLog("Bluetooth unsupported")
-            completion?(.failure(GliderError.bluetoothNotSupported))
+            setupFileTransferCompletion?(.failure(GliderError.bluetoothNotSupported))
         }
         else {
             startAutoReconnect()
@@ -286,16 +263,16 @@ class GliderClient {
     private func didReconnectToKnownPeripheral(_ notification: Notification) {
         DLog("GliderClient didReconnectToKnownPeripheral")
         guard let fileTransferClient = fileTransferClient else {
-            completion?(.failure(GliderError.invalidInternalState))
+            setupFileTransferCompletion?(.failure(GliderError.invalidInternalState))
             return
         }
 
-        completion?(.success((fileTransferClient)))
+        setupFileTransferCompletion?(.success((fileTransferClient)))
     }
 
     private func didFailToReconnectToKnownPeripheral(_ notification: Notification) {
         DLog("GliderClient didFailToReconnectToKnownPeripheral")
-        completion?(.failure(GliderError.connectionFailed))
+        setupFileTransferCompletion?(.failure(GliderError.connectionFailed))
     }
     
     // MARK: - Disconnection Notifications
@@ -316,6 +293,7 @@ class GliderClient {
     private func didDisconnectFromPeripheral(notification: Notification) {
         DLog("Warning: peripheral has disconnected!!")
         fileTransferClient = nil
+//        fileTransferSemaphore.signal()
     }
 }
 

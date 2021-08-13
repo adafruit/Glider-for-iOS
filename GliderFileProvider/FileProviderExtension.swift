@@ -129,7 +129,7 @@ class FileProviderExtension: NSFileProviderExtension {
         if !isFileOnDisk {
             // If no file on disk, donwload from peripheral
             DLog("File \(fileProviderItem.fullPath) does not exists locally. Get from peripheral")
-            gliderClient.readFileStartingFileTransferIfNeeded(path: fileProviderItem.fullPath) { [weak self]  result in
+            gliderClient.readFile(path: fileProviderItem.fullPath) { [weak self]  result in
                 guard let self = self else { return }
                 
                 switch result {
@@ -379,6 +379,7 @@ class FileProviderExtension: NSFileProviderExtension {
     
     override func importDocument(at fileURL: URL, toParentItemIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
         
+        DLog("importDocument at: \(fileURL.absoluteString) to parent: \(parentItemIdentifier.rawValue)")
         guard let parentFileProviderItem = try? item(for: parentItemIdentifier) as? FileProviderItem else {
             completionHandler(nil, NSFileProviderError(.noSuchItem))
             return
@@ -409,7 +410,7 @@ class FileProviderExtension: NSFileProviderExtension {
             // Schedule updload in background
             backgroundQueue.async {
                 
-                self.gliderClient.writeFileStartingFileTransferIfNeeded(path: fileProviderItem.fullPath, data: data) { result in
+                self.gliderClient.writeFile(path: fileProviderItem.fullPath, data: data) { result in
                     switch result {
                     case .success:
                         DLog("importDocument '\(fileProviderItem.fullPath)' successful. (\(data.count) bytes")
@@ -555,7 +556,7 @@ class FileProviderExtension: NSFileProviderExtension {
             let localData = try Data(contentsOf: url)
             
             // Retrieve remote file and compare with local data
-            gliderClient.readFileStartingFileTransferIfNeeded(path: fileProviderItem.fullPath) { [weak self]  result in
+            gliderClient.readFile(path: fileProviderItem.fullPath) { [weak self]  result in
                 guard let self = self else { return }
                 
                 switch result {
@@ -631,7 +632,7 @@ class FileProviderExtension: NSFileProviderExtension {
     private func uploadFile(localURL url: URL, item fileProviderItem: FileProviderItem, completionHandler: @escaping ((_ error: Error?) -> Void)) {
         do {
             let localData = try Data(contentsOf: url)
-            gliderClient.writeFileStartingFileTransferIfNeeded(path: fileProviderItem.fullPath, data: localData) { result in
+            gliderClient.writeFile(path: fileProviderItem.fullPath, data: localData) { result in
                 switch result {
                 case .success:
                     // Save sync date
