@@ -208,7 +208,7 @@ extension BlePeripheral {
         let offset = 0
         let chunkSize = mtu - Self.readFileResponseHeaderSize
         let data = ([UInt8]([0x10, 0x00])).data
-            + UInt16(path.count).littleEndian.data
+            + UInt16(path.utf8.count).littleEndian.data
             + UInt32(offset).littleEndian.data
             + UInt32(chunkSize).littleEndian.data
             + Data(path.utf8)
@@ -236,7 +236,7 @@ extension BlePeripheral {
         let totalSize = fileStatus.data.count
         
         let data = ([UInt8]([0x20, 0x00])).data
-            + UInt16(path.count).littleEndian.data
+            + UInt16(path.utf8.count).littleEndian.data
             + UInt32(offset).littleEndian.data
             + UInt32(totalSize).littleEndian.data
             + Data(path.utf8)
@@ -268,7 +268,7 @@ extension BlePeripheral {
         self.adafruitFileTransferDeleteStatus = FileTransferDeleteStatus(completion: completion)
         
         let data = ([UInt8]([0x30, 0x00])).data
-            + UInt16(path.count).littleEndian.data
+            + UInt16(path.utf8.count).littleEndian.data
             + Data(path.utf8)
        
         sendCommand(data: data) { result in
@@ -283,7 +283,7 @@ extension BlePeripheral {
         self.adafruitFileTransferListDirectoryStatus = FileTransferListDirectoryStatus(completion: completion)
                 
         let data = ([UInt8]([0x50, 0x00])).data
-            + UInt16(path.count).littleEndian.data
+            + UInt16(path.utf8.count).littleEndian.data
             + Data(path.utf8)
         
         sendCommand(data: data)  { result in
@@ -297,7 +297,7 @@ extension BlePeripheral {
         self.adafruitFileTransferMakeDirectoryStatus = FileTransferMakeDirectoryStatus(completion: completion)
                 
         let data = ([UInt8]([0x40, 0x00])).data
-            + UInt16(path.count).littleEndian.data
+            + UInt16(path.utf8.count).littleEndian.data
             + Data(path.utf8)
         
         sendCommand(data: data)  { result in
