@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/*
 struct MainView: View {
     @State private var isAutoConnectVisible = false
 //    @Environment(\.isKeyboardVisible) var isKeyboardVisible
@@ -43,3 +44,4 @@ struct MainView_Previews: PreviewProvider {
     }
 }
 
+*/

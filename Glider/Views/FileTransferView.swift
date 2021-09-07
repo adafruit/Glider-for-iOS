@@ -4,7 +4,7 @@
 //
 //  Created by Antonio García on 17/5/21.
 //
- 
+
 import SwiftUI
 
 struct FileTransferView: View {
@@ -12,7 +12,7 @@ struct FileTransferView: View {
     private let helperButtonSize = CGSize(width: 40, height: 32)
     
     // Params
-    private let fileTransferClient: FileTransferClient?
+    let fileTransferClient: FileTransferClient?
     
     // Data
     @Environment(\.presentationMode) var presentationMode
@@ -22,69 +22,67 @@ struct FileTransferView: View {
     @State private var isShowingFileChooser = false
     @State private var topViewsHeight: CGFloat = .zero
     
-    init(fileTransferClient: FileTransferClient?) {
-        self.fileTransferClient = fileTransferClient
-        //self.filename = model.fileNamePlaceholders.first!
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .leading, spacing: 8) {
+                
+                // Filename
+                FileNameView(model: model, filename: $filename, isShowingFileChooser: $isShowingFileChooser, helperButtonSize: helperButtonSize)
+                
+                // Actions
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Actions:")
+                        .foregroundColor(.white)
+                        .font(.caption2)
+                    
+                    HStack {
+                        Button("Write File") {
+                            if let data = fileContents.data(using: .utf8) {
+                                model.writeFile(filename: filename, data: data)
+                            }
+                        }
+                        Button("Read File") {
+                            model.readFile(filename: filename)
+                        }
+                        Button("Delete File") {
+                            model.deleteFile(filename: filename)
+                        }
+                        
+                    }
+                    .buttonStyle(PrimaryButtonStyle())
+                }
+                
+                // Contents Editor
+                ContentsView(model: model, fileContents: $fileContents, filename: $filename, helperButtonSize: helperButtonSize)
+            }
+            .accentColor(.gray)
+            .disabled(model.transmissionProgress != nil)
+            .padding()
+            //.navigationTitle("File Transfer")
+            .defaultGradientBackground(hidesKeyboardOnTap: true)
+            .sheet(isPresented: $isShowingFileChooser) {
+                FileChooserView(directory: $filename, fileTransferClient: model.fileTransferClient)
+            }
+            .onChange(of: model.fileTransferClient) { fileTransferClient in
+                if fileTransferClient == nil {
+                    isShowingFileChooser = false
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            }
+            .onAppear {
+                model.onAppear(fileTransferClient: fileTransferClient)
+            }
+            .onDisappear {
+                model.onDissapear()
+            }
+            .navigationBarTitle("File Transfer Tests", displayMode: .large)
+            //.navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
+            .modifier(Alerts(activeAlert: $model.activeAlert))
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            
-            // Filename
-            FileNameView(model: model, filename: $filename, isShowingFileChooser: $isShowingFileChooser, helperButtonSize: helperButtonSize)
-            
-            // Actions
-            VStack(alignment: .leading, spacing: 1) {
-                Text("Actions:")
-                    .foregroundColor(.white)
-                    .font(.caption2)
-                
-                HStack {
-                    Button("Write File") {
-                        if let data = fileContents.data(using: .utf8) {
-                            model.writeFile(filename: filename, data: data)
-                        }
-                    }
-                    Button("Read File") {
-                        model.readFile(filename: filename)
-                    }
-                    Button("Delete File") {
-                        model.deleteFile(filename: filename)
-                    }
-                    
-                }
-                .buttonStyle(PrimaryButtonStyle())
-            }
-            
-            // Contents Editor
-            ContentsView(model: model, fileContents: $fileContents, filename: $filename, helperButtonSize: helperButtonSize)
-        }
-        .accentColor(.gray)
-        .disabled(model.transmissionProgress != nil)
-        .padding()
-        //.navigationTitle("File Transfer")
-        .defaultBackground(hidesKeyboardOnTap: true)
-        .sheet(isPresented: $isShowingFileChooser) {
-            FileChooserView(directory: $filename, fileTransferClient: model.fileTransferClient)
-        }
-        .onChange(of: model.fileTransferClient) { fileTransferClient in
-            if fileTransferClient == nil {
-                isShowingFileChooser = false
-                self.presentationMode.wrappedValue.dismiss()
-            }
-        }
-        .onAppear {
-            model.onAppear(fileTransferClient: fileTransferClient)
-        }
-        .onDisappear {
-            model.onDissapear()
-        }
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
-        .modifier(Alerts(activeAlert: $model.activeAlert))
-    }
-
     private struct ContentsView: View {
         @ObservedObject var model: FileTransferViewModel
         @Binding var fileContents: String
@@ -111,7 +109,7 @@ struct FileTransferView: View {
                                     fileContents = String(data: data, encoding: .utf8) ?? ""
                                 }
                             }
-                                                
+                        
                         Group {
                             if let progress = model.transmissionProgress, let totalBytes = progress.totalBytes {
                                 ProgressView(progress.description, value: Float(progress.transmittedBytes), total: Float(totalBytes))
@@ -130,22 +128,22 @@ struct FileTransferView: View {
                                         }
                                     }
                                     
-                                    HStack() {
-                                        Button(action: {
-                                            model.disconnectAndForgetPairing()
-                                        }, label: {
-                                            Text("Forget Pairing")
-                                                .bold()
-                                        })
-                                        .buttonStyle(PrimaryButtonStyle(foregroundColor: Color("button_warning_text")))
-                                        
-                                        
-                                        Button("FileProvider Resync") {
-                                            FileProviderUtils.signalFileProviderChanges()
-                                        }
-                                        .buttonStyle(PrimaryButtonStyle(foregroundColor: Color("button_warning_text")))
-                                        
-                                    }
+                                    /*
+                                     HStack() {
+                                     Button(action: {
+                                     model.disconnectAndForgetPairing()
+                                     }, label: {
+                                     Text("Forget Pairing")
+                                     .bold()
+                                     })
+                                     .buttonStyle(PrimaryButtonStyle(foregroundColor: Color("button_warning_text")))
+                                     
+                                     
+                                     Button("FileProvider Resync") {
+                                     FileProviderUtils.signalFileProviderChanges()
+                                     }
+                                     .buttonStyle(PrimaryButtonStyle(foregroundColor: Color("button_warning_text")))
+                                     }*/
                                 }
                                 
                             }
@@ -173,6 +171,7 @@ struct FileTransferView: View {
                 }
             }
         }
+        
     }
     
     private struct Alerts: ViewModifier {
@@ -242,12 +241,13 @@ struct FileTransferView: View {
 struct FileTransferView_Previews: PreviewProvider {
     static var previews: some View {
         
-        NavigationView {
-            ZStack {
-                FileTransferView(fileTransferClient: nil)
-            }
-            .defaultBackground()
-            .navigationViewStyle(StackNavigationViewStyle())
-        }
+        FileTransferView(fileTransferClient: nil)
+        /*
+         NavigationView {
+         ZStack {
+         FileTransferView(fileTransferClient: nil)
+         }
+         .navigationViewStyle(StackNavigationViewStyle())
+         }*/
     }
 }

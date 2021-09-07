@@ -13,17 +13,18 @@ struct StartupView: View {
     
     var body: some View {
         VStack {
+            Image("glider_logo")
+            
             Text("Restoring Connection...")
                 .foregroundColor(Color.white)
-                .if(!model.isRestoringConnection) {
-                    $0.hidden()
-                }
+                .opacity(model.isRestoringConnection ? 1 : 0)
+            
             ProgressView()
                 .scaleEffect(1.5)
                 .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
         }
-        .defaultBackground()
-        .modifier(StartupAlerts(model: model))
+        .defaultPlainBackground()
+        .modifier(Alerts(activeAlert: $model.activeAlert, model: model))
         .onAppear {
             model.setupBluetooth()
         }
@@ -34,19 +35,14 @@ struct StartupView: View {
         }
     }
     
-    private struct StartupAlerts: ViewModifier {
+    private struct Alerts: ViewModifier {
+        @Binding var activeAlert: StartupViewModel.ActiveAlert?
         @ObservedObject var model: StartupViewModel
 
-        private var isAlertPresented: Binding<Bool> { Binding(
-            get: { self.model.activeAlert.isActive },
-            set: { if !$0 { self.model.activeAlert.setInactive() } }
-        )
-        }
-        
         func body(content: Content) -> some View {
             content
-                .alert(isPresented: isAlertPresented, content: {
-                    switch model.activeAlert {
+                .alert(item: $activeAlert, content:  { alert in
+                    switch alert {
                     case .bluetoothUnsupported:
                         return Alert(
                             title: Text("Error"),
@@ -62,21 +58,15 @@ struct StartupView: View {
                             dismissButton: .cancel(Text("Ok")) {
                                 model.setupBluetooth()
                             })
-                        
-                    case .none:
-                        return Alert(title: Text("undefined"))
                     }
                 })
         }
     }
 }
 
-
-
 struct StartupView_Previews: PreviewProvider {
     static var previews: some View {
         StartupView()
             .environmentObject(RootViewModel())
     }
-    
 }

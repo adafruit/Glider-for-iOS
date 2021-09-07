@@ -14,41 +14,41 @@ class AutoConnectViewModel: ObservableObject {
     // Published
     enum Destination {
         case fileTransfer
+        case troubleshootConnection
     }
     
     @Published var destination: Destination? = nil
     
-    @Published var isScanning: Bool = false{
-        didSet {
-            if isScanning {
-                startScanning()
-            }
-            else {
-                stopScanning()
-            }
-        }
+    enum ConnectionStatus {
+        case scanning
+        case restoringConnection
+        case connecting
+        case connected
+        case discovering
+        case fileTransferError
+        case fileTransferReady
+        case disconnected(error: Error?)
     }
+    @Published var connectionStatus: ConnectionStatus = .scanning
     
     @Published var selectedPeripheral: BlePeripheral? = nil
-    @Published var detailText: String = "Starting..."
-    @Published var numPeripheralsScanned = 0
-    @Published var numAdafruitPeripheralsScanned = 0
-    @Published var numAdafruitPeripheralsWithFileTranferServiceScanned = 0
-    @Published var numAdafruitPeripheralsWithFileTranferServiceNearby = 0
-    @Published var isRestoringConnection = false
-    
+    //@Published var numPeripheralsScanned = 0
+    //@Published var numAdafruitPeripheralsScanned = 0
+    @Published var numAdafruitPeripheralsWithFileTransferServiceScanned = 0
+    //@Published var numAdafruitPeripheralsWithFileTransferServiceNearby = 0
+   
     // Data
     private let bleManager = BleManager.shared
     private var peripheralList = PeripheralList(bleManager: BleManager.shared)
     private var peripheralAutoConnect = PeripheralAutoConnect()
     
-    
+    /*
     init() {
         // Check if we are reconnecting to a known Peripheral. If AppState.shared.fileTransferClient is not nil, no need to scan, just go to the FileTransfer screen
         if AppState.shared.fileTransferClient != nil {
             destination = .fileTransfer
         }
-    }
+    }*/
     
     func onAppear() {
         registerNotifications(enabled: true)
@@ -63,7 +63,8 @@ class AutoConnectViewModel: ObservableObject {
         else {
             let isTryingToReconnect = AppState.shared.forceReconnect()
             if isTryingToReconnect {
-                detailText = "Restoring connection..."
+                connectionStatus = .restoringConnection
+                //detailText = "Restoring connection..."
             }
             else {
                 startScanning()
@@ -76,6 +77,7 @@ class AutoConnectViewModel: ObservableObject {
         registerNotifications(enabled: false)
     }
     
+
     // MARK: - Scanning
     
     /// Returns true if it was connnected
@@ -98,15 +100,14 @@ class AutoConnectViewModel: ObservableObject {
     }
 
     private func startScanning() {
-        //setup()
-        
         updateScannedPeripherals()
         
         // Start scannning
         BlePeripheral.rssiRunningAverageFactor = Self.kRssiRunningAverageFactor     // Use running average for rssi
         if !bleManager.isScanning {
             bleManager.startScan()
-            detailText = "Scanning..."
+            connectionStatus = .scanning
+            //detailText = "Scanning..."
         }
     }
     
@@ -130,10 +131,10 @@ class AutoConnectViewModel: ObservableObject {
         }
         
         // Update stats
-        numPeripheralsScanned = bleManager.numPeripherals()
-        numAdafruitPeripheralsScanned = bleManager.peripherals().filter{$0.isManufacturerAdafruit()}.count
-        numAdafruitPeripheralsWithFileTranferServiceScanned = peripheralList.filteredPeripherals(forceUpdate: false).count
-        numAdafruitPeripheralsWithFileTranferServiceNearby = peripheralAutoConnect.matchingPeripherals.count
+        //numPeripheralsScanned = bleManager.numPeripherals()
+        //numAdafruitPeripheralsScanned = bleManager.peripherals().filter{$0.isManufacturerAdafruit()}.count
+        numAdafruitPeripheralsWithFileTransferServiceScanned = peripheralList.filteredPeripherals(forceUpdate: false).count
+        //numAdafruitPeripheralsWithFileTransferServiceNearby = peripheralAutoConnect.matchingPeripherals.count
     }
 
     // MARK: - Connections
@@ -208,7 +209,8 @@ class AutoConnectViewModel: ObservableObject {
                  return
              }
 
-        detailText = "Connecting..."
+        connectionStatus = .connecting
+        //detailText = "Connecting..."
     }
 
     private func didConnectToPeripheral(notification: Notification) {
@@ -216,7 +218,8 @@ class AutoConnectViewModel: ObservableObject {
             DLog("didConnect to an unexpected peripheral: \(String(describing: notification.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID))")
             return
         }
-        detailText = "Connected..."
+        connectionStatus = .connected
+        //detailText = "Connected..."
 
         // Setup peripheral
         AppState.shared.fileTransferClient = FileTransferClient(connectedBlePeripheral: selectedPeripheral, services: [.filetransfer]) { [weak self] result in
@@ -229,7 +232,8 @@ class AutoConnectViewModel: ObservableObject {
                 // Check if filetransfer was setup
                 guard let fileTransferClient = AppState.shared.fileTransferClient, fileTransferClient.isFileTransferEnabled else {
                     DLog("setupPeripheral fileTransfer not enabled")
-                    self.detailText = "Error initializing FileTransfer"
+                    self.connectionStatus = .fileTransferError
+                    //self.detailText = "Error initializing FileTransfer"
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1)    {
                         self.disconnect(peripheral: selectedPeripheral)
@@ -240,7 +244,8 @@ class AutoConnectViewModel: ObservableObject {
                 DLog("setupPeripheral success")
                 
                 // Finished setup
-                self.detailText = "FileTransfer service ready"
+                self.connectionStatus = .fileTransferReady
+                //self.detailText = "FileTransfer service ready"
                 self.gotoFileTransfer()
 
             case .failure(let error):
@@ -258,9 +263,10 @@ class AutoConnectViewModel: ObservableObject {
     }
 
     private func willDiscoverServices(notification: Notification) {
-        detailText = "Discovering Services..."
+        connectionStatus = .discovering
+        //detailText = "Discovering Services..."
     }
-
+    
     private func didDisconnectFromPeripheral(notification: Notification) {
         let peripheral = bleManager.peripheral(from: notification)
         
@@ -273,12 +279,14 @@ class AutoConnectViewModel: ObservableObject {
         self.selectedPeripheral = nil
 
         // Show error if needed
+        connectionStatus = .disconnected(error: bleManager.error(from: notification))
+        /*
         if let error = bleManager.error(from: notification) {
             detailText = "Disconnected \(error.localizedDescription)"
         }
         else {
             detailText = "Disconnected"
-        }
+        }*/
     }
 
     private func peripheralDidUpdateName(notification: Notification) {

@@ -44,10 +44,29 @@ struct PrimaryButtonStyle: ButtonStyle {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(isEnabled ? color : Color.clear, lineWidth: 1)
                         .background((isEnabled ? (configuration.isPressed ? Color("button_primary_accent") :  Color.clear) : Color.gray).cornerRadius(8))
-                    
-                    
                 )
                 .animation(.easeOut(duration: 0.1))
         }
+    }
+}
+
+struct MainButtonStyle: ButtonStyle {
+    var isDark = true
+    var backgroundColor = Color("accent_main")
+    
+    func makeBody(configuration: ButtonStyle.Configuration) -> some View {
+        let backgroundPressed = isDark ? backgroundColor.darker() : backgroundColor.lighter()
+        
+        configuration.label
+            .font(.subheadline.bold())
+            .textCase(.uppercase)
+            .foregroundColor(isDark ? Color("button_main_text") : Color(.white))
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+            .contentShape(Rectangle())
+            .background(
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(configuration.isPressed ? backgroundPressed : backgroundColor)
+            )
     }
 }

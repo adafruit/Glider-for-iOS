@@ -48,6 +48,15 @@
 		A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7C26543894007A5E5A /* AppDelegate.swift */; };
 		A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7E26543894007A5E5A /* AppEnvironment.swift */; };
 		A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FEA92654392F007A5E5A /* Assets.xcassets */; };
+		A9678E8026E758B2003936DC /* BluetoothStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */; };
+		A9678E8226E78797003936DC /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8126E78797003936DC /* WaveView.swift */; };
+		A9678E8426E7C98F003936DC /* ConnectedTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8326E7C98E003936DC /* ConnectedTabView.swift */; };
+		A9678E8626E7D191003936DC /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8526E7D191003936DC /* InfoView.swift */; };
+		A9678E8826E7D754003936DC /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8726E7D754003936DC /* UIColor+LightAndDark.swift */; };
+		A9678E8A26E7FB58003936DC /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8926E7FB58003936DC /* LogView.swift */; };
+		A9678E8E26E828E2003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
+		A9678E8F26E8C941003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
+		A9678E9026E8C980003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
 		A96D27852687F9DB00D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
 		A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
 		A96D27872687FA3D00D6E247 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
@@ -163,6 +172,13 @@
 		A947FE7C26543894007A5E5A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A947FE7E26543894007A5E5A /* AppEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		A947FEA92654392F007A5E5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothStatusView.swift; sourceTree = "<group>"; };
+		A9678E8126E78797003936DC /* WaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
+		A9678E8326E7C98E003936DC /* ConnectedTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedTabView.swift; sourceTree = "<group>"; };
+		A9678E8526E7D191003936DC /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		A9678E8726E7D754003936DC /* UIColor+LightAndDark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+LightAndDark.swift"; path = "../../../../../Filmin/filmin5/app/Filmin_iOS/Filmin/FilminKit5/SwiftUI/UIColor+LightAndDark.swift"; sourceTree = "<group>"; };
+		A9678E8926E7FB58003936DC /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
+		A9678E8D26E828E2003936DC /* LogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
 		A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderUtils.swift; sourceTree = "<group>"; };
 		A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleDataProcessingQueue.swift; sourceTree = "<group>"; };
 		A9ED1F262687530700B6C27F /* GliderFileProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -279,11 +295,15 @@
 				A947FE5126543893007A5E5A /* Utils */,
 				A947FE5426543893007A5E5A /* RootView.swift */,
 				A947FE4F26543893007A5E5A /* StartupView.swift */,
+				A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */,
 				A947FE5626543893007A5E5A /* MainView.swift */,
 				A947FE5026543893007A5E5A /* AutoConnectView.swift */,
 				A947FE5526543893007A5E5A /* FileTransferView.swift */,
 				A947FE5826543893007A5E5A /* TodoView.swift */,
 				A9F225252659ED8400D3B2C6 /* FileChooserView.swift */,
+				A9678E8326E7C98E003936DC /* ConnectedTabView.swift */,
+				A9678E8526E7D191003936DC /* InfoView.swift */,
+				A9678E8926E7FB58003936DC /* LogView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -292,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				A947FE4C26543893007A5E5A /* ButtonStyles.swift */,
+				A9678E8126E78797003936DC /* WaveView.swift */,
 			);
 			path = Decoration;
 			sourceTree = "<group>";
@@ -333,6 +354,7 @@
 				A947FE5E26543893007A5E5A /* AdafruitBoard */,
 				A947FE6226543893007A5E5A /* Scanner */,
 				A919BA6926791585000C9291 /* AppState.swift */,
+				A9678E8D26E828E2003936DC /* LogManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -432,6 +454,7 @@
 				A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */,
 				A9F22529265BA80F00D3B2C6 /* FileTransferPathUtils.swift */,
 				A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */,
+				A9678E8726E7D754003936DC /* UIColor+LightAndDark.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -630,6 +653,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9678E8E26E828E2003936DC /* LogManager.swift in Sources */,
 				A947FE9626543894007A5E5A /* BlePeripheral+AdafruitCommon.swift in Sources */,
 				A9CCB9C1266A3CEE00E9FA28 /* BleDataProcessingQueue.swift in Sources */,
 				A947FE8F26543894007A5E5A /* AutoConnectViewModel.swift in Sources */,
@@ -646,9 +670,11 @@
 				A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */,
 				A947FE8926543894007A5E5A /* FileTransferView.swift in Sources */,
 				A947FE9926543894007A5E5A /* BlePeripheral.swift in Sources */,
+				A9678E8226E78797003936DC /* WaveView.swift in Sources */,
 				A947FE9C26543894007A5E5A /* Data+LittleEndianTypes.swift in Sources */,
 				A947FE8426543894007A5E5A /* StartupView.swift in Sources */,
 				A9F2252A265BA80F00D3B2C6 /* FileTransferPathUtils.swift in Sources */,
+				A9678E8A26E7FB58003936DC /* LogView.swift in Sources */,
 				A947FEA426543894007A5E5A /* GliderApp.swift in Sources */,
 				A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */,
 				A947FEA026543894007A5E5A /* LogHelper.swift in Sources */,
@@ -656,18 +682,22 @@
 				A947FE8626543894007A5E5A /* View+If.swift in Sources */,
 				A947FEA126543894007A5E5A /* Types+Data.swift in Sources */,
 				A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */,
+				A9678E8626E7D191003936DC /* InfoView.swift in Sources */,
 				A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */,
 				A947FE8526543894007A5E5A /* AutoConnectView.swift in Sources */,
 				A947FE9A26543894007A5E5A /* BleManager.swift in Sources */,
 				A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */,
+				A9678E8026E758B2003936DC /* BluetoothStatusView.swift in Sources */,
 				A947FE9E26543894007A5E5A /* Int+Bytes.swift in Sources */,
 				A947FEA226543894007A5E5A /* Data+ScanValue.swift in Sources */,
 				A96D27852687F9DB00D6E247 /* FileProviderUtils.swift in Sources */,
 				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
 				A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */,
 				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
+				A9678E8426E7C98F003936DC /* ConnectedTabView.swift in Sources */,
 				A9FEDC582680AC1200E409FA /* BleAutoReconnect.swift in Sources */,
 				A947FE9F26543894007A5E5A /* CommandQueue.swift in Sources */,
+				A9678E8826E7D754003936DC /* UIColor+LightAndDark.swift in Sources */,
 				A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */,
 				A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */,
 				A947FE9B26543894007A5E5A /* BlePeripheral+Battery.swift in Sources */,
@@ -680,6 +710,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9678E8F26E8C941003936DC /* LogManager.swift in Sources */,
 				A9ED1F5726875B8600B6C27F /* HexUtils.swift in Sources */,
 				A9ED1F5326875B8600B6C27F /* Data+ScanValue.swift in Sources */,
 				A91E913326BD9AD400B37FF9 /* FileTransferPathUtils.swift in Sources */,
@@ -713,6 +744,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9678E9026E8C980003936DC /* LogManager.swift in Sources */,
 				A9E7EB9726C3005E00C09C8B /* LogHelper.swift in Sources */,
 				A9ED1F372687530800B6C27F /* DocumentActionViewController.swift in Sources */,
 			);
@@ -885,7 +917,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -895,7 +927,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -911,7 +943,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -921,7 +953,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -933,7 +965,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -941,7 +973,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -954,7 +986,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -962,7 +994,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -976,7 +1008,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -984,10 +1016,12 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG FILEPROVIDER";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -998,7 +1032,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1006,10 +1040,12 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = FILEPROVIDER;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

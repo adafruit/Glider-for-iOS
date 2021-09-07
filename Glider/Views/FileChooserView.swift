@@ -111,7 +111,7 @@ struct FileChooserView: View {
             }
             .padding(.bottom)
         }
-        .defaultBackground(hidesKeyboardOnTap: true)
+        .defaultGradientBackground(hidesKeyboardOnTap: true)
         .onAppear {
             model.setup(fileTransferClient: fileTransferClient, directory: directory)
         }

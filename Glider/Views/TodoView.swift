@@ -22,14 +22,15 @@ struct TodoView: View {
                 .font(.system(size: 128))
             
             
+            /*
             Button("Restart") {
                 rootViewModel.gotoMain()
             }
-            .buttonStyle(PrimaryButtonStyle())
+            .buttonStyle(MainButtonStyle())*/
         }
         //.limitWidthOnRegularSizeClass()
         .padding()
-        .defaultBackground()
+        .defaultGradientBackground()
         .navigationTitle("TODO")
         .navigationBarTitleDisplayMode(.inline)
     }

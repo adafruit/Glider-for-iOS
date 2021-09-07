@@ -17,11 +17,33 @@ class FileProviderExtension: NSFileProviderExtension {
     override init() {
         super.init()
         
+        DLog("FileProviderExtension init")
+        LogManager.shared.load()
+        
         if AppEnvironment.isDebug && false {
             DLog("Debug: force resync")
             FileProviderUtils.signalFileProviderChanges()
         }
     }
+    
+    deinit {
+        DLog("FileProviderExtension deinit")
+        LogManager.shared.save()
+    }
+    
+    /*
+    private weak var extensionDidBecomeActiveObserver: NSObjectProtocol?
+    private func registerNotifications(enabled: Bool) {
+        if enabled {
+            extensionDidBecomeActiveObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.NSExtensionHostDidBecomeActive, object: nil, queue: .main, using: { notification in
+                
+            })
+           
+        } else {
+            if let extensionDidBecomeActiveObserver = extensionDidBecomeActiveObserver {NotificationCenter.default.removeObserver(extensionDidBecomeActiveObserver)}
+            
+        }
+    }*/
     
     // MARK: - Mandatory
     override func item(for identifier: NSFileProviderItemIdentifier) throws -> NSFileProviderItem {
@@ -338,7 +360,6 @@ class FileProviderExtension: NSFileProviderExtension {
                 completionHandler(nil, error)
             }
         }
-
     }
     
     override func deleteItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (Error?) -> Void) {
@@ -682,6 +703,5 @@ class FileProviderExtension: NSFileProviderExtension {
         let localModificationDate = self.fileModificationDate(url: url)
         let localFileHasChanges = (localModificationDate ?? Date.distantPast) > fileProviderItem.lastUpdate
         return localFileHasChanges
-     
     }
 }

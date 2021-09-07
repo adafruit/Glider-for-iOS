@@ -44,12 +44,12 @@ class FileChooserViewModel: ObservableObject {
                         self.directory = directory
                     }
                     else {
-                        print("listDirectory: nonexistent directory")
+                        DLog("listDirectory: nonexistent directory")
                         self.directory = directory
                     }
                     
                 case .failure(let error):
-                    print("listDirectory \(directory) error: \(error)")
+                    DLog("listDirectory \(directory) error: \(error)")
                 }
             }
         }
@@ -57,7 +57,7 @@ class FileChooserViewModel: ObservableObject {
     
     func makeDirectory(path: String) {
         // Make sure that the path ends with the separator
-        print("makeDirectory: \(path)")
+        DLog("makeDirectory: \(path)")
         isTransmiting = true
         fileTransferClient?.makeDirectory(path: path) { [weak self] result in
             guard let self = self else { return }
@@ -67,11 +67,11 @@ class FileChooserViewModel: ObservableObject {
                 
                 switch result {
                 case .success(let success):
-                    print("makeDirectory \(path) success: \(success)")
+                    DLog("makeDirectory \(path) success: \(success)")
                     self.listDirectory(directory: self.directory)      // Force list again directory
                     
                 case .failure(let error):
-                    print("makeDirectory \(path) error: \(error)")
+                    DLog("makeDirectory \(path) error: \(error)")
                 }
             }
         }
@@ -96,7 +96,7 @@ class FileChooserViewModel: ObservableObject {
         for offset in offsets {
             let entry = entries[offset]
             let filename = directory + entry.name
-            print("delete: \(offset) - \(filename)")
+            DLog("delete: \(offset) - \(filename)")
 
             isTransmiting = true
             fileTransferClient?.deleteFile(path: filename) { [weak self]  result in
@@ -107,11 +107,11 @@ class FileChooserViewModel: ObservableObject {
                     
                     switch result {
                     case .success(let success):
-                        print("deleteFile \(filename) success: \(success)")
+                        DLog("deleteFile \(filename) success: \(success)")
                         self.listDirectory(directory: self.directory)      // Force list again directory
                         
                     case .failure(let error):
-                        print("deleteFile \(filename) error: \(error)")
+                        DLog("deleteFile \(filename) error: \(error)")
                     }
                 }
             }

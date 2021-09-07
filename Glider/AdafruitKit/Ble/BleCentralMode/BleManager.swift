@@ -346,15 +346,17 @@ extension BleManager: CBCentralManagerDelegate {
             // Remove all peripherals found (Important because the BlePeripheral queues could contain old commands that were processing when the bluetooth state changed)
             peripheralsFound.removeAll()
         }
-
-        NotificationCenter.default.post(name: .didUpdateBleState, object: nil)
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .didUpdateBleState, object: nil)
+        }
     }
-
+    
     /*
-    func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
+     func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
      
      }*/
-
+    
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber) {
         // DLog("didDiscover: \(peripheral.name ?? peripheral.identifier.uuidString)")
         let rssi = RSSI.intValue
@@ -363,41 +365,47 @@ extension BleManager: CBCentralManagerDelegate {
             NotificationCenter.default.post(name: .didDiscoverPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
         }
     }
-
+    
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         DLog("didConnect: \(peripheral.identifier)")
-
+        
         // Remove connection timeout if exists
         if let timer = connectionTimeoutTimers[peripheral.identifier] {
             timer.invalidate()
             connectionTimeoutTimers[peripheral.identifier] = nil
         }
-
+        
         // Send notification
-        NotificationCenter.default.post(name: .didConnectToPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .didConnectToPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
+        }
     }
-
+    
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         DLog("didFailToConnect: \(String(describing: error))")
-
+        
         // Clean
         peripheralsFound[peripheral.identifier]?.reset()
-
+        
         // Notify
-        NotificationCenter.default.post(name: .didDisconnectFromPeripheral, object: nil, userInfo: [
-            NotificationUserInfoKey.uuid.rawValue: peripheral.identifier,
-            NotificationUserInfoKey.error.rawValue: error as Any
-        ])
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .didDisconnectFromPeripheral, object: nil, userInfo: [
+                NotificationUserInfoKey.uuid.rawValue: peripheral.identifier,
+                NotificationUserInfoKey.error.rawValue: error as Any
+            ])
+        }
     }
-
+    
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         DLog("didDisconnectPeripheral")
-
+        
         // Clean
         peripheralsFound[peripheral.identifier]?.reset()
-
+        
         // Notify
-        NotificationCenter.default.post(name: .didDisconnectFromPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .didDisconnectFromPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
+        }
 
         // Remove from peripheral list (after sending notification so the receiving objects can query about the peripheral before being removed)
         peripheralsFoundLock.lock()
