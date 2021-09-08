@@ -52,11 +52,11 @@
 		A9678E8226E78797003936DC /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8126E78797003936DC /* WaveView.swift */; };
 		A9678E8426E7C98F003936DC /* ConnectedTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8326E7C98E003936DC /* ConnectedTabView.swift */; };
 		A9678E8626E7D191003936DC /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8526E7D191003936DC /* InfoView.swift */; };
-		A9678E8826E7D754003936DC /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8726E7D754003936DC /* UIColor+LightAndDark.swift */; };
 		A9678E8A26E7FB58003936DC /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8926E7FB58003936DC /* LogView.swift */; };
 		A9678E8E26E828E2003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
 		A9678E8F26E8C941003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
 		A9678E9026E8C980003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
+		A9678E9226E91B90003936DC /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */; };
 		A96D27852687F9DB00D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
 		A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
 		A96D27872687FA3D00D6E247 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
@@ -176,9 +176,9 @@
 		A9678E8126E78797003936DC /* WaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 		A9678E8326E7C98E003936DC /* ConnectedTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedTabView.swift; sourceTree = "<group>"; };
 		A9678E8526E7D191003936DC /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
-		A9678E8726E7D754003936DC /* UIColor+LightAndDark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+LightAndDark.swift"; path = "../../../../../Filmin/filmin5/app/Filmin_iOS/Filmin/FilminKit5/SwiftUI/UIColor+LightAndDark.swift"; sourceTree = "<group>"; };
 		A9678E8926E7FB58003936DC /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		A9678E8D26E828E2003936DC /* LogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
+		A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+LightAndDark.swift"; sourceTree = "<group>"; };
 		A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderUtils.swift; sourceTree = "<group>"; };
 		A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleDataProcessingQueue.swift; sourceTree = "<group>"; };
 		A9ED1F262687530700B6C27F /* GliderFileProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -454,7 +454,7 @@
 				A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */,
 				A9F22529265BA80F00D3B2C6 /* FileTransferPathUtils.swift */,
 				A9ED1F622687EC1C00B6C27F /* String+DeletingPrefix.swift */,
-				A9678E8726E7D754003936DC /* UIColor+LightAndDark.swift */,
+				A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -697,9 +697,9 @@
 				A9678E8426E7C98F003936DC /* ConnectedTabView.swift in Sources */,
 				A9FEDC582680AC1200E409FA /* BleAutoReconnect.swift in Sources */,
 				A947FE9F26543894007A5E5A /* CommandQueue.swift in Sources */,
-				A9678E8826E7D754003936DC /* UIColor+LightAndDark.swift in Sources */,
 				A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */,
 				A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */,
+				A9678E9226E91B90003936DC /* UIColor+LightAndDark.swift in Sources */,
 				A947FE9B26543894007A5E5A /* BlePeripheral+Battery.swift in Sources */,
 				A91E913426BD9DA000B37FF9 /* String+DeletingPrefix.swift in Sources */,
 				A947FE9D26543894007A5E5A /* HexUtils.swift in Sources */,
