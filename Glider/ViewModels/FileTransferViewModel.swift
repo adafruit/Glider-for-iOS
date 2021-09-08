@@ -101,7 +101,7 @@ class FileTransferViewModel: ObservableObject {
     
     private func setup(fileTransferClient: FileTransferClient?) {
         guard let fileTransferClient = fileTransferClient else {
-            print("Error: undefined fileTransferClient")
+            DLog("Error: undefined fileTransferClient")
             return
         }
         
@@ -226,9 +226,9 @@ class FileTransferViewModel: ObservableObject {
     }
     
     private func readFileCommand(path: String, completion: ((Result<Data, Error>) -> Void)?) {
-        print("start readFile \(path)")
+        DLog("start readFile \(path)")
         fileTransferClient?.readFile(path: path, progress: { [weak self] read, total in
-            print("reading progress: \( String(format: "%.1f%%", Float(read) * 100 / Float(total)) )")
+            DLog("reading progress: \( String(format: "%.1f%%", Float(read) * 100 / Float(total)) )")
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.transmissionProgress?.transmittedBytes = read
@@ -238,10 +238,10 @@ class FileTransferViewModel: ObservableObject {
             if AppEnvironment.isDebug {
                 switch result {
                 case .success(let data):
-                    print("readFile \(path) success. Size: \(data.count)")
+                    DLog("readFile \(path) success. Size: \(data.count)")
                     
                 case .failure(let error):
-                    print("readFile  \(path) error: \(error)")
+                    DLog("readFile  \(path) error: \(error)")
                 }
             }
             
@@ -250,9 +250,9 @@ class FileTransferViewModel: ObservableObject {
     }
     
     private func writeFileCommand(path: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
-        print("start writeFile \(path)")
+        DLog("start writeFile \(path)")
         fileTransferClient?.writeFile(path: path, data: data, progress: { [weak self] written, total in
-            print("writing progress: \( String(format: "%.1f%%", Float(written) * 100 / Float(total)) )")
+            DLog("writing progress: \( String(format: "%.1f%%", Float(written) * 100 / Float(total)) )")
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.transmissionProgress?.transmittedBytes = written
@@ -262,10 +262,10 @@ class FileTransferViewModel: ObservableObject {
             if AppEnvironment.isDebug {
                 switch result {
                 case .success:
-                    print("writeFile \(path) success. Size: \(data.count)")
+                    DLog("writeFile \(path) success. Size: \(data.count)")
                     
                 case .failure(let error):
-                    print("writeFile  \(path) error: \(error)")
+                    DLog("writeFile  \(path) error: \(error)")
                 }
             }
             
@@ -274,15 +274,15 @@ class FileTransferViewModel: ObservableObject {
     }
     
     private func deleteFileCommand(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
-        print("start deleteFile \(path)")
+        DLog("start deleteFile \(path)")
         fileTransferClient?.deleteFile(path: path) { result in
             if AppEnvironment.isDebug {
                 switch result {
                 case .success(let success):
-                    print("deleteFile \(path) \(success ? "success":"failed")")
+                    DLog("deleteFile \(path) \(success ? "success":"failed")")
                     
                 case .failure(let error):
-                    print("deleteFile  \(path) error: \(error)")
+                    DLog("deleteFile  \(path) error: \(error)")
                 }
             }
             
@@ -291,14 +291,14 @@ class FileTransferViewModel: ObservableObject {
     }
     
     private func listDirectoryCommand(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
-        print("start listDirectory \(path)")
+        DLog("start listDirectory \(path)")
         fileTransferClient?.listDirectory(path: path) { result in
             switch result {
             case .success(let entries):
-                print("listDirectory \(path). \(entries != nil ? "Entries: \(entries!.count)" : "Directory does not exist")")
+                DLog("listDirectory \(path). \(entries != nil ? "Entries: \(entries!.count)" : "Directory does not exist")")
                 
             case .failure(let error):
-                print("listDirectory \(path) error: \(error)")
+                DLog("listDirectory \(path) error: \(error)")
             }
             
             completion?(result)
@@ -306,14 +306,14 @@ class FileTransferViewModel: ObservableObject {
     }
     
     private func makeDirectoryCommand(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
-        print("start makeDirectory \(path)")
+        DLog("start makeDirectory \(path)")
         fileTransferClient?.makeDirectory(path: path) { result in
             switch result {
             case .success(let success):
-                print("makeDirectory \(path) \(success ? "success":"failed")")
+                DLog("makeDirectory \(path) \(success ? "success":"failed")")
                 
             case .failure(let error):
-                print("makeDirectory \(path) error: \(error)")
+                DLog("makeDirectory \(path) error: \(error)")
             }
             
             completion?(result)

@@ -8,21 +8,42 @@
 import SwiftUI
 
 // MARK: - Background
-struct DefaultBackgroundView: View {
-    
+struct DefaultPlainBackgrondView: View {
     var body: some View {
         Color("background_default")
             .ignoresSafeArea()
     }
 }
 
+struct DefaultGradientBackgroundView: View {
+    var body: some View {
+       
+        LinearGradient(
+            gradient: Gradient(colors: [Color("background_gradient_start"), Color("background_gradient_end")]),
+            startPoint: .topTrailing,
+            endPoint: .bottomLeading
+        )
+        .ignoresSafeArea()
+    }
+}
+
 // MARK: - Background as modifier
-private struct DefaultBackgroundViewModifier: ViewModifier {
+private struct DefaultPlainBackgroundViewModifier: ViewModifier {
+    
+    func body(content: Content) -> some View {
+        ZStack() {
+            DefaultPlainBackgrondView()
+            content
+        }
+    }
+}
+
+private struct DefaultGradientBackgroundViewModifier: ViewModifier {
     var hidesKeyboardOnTap: Bool
     
     func body(content: Content) -> some View {
         ZStack() {
-            DefaultBackgroundView()
+            DefaultGradientBackgroundView()
                 .if(hidesKeyboardOnTap) {
                     $0.onTapGesture {
                         self.hideKeyboard()
@@ -34,7 +55,11 @@ private struct DefaultBackgroundViewModifier: ViewModifier {
 }
 
 extension View {
-    func defaultBackground(hidesKeyboardOnTap: Bool = false) -> some View {
-        self.modifier(DefaultBackgroundViewModifier(hidesKeyboardOnTap: hidesKeyboardOnTap))
+    func defaultPlainBackground(hidesKeyboardOnTap: Bool = false) -> some View {
+        self.modifier(DefaultPlainBackgroundViewModifier())
+    }
+    
+    func defaultGradientBackground(hidesKeyboardOnTap: Bool = false) -> some View {
+        self.modifier(DefaultGradientBackgroundViewModifier(hidesKeyboardOnTap: hidesKeyboardOnTap))
     }
 }

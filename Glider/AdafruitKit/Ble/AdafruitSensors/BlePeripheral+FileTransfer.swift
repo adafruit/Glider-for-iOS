@@ -379,6 +379,7 @@ extension BlePeripheral {
 
         default:
             DLog("Error: unknown command: \(HexUtils.hexDescription(bytes: [command], prefix: "0x")). Invalidating all received data...")
+         
             bytesProcessed = Int.max        // Invalidate all received data
         }
 

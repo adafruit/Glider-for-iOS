@@ -14,38 +14,26 @@ class StartupViewModel: ObservableObject {
     private static let kReconnectTimeout = 2.0
     
     // Published
-    enum ActiveAlert {
-        case none
+    enum ActiveAlert: Identifiable {
         case bluetoothUnsupported
         case fileTransferErrorOnReconnect
         //case bluetoothError(description: String)
         
-        var isActive: Bool {
-            switch self {
-            case .none: return false
-            default: return true
-            }
-        }
-        
-        mutating func setInactive() {
-            self = .none
-        }
+        var id: Int { hashValue }
     }
     
-    @Published var activeAlert: ActiveAlert = .none
+    @Published var activeAlert: ActiveAlert?
     @Published var isRestoringConnection = false
     @Published var isStartupFinished = false
-    
+
     // Data
     private let bleSupportSemaphore = DispatchSemaphore(value: 0)
-    private var startTime: CFAbsoluteTime!
-    
+
     deinit {
         registerAutoReconnectNotifications(enabled: false)
     }
     
     func setupBluetooth() {
-        startTime = CFAbsoluteTimeGetCurrent()
         
         // check Bluetooth status
         let bleState = BleManager.shared.state
@@ -111,7 +99,6 @@ class StartupViewModel: ObservableObject {
             if let didFailToReconnectToKnownPeripheralObserver = didFailToReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(didFailToReconnectToKnownPeripheralObserver)}
         }
     }
-    
     
     private func willReconnectToKnownPeripheral(_ notification: Notification) {
         DLog("willReconnectToKnownPeripheral")
