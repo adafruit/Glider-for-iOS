@@ -36,23 +36,23 @@ TODO: Add Swift Package Manager Support
 
 - **writeFile**: Writes the content to the given full path. If the file exists, it will be overwritten.
 
-		func writeFile(path: String, data: Data, progress: ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?)
+		func writeFile(path: String, data: Data, progress: ProgressHandler? = nil, completion: ((Result<Date?, Error>) -> Void)?)
 		
-	completion is called with *.success* or *.failure* with an *Error*
+	completion is called with *.success* wjith the modification Date or *.failure* with an *Error*
         progress is called with the transmission status *typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)*
 
 - **deleteFile**: Deletes the file or directory at the given full path. Directories must be empty to be deleted.
 
-		func deleteFile(path: String, completion: ((Result<Bool, Error>) -> Void)?)
+		func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?)
 
-	completion is called with *.success* and a Bool indicating the status flag of the protocol (true for sucessful delete or false if the path is a non-empty directory or non-existent) or *.failure* with an *Error*
+	completion is called with *.success* or *.failure* with an *Error*
 
 
 - **makeDirectory**: Creates a new directory at the given full path. If a parent directory does not exist, then it will also be created. If any name conflicts with an existing file, an error will be returned
 
-		func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?)
+		func makeDirectory(path: String, completion: ((Result<Date?, Error>) -> Void)?)
 
-	completion is called with *.success* and a Bool indicating the status flag of the protocol (true if the directory(s) were created or false if if any parent of the path is an existing file) or *.failure* with an *Error*
+	completion is called with *.success* with the modification Date or *.failure* with an *Error*
 
 
 - **listDirectory**: Lists all of the contents in a directory given a full path. Returned paths are relative to the given path to reduce duplication

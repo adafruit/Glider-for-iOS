@@ -1,5 +1,5 @@
 //
-//  AutoConnectViewModel.swift
+//  ScanViewModel.swift
 //  Glider
 //
 //  Created by Antonio García on 14/5/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AutoConnectViewModel: ObservableObject {
+class ScanViewModel: ObservableObject {
     // Config
     private static let kRssiRunningAverageFactor = 0.2
 
@@ -55,8 +55,7 @@ class AutoConnectViewModel: ObservableObject {
         let wasConnected = disconnectPeripheralAndResetAutoConnect()
         
         if wasConnected {
-            // If it was connected, dont reconnect, just start scanning as usual
-            DLog("User forced disconnection. Don't try to reconnect")
+            DLog("User forced disconnection")
             AppState.shared.forceReconnect()
             startScanning()
         }
@@ -64,7 +63,6 @@ class AutoConnectViewModel: ObservableObject {
             let isTryingToReconnect = AppState.shared.forceReconnect()
             if isTryingToReconnect {
                 connectionStatus = .restoringConnection
-                //detailText = "Restoring connection..."
             }
             else {
                 startScanning()
@@ -79,7 +77,6 @@ class AutoConnectViewModel: ObservableObject {
     
 
     // MARK: - Scanning
-    
     /// Returns true if it was connnected
     private func disconnectPeripheralAndResetAutoConnect() -> Bool {
         var isConnected = false
@@ -107,7 +104,6 @@ class AutoConnectViewModel: ObservableObject {
         if !bleManager.isScanning {
             bleManager.startScan()
             connectionStatus = .scanning
-            //detailText = "Scanning..."
         }
     }
     
@@ -210,7 +206,6 @@ class AutoConnectViewModel: ObservableObject {
              }
 
         connectionStatus = .connecting
-        //detailText = "Connecting..."
     }
 
     private func didConnectToPeripheral(notification: Notification) {
@@ -219,7 +214,6 @@ class AutoConnectViewModel: ObservableObject {
             return
         }
         connectionStatus = .connected
-        //detailText = "Connected..."
 
         // Setup peripheral
         AppState.shared.fileTransferClient = FileTransferClient(connectedBlePeripheral: selectedPeripheral, services: [.filetransfer]) { [weak self] result in
@@ -251,20 +245,15 @@ class AutoConnectViewModel: ObservableObject {
             case .failure(let error):
                 DLog("setupPeripheral error: \(error.localizedDescription)")
 
-                /*
-                let alertController = UIAlertController(title: localizationManager.localizedString("dialog_error"), message: localizationManager.localizedString("scanner_error_startboard"), preferredStyle: .alert)
-                let okAction = UIAlertAction(title: localizationManager.localizedString("dialog_ok"), style: .default, handler: nil)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-*/
-                self.disconnect(peripheral: selectedPeripheral)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.disconnect(peripheral: selectedPeripheral)
+                }
             }
         }
     }
 
     private func willDiscoverServices(notification: Notification) {
         connectionStatus = .discovering
-        //detailText = "Discovering Services..."
     }
     
     private func didDisconnectFromPeripheral(notification: Notification) {
@@ -280,13 +269,6 @@ class AutoConnectViewModel: ObservableObject {
 
         // Show error if needed
         connectionStatus = .disconnected(error: bleManager.error(from: notification))
-        /*
-        if let error = bleManager.error(from: notification) {
-            detailText = "Disconnected \(error.localizedDescription)"
-        }
-        else {
-            detailText = "Disconnected"
-        }*/
     }
 
     private func peripheralDidUpdateName(notification: Notification) {

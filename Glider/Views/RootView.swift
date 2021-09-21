@@ -19,7 +19,7 @@ struct RootView: View {
             case .startup:
                 StartupView()
             case .scan:
-                AutoConnectView()
+                ScanView()
             case .bluetoothStatus:
                 BluetoothStatusView()
             case .connected:

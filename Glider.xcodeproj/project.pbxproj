@@ -15,17 +15,16 @@
 		A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4C26543893007A5E5A /* ButtonStyles.swift */; };
 		A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4E26543893007A5E5A /* DefaultBackground.swift */; };
 		A947FE8426543894007A5E5A /* StartupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4F26543893007A5E5A /* StartupView.swift */; };
-		A947FE8526543894007A5E5A /* AutoConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5026543893007A5E5A /* AutoConnectView.swift */; };
+		A947FE8526543894007A5E5A /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5026543893007A5E5A /* ScanView.swift */; };
 		A947FE8626543894007A5E5A /* View+If.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5226543893007A5E5A /* View+If.swift */; };
 		A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5326543893007A5E5A /* HideKeyboard.swift */; };
 		A947FE8826543894007A5E5A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5426543893007A5E5A /* RootView.swift */; };
 		A947FE8926543894007A5E5A /* FileTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5526543893007A5E5A /* FileTransferView.swift */; };
-		A947FE8A26543894007A5E5A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5626543893007A5E5A /* MainView.swift */; };
 		A947FE8B26543894007A5E5A /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5826543893007A5E5A /* TodoView.swift */; };
 		A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5926543893007A5E5A /* RootViewModel.swift */; };
 		A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5A26543893007A5E5A /* StartupViewModel.swift */; };
 		A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */; };
-		A947FE8F26543894007A5E5A /* AutoConnectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */; };
+		A947FE8F26543894007A5E5A /* ScanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5C26543893007A5E5A /* ScanViewModel.swift */; };
 		A947FE9026543894007A5E5A /* FileTransferClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5F26543893007A5E5A /* FileTransferClient.swift */; };
 		A947FE9226543894007A5E5A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
 		A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6326543893007A5E5A /* PeripheralList.swift */; };
@@ -139,17 +138,16 @@
 		A947FE4C26543893007A5E5A /* ButtonStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		A947FE4E26543893007A5E5A /* DefaultBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultBackground.swift; sourceTree = "<group>"; };
 		A947FE4F26543893007A5E5A /* StartupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupView.swift; sourceTree = "<group>"; };
-		A947FE5026543893007A5E5A /* AutoConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoConnectView.swift; sourceTree = "<group>"; };
+		A947FE5026543893007A5E5A /* ScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		A947FE5226543893007A5E5A /* View+If.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+If.swift"; sourceTree = "<group>"; };
 		A947FE5326543893007A5E5A /* HideKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HideKeyboard.swift; sourceTree = "<group>"; };
 		A947FE5426543893007A5E5A /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		A947FE5526543893007A5E5A /* FileTransferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferView.swift; sourceTree = "<group>"; };
-		A947FE5626543893007A5E5A /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		A947FE5826543893007A5E5A /* TodoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		A947FE5926543893007A5E5A /* RootViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		A947FE5A26543893007A5E5A /* StartupViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupViewModel.swift; sourceTree = "<group>"; };
 		A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferViewModel.swift; sourceTree = "<group>"; };
-		A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoConnectViewModel.swift; sourceTree = "<group>"; };
+		A947FE5C26543893007A5E5A /* ScanViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanViewModel.swift; sourceTree = "<group>"; };
 		A947FE5F26543893007A5E5A /* FileTransferClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferClient.swift; sourceTree = "<group>"; };
 		A947FE6126543893007A5E5A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		A947FE6326543893007A5E5A /* PeripheralList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralList.swift; sourceTree = "<group>"; };
@@ -296,14 +294,13 @@
 				A947FE5426543893007A5E5A /* RootView.swift */,
 				A947FE4F26543893007A5E5A /* StartupView.swift */,
 				A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */,
-				A947FE5626543893007A5E5A /* MainView.swift */,
-				A947FE5026543893007A5E5A /* AutoConnectView.swift */,
-				A947FE5526543893007A5E5A /* FileTransferView.swift */,
-				A947FE5826543893007A5E5A /* TodoView.swift */,
-				A9F225252659ED8400D3B2C6 /* FileChooserView.swift */,
+				A947FE5026543893007A5E5A /* ScanView.swift */,
 				A9678E8326E7C98E003936DC /* ConnectedTabView.swift */,
+				A947FE5526543893007A5E5A /* FileTransferView.swift */,
+				A9F225252659ED8400D3B2C6 /* FileChooserView.swift */,
 				A9678E8526E7D191003936DC /* InfoView.swift */,
 				A9678E8926E7FB58003936DC /* LogView.swift */,
+				A947FE5826543893007A5E5A /* TodoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -340,7 +337,7 @@
 			children = (
 				A947FE5926543893007A5E5A /* RootViewModel.swift */,
 				A947FE5A26543893007A5E5A /* StartupViewModel.swift */,
-				A947FE5C26543893007A5E5A /* AutoConnectViewModel.swift */,
+				A947FE5C26543893007A5E5A /* ScanViewModel.swift */,
 				A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */,
 				A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */,
 			);
@@ -656,12 +653,11 @@
 				A9678E8E26E828E2003936DC /* LogManager.swift in Sources */,
 				A947FE9626543894007A5E5A /* BlePeripheral+AdafruitCommon.swift in Sources */,
 				A9CCB9C1266A3CEE00E9FA28 /* BleDataProcessingQueue.swift in Sources */,
-				A947FE8F26543894007A5E5A /* AutoConnectViewModel.swift in Sources */,
+				A947FE8F26543894007A5E5A /* ScanViewModel.swift in Sources */,
 				A947FE9826543894007A5E5A /* BlePeripheral+ManufacturerAdafruit.swift in Sources */,
 				A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */,
 				A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */,
 				A947FE9226543894007A5E5A /* Settings.swift in Sources */,
-				A947FE8A26543894007A5E5A /* MainView.swift in Sources */,
 				A947FE9026543894007A5E5A /* FileTransferClient.swift in Sources */,
 				A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */,
 				A947FE8B26543894007A5E5A /* TodoView.swift in Sources */,
@@ -684,7 +680,7 @@
 				A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */,
 				A9678E8626E7D191003936DC /* InfoView.swift in Sources */,
 				A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */,
-				A947FE8526543894007A5E5A /* AutoConnectView.swift in Sources */,
+				A947FE8526543894007A5E5A /* ScanView.swift in Sources */,
 				A947FE9A26543894007A5E5A /* BleManager.swift in Sources */,
 				A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */,
 				A9678E8026E758B2003936DC /* BluetoothStatusView.swift in Sources */,
@@ -917,7 +913,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -927,7 +923,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.5;
+				MARKETING_VERSION = 0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -943,7 +939,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -953,7 +949,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.5;
+				MARKETING_VERSION = 0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

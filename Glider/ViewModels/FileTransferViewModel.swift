@@ -29,9 +29,9 @@ class FileTransferViewModel: ObservableObject {
         enum TransmissionType: Equatable {
             case read(data: Data)
             case write(size: Int)
-            case delete(success: Bool)
+            case delete
             case listDirectory(numItems: Int?)
-            case makeDirectory(success: Bool)
+            case makeDirectory
             case error(message: String)
         }
         let type: TransmissionType
@@ -41,9 +41,9 @@ class FileTransferViewModel: ObservableObject {
             switch self.type {
             case .read(let data): modeText = "Received \(data.count) bytes"
             case .write(let size): modeText = "Sent \(size) bytes"
-            case .delete(let success): modeText = "Deleted file: \(success ? "success":"failed")"
+            case .delete: modeText = "Deleted file"
             case .listDirectory(numItems: let numItems): modeText = numItems != nil ? "Listed directory: \(numItems!) items" : "Listed nonexistent directory"
-            case .makeDirectory(let success): modeText = "Created directory: \(success ? "success":"failed")"
+            case .makeDirectory: modeText = "Created directory"
             case .error(let message): modeText = message
             }
             
@@ -183,8 +183,8 @@ class FileTransferViewModel: ObservableObject {
             
             DispatchQueue.main.async {
                 switch result {
-                case .success(let success):
-                    self.lastTransmit = TransmissionLog(type: .delete(success: success))
+                case .success:
+                    self.lastTransmit = TransmissionLog(type: .delete)
                     
                 case .failure(let error):
                     self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
@@ -203,8 +203,8 @@ class FileTransferViewModel: ObservableObject {
             
             DispatchQueue.main.async {
                 switch result {
-                case .success(let success):
-                    self.lastTransmit = TransmissionLog(type: .makeDirectory(success: success))
+                case .success(_ /*let date*/):
+                    self.lastTransmit = TransmissionLog(type: .makeDirectory)
                     
                 case .failure(let error):
                     self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
@@ -249,7 +249,7 @@ class FileTransferViewModel: ObservableObject {
         }
     }
     
-    private func writeFileCommand(path: String, data: Data, completion: ((Result<Void, Error>) -> Void)?) {
+    private func writeFileCommand(path: String, data: Data, completion: ((Result<Date?, Error>) -> Void)?) {
         DLog("start writeFile \(path)")
         fileTransferClient?.writeFile(path: path, data: data, progress: { [weak self] written, total in
             DLog("writing progress: \( String(format: "%.1f%%", Float(written) * 100 / Float(total)) )")
@@ -273,13 +273,13 @@ class FileTransferViewModel: ObservableObject {
         }
     }
     
-    private func deleteFileCommand(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
+    private func deleteFileCommand(path: String, completion: ((Result<Void, Error>) -> Void)?) {
         DLog("start deleteFile \(path)")
         fileTransferClient?.deleteFile(path: path) { result in
             if AppEnvironment.isDebug {
                 switch result {
-                case .success(let success):
-                    DLog("deleteFile \(path) \(success ? "success":"failed")")
+                case .success:
+                    DLog("deleteFile \(path) success")
                     
                 case .failure(let error):
                     DLog("deleteFile  \(path) error: \(error)")
@@ -305,12 +305,12 @@ class FileTransferViewModel: ObservableObject {
         }
     }
     
-    private func makeDirectoryCommand(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
+    private func makeDirectoryCommand(path: String, completion: ((Result<Date?, Error>) -> Void)?) {
         DLog("start makeDirectory \(path)")
         fileTransferClient?.makeDirectory(path: path) { result in
             switch result {
-            case .success(let success):
-                DLog("makeDirectory \(path) \(success ? "success":"failed")")
+            case .success(_ /*let date*/):
+                DLog("makeDirectory \(path)")
                 
             case .failure(let error):
                 DLog("makeDirectory \(path) error: \(error)")

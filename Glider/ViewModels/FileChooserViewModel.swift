@@ -66,8 +66,8 @@ class FileChooserViewModel: ObservableObject {
                 self.isTransmiting = false
                 
                 switch result {
-                case .success(let success):
-                    DLog("makeDirectory \(path) success: \(success)")
+                case .success(_ /*let date*/):
+                    DLog("makeDirectory \(path) success")
                     self.listDirectory(directory: self.directory)      // Force list again directory
                     
                 case .failure(let error):

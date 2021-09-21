@@ -21,7 +21,7 @@ struct FileMetadataCache {
         
         // If is the first time add root container
         if metadata[.rootContainer] == nil {
-            metadata[.rootContainer] = FileProviderItem(path: FileTransferPathUtils.rootDirectory, entry: BlePeripheral.DirectoryEntry(name: "", type: .directory))
+            metadata[.rootContainer] = FileProviderItem(path: FileTransferPathUtils.rootDirectory, entry: BlePeripheral.DirectoryEntry(name: "", type: .directory, modificationDate: nil))
             saveToUserDefaults()
         }
     }

@@ -98,14 +98,14 @@ class GliderClient {
         }
     }
     
-    func deleteFile(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
+    func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?) {
         fileTransferSemaphore.wait()
         setupFileTransferIfNeeded { result in
             switch result {
             case .success(let client):
-                client.deleteFile(path: path) { isDeleted in
+                client.deleteFile(path: path) { result in
                     self.fileTransferSemaphore.signal()
-                    completion?(isDeleted)
+                    completion?(result)
                 }
             case .failure(let error):
                 self.fileTransferSemaphore.signal()
@@ -114,7 +114,7 @@ class GliderClient {
         }
     }
 
-    func makeDirectory(path: String, completion: ((Result<Bool, Error>) -> Void)?) {
+    func makeDirectory(path: String, completion: ((Result<Date?, Error>) -> Void)?) {
         fileTransferSemaphore.wait()
         setupFileTransferIfNeeded { result in
             switch result {

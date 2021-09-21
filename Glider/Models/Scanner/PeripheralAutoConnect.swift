@@ -66,7 +66,6 @@ class PeripheralAutoConnect {
 
         // Wait for the minimum time since scanning started
         guard bleManager.scanningElapsedTime ?? 0 > PeripheralAutoConnect.kMinScanningTimeToAutoconnect else {
-            //DLog("remaining mandatory scan time: \(AutoConnectViewController.kMinScanningTimeToAutoconnect - (bleManager.scanningElapsedTime ?? 0))")
             return nil
         }
 

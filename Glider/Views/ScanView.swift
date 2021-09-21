@@ -1,5 +1,5 @@
 //
-//  AutoConnectView.swift
+//  ScanView.swift
 //  Glider
 //
 //  Created by Antonio García on 14/5/21.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct AutoConnectView: View {
-    @StateObject private var model = AutoConnectViewModel()
+struct ScanView: View {
+    @StateObject private var model = ScanViewModel()
     @EnvironmentObject var rootViewModel: RootViewModel
     
     var body: some View {
@@ -223,9 +223,9 @@ extension View {
     }
 }
 
-struct AutoConnectView_Previews: PreviewProvider {
+struct ScanView_Previews: PreviewProvider {
     static var previews: some View {
-        AutoConnectView()
+        ScanView()
         //.previewDevice(PreviewDevice(rawValue: "iPad Air (4th generation)"))
         //.previewDevice(PreviewDevice(rawValue: "iPhone 12"))
         //.previewDevice(PreviewDevice(rawValue: "iPhone 12 Pro Max"))
