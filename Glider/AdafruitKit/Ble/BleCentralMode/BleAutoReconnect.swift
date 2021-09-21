@@ -34,22 +34,25 @@ class BleAutoReconnect {
     /// Returns if is trying to reconnect, or false if it is quickly decided that there is not possible
     @discardableResult
     func reconnect() -> Bool {
+        return self.reconnecToPeripheral(withIdentifier: Settings.autoconnectPeripheralUUID)
+        
+        /*
         if let identifier = Settings.autoconnectPeripheralUUID {
             return self.reconnecToPeripheral(withIdentifier: identifier)
         } else {
             DLog("Reconnect finished")
             NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil)
             return false
-        }
+        }*/
     }
     
     // MARK: - Reconnect previously connnected Ble Peripheral
-    private func reconnecToPeripheral(withIdentifier identifier: UUID) -> Bool {
+    private func reconnecToPeripheral(withIdentifier identifier: UUID?) -> Bool {
         DLog("Reconnecting...")
         isReconnecting = true
         
         // Reconnect
-        let isTryingToReconnect = BleManager.shared.reconnecToPeripherals(peripheralUUIDs: [identifier], withServices: servicesToReconnect, timeout: reconnectTimeout)
+        let isTryingToReconnect = BleManager.shared.reconnecToPeripherals(peripheralUUIDs: identifier == nil ? nil : [identifier!], withServices: servicesToReconnect, timeout: reconnectTimeout)
 
         if !isTryingToReconnect {
             DLog("isTryingToReconnect false. Go to next")

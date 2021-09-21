@@ -99,11 +99,20 @@ extension BlePeripheral {
     }
 
     // MARK: - Errors
-    enum FileTransferError: Error {
+    enum FileTransferError: LocalizedError {
         case invalidData
         case unknownCommand
         case invalidInternalState
         case statusFailed(code: Int)
+        
+        var errorDescription: String? {
+            switch self {
+            case .invalidData: return "invalid data"
+            case .unknownCommand: return "unknown command"
+            case .invalidInternalState: return "invalid internal state"
+            case .statusFailed(let code): return "status error: \(code)"
+            }
+        }
     }
     
     // MARK: - Custom properties
@@ -447,7 +456,7 @@ extension BlePeripheral {
             dateFormatter.dateFormat = "yyyy/MM/dd-HH:mm:ss"
             DLog("write \(isStatusOk ? "ok":"error(\(status))") at offset: \(offset). \(writeDate == nil ? "" : "date: \(dateFormatter.string(from: writeDate!))") freespace: \(freeSpace)")
         }
-        
+
         guard isStatusOk else {
             self.adafruitFileTransferWriteStatus = nil
             completion?(.failure(FileTransferError.statusFailed(code: Int(status))))
@@ -455,7 +464,7 @@ extension BlePeripheral {
         }
         
         adafruitFileTransferWriteStatus.progress?(Int(offset), Int(adafruitFileTransferWriteStatus.data.count))
-        
+
         if offset >= adafruitFileTransferWriteStatus.data.count  {
             self.adafruitFileTransferWriteStatus = nil
             completion?(.success((writeDate)))
