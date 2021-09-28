@@ -9,7 +9,6 @@
 import UIKit
 import CoreBluetooth
 
-
 class FileTransferClient {
     // Data structs
     typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)

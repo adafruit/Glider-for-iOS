@@ -58,6 +58,7 @@
 		A9678E9226E91B90003936DC /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */; };
 		A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
 		A96D27872687FA3D00D6E247 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
+		A99F04DC270377F100772FB4 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99F04DB270377F100772FB4 /* ConnectionManager.swift */; };
 		A9CCB9C1266A3CEE00E9FA28 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */; };
 		A9E7EB9726C3005E00C09C8B /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7626543893007A5E5A /* LogHelper.swift */; };
 		A9ED1F292687530700B6C27F /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F282687530700B6C27F /* FileProviderExtension.swift */; };
@@ -177,6 +178,7 @@
 		A9678E8D26E828E2003936DC /* LogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
 		A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+LightAndDark.swift"; sourceTree = "<group>"; };
 		A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderUtils.swift; sourceTree = "<group>"; };
+		A99F04DB270377F100772FB4 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleDataProcessingQueue.swift; sourceTree = "<group>"; };
 		A9ED1F262687530700B6C27F /* GliderFileProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9ED1F282687530700B6C27F /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
@@ -346,21 +348,14 @@
 		A947FE5D26543893007A5E5A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A947FE6126543893007A5E5A /* Settings.swift */,
-				A947FE5E26543893007A5E5A /* AdafruitBoard */,
 				A947FE6226543893007A5E5A /* Scanner */,
 				A919BA6926791585000C9291 /* AppState.swift */,
+				A947FE6126543893007A5E5A /* Settings.swift */,
+				A947FE5F26543893007A5E5A /* FileTransferClient.swift */,
 				A9678E8D26E828E2003936DC /* LogManager.swift */,
+				A99F04DB270377F100772FB4 /* ConnectionManager.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		A947FE5E26543893007A5E5A /* AdafruitBoard */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE5F26543893007A5E5A /* FileTransferClient.swift */,
-			);
-			path = AdafruitBoard;
 			sourceTree = "<group>";
 		};
 		A947FE6226543893007A5E5A /* Scanner */ = {
@@ -673,6 +668,7 @@
 				A947FEA426543894007A5E5A /* GliderApp.swift in Sources */,
 				A947FEA626543894007A5E5A /* AppEnvironment.swift in Sources */,
 				A947FEA026543894007A5E5A /* LogHelper.swift in Sources */,
+				A99F04DC270377F100772FB4 /* ConnectionManager.swift in Sources */,
 				A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */,
 				A947FE8626543894007A5E5A /* View+If.swift in Sources */,
 				A947FEA126543894007A5E5A /* Types+Data.swift in Sources */,

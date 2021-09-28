@@ -13,10 +13,10 @@ class ScanViewModel: ObservableObject {
 
     // Published
     enum Destination {
-        case fileTransfer
+        case connected
         case troubleshootConnection
     }
-    
+
     @Published var destination: Destination? = nil
     
     enum ConnectionStatus {
@@ -32,26 +32,17 @@ class ScanViewModel: ObservableObject {
     @Published var connectionStatus: ConnectionStatus = .scanning
     
     @Published var selectedPeripheral: BlePeripheral? = nil
-    //@Published var numPeripheralsScanned = 0
-    //@Published var numAdafruitPeripheralsScanned = 0
     @Published var numAdafruitPeripheralsWithFileTransferServiceScanned = 0
-    //@Published var numAdafruitPeripheralsWithFileTransferServiceNearby = 0
    
     // Data
     private let bleManager = BleManager.shared
     private var peripheralList = PeripheralList(bleManager: BleManager.shared)
     private var peripheralAutoConnect = PeripheralAutoConnect()
     
-    /*
-    init() {
-        // Check if we are reconnecting to a known Peripheral. If AppState.shared.fileTransferClient is not nil, no need to scan, just go to the FileTransfer screen
-        if AppState.shared.fileTransferClient != nil {
-            destination = .fileTransfer
-        }
-    }*/
-    
+    // MARK: - Lifecycle
     func onAppear() {
         registerNotifications(enabled: true)
+        /*
         let wasConnected = disconnectPeripheralAndResetAutoConnect()
         
         if wasConnected {
@@ -60,6 +51,7 @@ class ScanViewModel: ObservableObject {
             startScanning()
         }
         else {
+            */
             let isTryingToReconnect = AppState.shared.forceReconnect()
             if isTryingToReconnect {
                 connectionStatus = .restoringConnection
@@ -67,7 +59,7 @@ class ScanViewModel: ObservableObject {
             else {
                 startScanning()
             }
-        }
+        //}
     }
     
     func onDissapear() {
@@ -76,7 +68,8 @@ class ScanViewModel: ObservableObject {
     }
     
 
-    // MARK: - Scanning
+    // MARK: - Scanning Actions
+    /*
     /// Returns true if it was connnected
     private func disconnectPeripheralAndResetAutoConnect() -> Bool {
         var isConnected = false
@@ -94,7 +87,7 @@ class ScanViewModel: ObservableObject {
         peripheralAutoConnect.reset()
         
         return isConnected
-    }
+    }*/
 
     private func startScanning() {
         updateScannedPeripherals()
@@ -114,11 +107,11 @@ class ScanViewModel: ObservableObject {
     }
     
     // MARK: - Destinations
-    private func gotoFileTransfer() {
-        destination = .fileTransfer
+    private func gotoConnected() {
+        destination = .connected
     }
 
-    // MARK: - Scanning
+    // MARK: - Scanning Status
     private func updateScannedPeripherals() {
         // Update peripheralAutoconnect
         if let peripheral = peripheralAutoConnect.update(peripheralList: peripheralList) {
@@ -127,13 +120,10 @@ class ScanViewModel: ObservableObject {
         }
         
         // Update stats
-        //numPeripheralsScanned = bleManager.numPeripherals()
-        //numAdafruitPeripheralsScanned = bleManager.peripherals().filter{$0.isManufacturerAdafruit()}.count
         numAdafruitPeripheralsWithFileTransferServiceScanned = peripheralList.filteredPeripherals(forceUpdate: false).count
-        //numAdafruitPeripheralsWithFileTransferServiceNearby = peripheralAutoConnect.matchingPeripherals.count
     }
 
-    // MARK: - Connections
+    // MARK: - Connect / Disconnect
     private func connect(peripheral: BlePeripheral) {
         // Connect to selected peripheral
         selectedPeripheral = peripheral
@@ -240,7 +230,7 @@ class ScanViewModel: ObservableObject {
                 // Finished setup
                 self.connectionStatus = .fileTransferReady
                 //self.detailText = "FileTransfer service ready"
-                self.gotoFileTransfer()
+                self.gotoConnected()
 
             case .failure(let error):
                 DLog("setupPeripheral error: \(error.localizedDescription)")

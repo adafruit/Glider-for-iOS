@@ -14,7 +14,7 @@ struct ScanView: View {
     var body: some View {
         NavigationView {
             VStack {
-                
+
                 // Navigate to TodoView
                 NavigationLink(
                     destination: TodoView(),
@@ -77,7 +77,7 @@ struct ScanView: View {
             model.onDissapear()
         }
         .onChange(of: model.destination) { destination in
-            if destination == .fileTransfer {
+            if destination == .connected {
                 self.rootViewModel.gotoConnected()
             }
         }
@@ -229,6 +229,6 @@ struct ScanView_Previews: PreviewProvider {
         ScanView()
         //.previewDevice(PreviewDevice(rawValue: "iPad Air (4th generation)"))
         //.previewDevice(PreviewDevice(rawValue: "iPhone 12"))
-        .previewDevice(PreviewDevice(rawValue: "iPhone 12 Pro Max"))
+        //.previewDevice(PreviewDevice(rawValue: "iPhone 12 Pro Max"))
     }
 }
