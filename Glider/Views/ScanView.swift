@@ -110,10 +110,11 @@ struct ScanView: View {
             }
             .frame(width: min(400, UIScreen.main.bounds.width))
             .onAppear {
-                withAnimation(.linear(duration: WaveOpacityModifier.waveAnimationDuration).delay(0.5).repeatForever(autoreverses: false)) {
-                    animationCurrentFactor = 1
+                DispatchQueue.main.async {
+                    withAnimation(.linear(duration: WaveOpacityModifier.waveAnimationDuration).delay(0.5).repeatForever(autoreverses: false)) {
+                        animationCurrentFactor = 1
+                    }
                 }
-                
             }
         }
     }
@@ -228,6 +229,6 @@ struct ScanView_Previews: PreviewProvider {
         ScanView()
         //.previewDevice(PreviewDevice(rawValue: "iPad Air (4th generation)"))
         //.previewDevice(PreviewDevice(rawValue: "iPhone 12"))
-        //.previewDevice(PreviewDevice(rawValue: "iPhone 12 Pro Max"))
+        .previewDevice(PreviewDevice(rawValue: "iPhone 12 Pro Max"))
     }
 }

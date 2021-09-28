@@ -15,6 +15,7 @@ class RootViewModel: ObservableObject {
         case bluetoothStatus
         case scan
         case connected
+        case debug
         case test
         case todo
     }

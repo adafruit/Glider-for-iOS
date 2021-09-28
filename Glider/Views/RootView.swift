@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct RootView: View {
+    static let debugForceDestination = AppEnvironment.isDebug && false ? RootViewModel.Destination.debug : nil
+
     @StateObject private var model = RootViewModel()
     
     let didUpdateBleStatePublisher = NotificationCenter.default.publisher(for: .didUpdateBleState)
@@ -15,7 +17,7 @@ struct RootView: View {
 
     var body: some View {
         Group {
-            switch model.destination {
+            switch Self.debugForceDestination ?? model.destination {
             case .startup:
                 StartupView()
             case .scan:
@@ -24,6 +26,8 @@ struct RootView: View {
                 BluetoothStatusView()
             case .connected:
                 ConnectedTabView()
+            case .debug:
+                ScanView()
             default:
                 TodoView()
             }
