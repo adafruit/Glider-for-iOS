@@ -56,7 +56,6 @@
 		A9678E8F26E8C941003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
 		A9678E9026E8C980003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
 		A9678E9226E91B90003936DC /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */; };
-		A96D27852687F9DB00D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
 		A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
 		A96D27872687FA3D00D6E247 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6126543893007A5E5A /* Settings.swift */; };
 		A9CCB9C1266A3CEE00E9FA28 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCB9C0266A3CEE00E9FA28 /* BleDataProcessingQueue.swift */; };
@@ -686,7 +685,6 @@
 				A9678E8026E758B2003936DC /* BluetoothStatusView.swift in Sources */,
 				A947FE9E26543894007A5E5A /* Int+Bytes.swift in Sources */,
 				A947FEA226543894007A5E5A /* Data+ScanValue.swift in Sources */,
-				A96D27852687F9DB00D6E247 /* FileProviderUtils.swift in Sources */,
 				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
 				A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */,
 				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
