@@ -78,8 +78,7 @@ extension BlePeripheral {
     private func adafruitServiceSetRepeatingResponse(characteristic: CBCharacteristic, timePeriod: TimeInterval?, responseHandler: @escaping(Result<(Data, UUID), Error>) -> Void, completion: ((Result<Void, Error>) -> Void)?) {
         
         // Time period
-        if let timePeriod = timePeriod {    // Set timePeriod if not nil
-            let serviceUuid = characteristic.service.uuid
+        if let timePeriod = timePeriod, let serviceUuid = characteristic.service?.uuid {    // Set timePeriod if not nil            
             self.adafruitSetPeriod(timePeriod, serviceUuid: serviceUuid) { [weak self] _ in
                 guard let self = self else { return }
                 
