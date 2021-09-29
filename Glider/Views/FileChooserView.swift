@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct FileChooserView: View {
     @Environment(\.presentationMode) private var presentationMode

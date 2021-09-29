@@ -7,6 +7,7 @@
 
 import FileProvider
 import UniformTypeIdentifiers
+import FileTransferClient
 
 final class FileProviderItem: NSObject, NSFileProviderItem {
 

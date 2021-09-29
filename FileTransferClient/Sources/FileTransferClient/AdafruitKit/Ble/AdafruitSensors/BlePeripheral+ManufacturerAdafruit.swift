@@ -14,7 +14,7 @@ extension BlePeripheral {
     internal static let kManufacturerAdafruitIdentifier: [UInt8] = [0x22, 0x08]
 
     // MARK: - Check Manufacturer
-    func isManufacturerAdafruit() -> Bool {
+    public func isManufacturerAdafruit() -> Bool {
         guard let manufacturerIdentifier = advertisement.manufacturerIdentifier else { return false }
 
         let manufacturerIdentifierBytes = [UInt8](manufacturerIdentifier)

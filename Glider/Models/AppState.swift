@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FileTransferClient
 
 class AppState: ObservableObject {
     // Singleton
@@ -18,8 +19,10 @@ class AppState: ObservableObject {
     private var autoReconnect: BleAutoReconnect?
 
     // MARK: - Actions
-    public func startAutoReconnect() {
-        autoReconnect = BleAutoReconnect(
+    /// Returns if is trying to reconnect, or false if it is quickly decided that there is not possible
+    @discardableResult
+    public func startAutoReconnect() -> Bool {
+        let autoReconnect = BleAutoReconnect(
             servicesToReconnect: [BlePeripheral.kFileTransferServiceUUID],
             reconnectHandler: { [unowned self] (peripheral: BlePeripheral, completion: @escaping (Result<Void, Error>) -> Void) in
                 
@@ -39,20 +42,25 @@ class AppState: ObservableObject {
                     }
                 }
             })
+        
+        self.autoReconnect = autoReconnect
+        return autoReconnect.reconnect()
     }
-    
+
     public func stopAutoReconnect() {
         autoReconnect = nil
     }
-    
+
+    /*
     /// Force reconnection returning if is trying to reconnect, or false if it is quickly decided that there is not possible
     @discardableResult
     public func forceReconnect() -> Bool {
         guard let autoReconnect = autoReconnect else { DLog("Error: reconnect called without calling startAutoReconnect"); return false }
         return autoReconnect.reconnect()
-    }
-    
+    }*/
+
+    /*
     public func clearAutoconnectPeripheral() {
-        Settings.clearAutoconnectPeripheral()
-    }
+        BleAutoReconnect.clearAutoconnectPeripheral()
+    }*/
 }

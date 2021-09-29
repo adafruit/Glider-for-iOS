@@ -8,16 +8,20 @@
 import Foundation
 import CoreBluetooth
 
-class BleAutoReconnect {
-    // Params
+public class BleAutoReconnect: ObservableObject {
+    // Published
+    var peripherals = [BlePeripheral]()
+
+    var isReconnecting = false
+    //var isPeripheralReconnecting = [UUID: Bool]()
+    
+    // Data
     private var servicesToReconnect: [CBUUID]
     private var reconnectHandler: ((_ peripheral: BlePeripheral, _ completion: @escaping (Result<Void, Error>) -> Void) -> ())?
     private let reconnectTimeout: TimeInterval
-
-    private var isReconnecting = false
-    var isDisconnectionMonitoringForAutoReconnectEnabled = false
-    
-    init(servicesToReconnect: [CBUUID], reconnectTimeout: TimeInterval = 2, reconnectHandler: @escaping ( BlePeripheral, @escaping (Result<Void, Error>) -> Void) -> ()) {
+  
+    //  MARK: - Lifecycle
+    public init(servicesToReconnect: [CBUUID], reconnectTimeout: TimeInterval = 2, reconnectHandler: @escaping ( BlePeripheral, @escaping (Result<Void, Error>) -> Void) -> ()) {
         DLog("Init autoReconnect to known peripherals")
         self.servicesToReconnect = servicesToReconnect
         self.reconnectTimeout = reconnectTimeout
@@ -25,35 +29,18 @@ class BleAutoReconnect {
         
         registerConnectionNotifications(enabled: true)
     }
-    
+
     deinit {
         // Unregister notifications
         registerConnectionNotifications(enabled: false)
     }
-    
+
     /// Returns if is trying to reconnect, or false if it is quickly decided that there is not possible
     @discardableResult
-    func reconnect() -> Bool {
-        return self.reconnecToPeripheral(withIdentifier: Settings.autoconnectPeripheralUUID)
+    public func reconnect() -> Bool {
         
-        /*
-        if let identifier = Settings.autoconnectPeripheralUUID {
-            return self.reconnecToPeripheral(withIdentifier: identifier)
-        } else {
-            DLog("Reconnect finished")
-            NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil)
-            return false
-        }*/
-    }
-    
-    // MARK: - Reconnect previously connnected Ble Peripheral
-    private func reconnecToPeripheral(withIdentifier identifier: UUID?) -> Bool {
-        DLog("Reconnecting...")
         isReconnecting = true
-        
-        // Reconnect
-        let isTryingToReconnect = BleManager.shared.reconnecToPeripherals(peripheralUUIDs: identifier == nil ? nil : [identifier!], withServices: servicesToReconnect, timeout: reconnectTimeout)
-
+        let isTryingToReconnect = BleManager.shared.reconnecToPeripheralsWithServices(servicesToReconnect, timeout: reconnectTimeout)
         if !isTryingToReconnect {
             DLog("isTryingToReconnect false. Go to next")
             connected(peripheral: nil, isDisconnected: true)
@@ -62,14 +49,15 @@ class BleAutoReconnect {
         return isTryingToReconnect
     }
 
+    // MARK: - Reconnect previously connnected Ble Peripheral
     private func didConnectToPeripheral(_ notification: Notification) {
         guard isReconnecting else {
             if let identifier = notification.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID {
-                DLog("AutoReconnect detected connection. Save identifier.");
-                Settings.autoconnectPeripheralUUID = identifier
+                DLog("AutoReconnect detected connection to identifier: \(identifier)");
             }
-            return }
-        
+            return
+        }
+
         guard let peripheral = BleManager.shared.peripheral(from: notification) else {
             DLog("Connected to an unknown peripheral")
             connected(peripheral: nil, isDisconnected: false)
@@ -84,10 +72,6 @@ class BleAutoReconnect {
             // Autoconnect failed
             connected(peripheral: nil, isDisconnected: true)
         }
-        else if isDisconnectionMonitoringForAutoReconnectEnabled {
-            DLog("AutoReconnect: Disconnection detected. Trying to auto reconnect")
-            reconnect()
-        }
     }
 
     // Note: added an extra parametrer isDisconnected to fix a problem with the FileProvider disconnections. Think how to improve the syntax
@@ -96,7 +80,6 @@ class BleAutoReconnect {
 
         //
         if isDisconnected {
-            Settings.clearAutoconnectPeripheral()
             NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil)
         }
         else if let peripheral = peripheral {
@@ -106,14 +89,12 @@ class BleAutoReconnect {
             reconnectHandler?(peripheral) { result in
                 switch result {
                 case .success:
-                    DLog("Reconnected to peripheral successfully")                            
+                    DLog("Reconnected to peripheral successfully")
                     NotificationCenter.default.post(name: .didReconnectToKnownPeripheral, object: nil, userInfo: [BleManager.NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
 
                 case .failure(let error):
                     DLog("Failed to setup peripheral: \(error.localizedDescription)")
-                    BleManager.shared.disconnect(from: peripheral)
-
-                    Settings.clearAutoconnectPeripheral()
+                    
                     NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil, userInfo: [BleManager.NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
                 }
             }
@@ -124,6 +105,7 @@ class BleAutoReconnect {
         }
     }
     
+
     // MARK: - Notifications
     private var didConnectToPeripheralObserver: NSObjectProtocol?
     private var didDisconnectFromPeripheralObserver: NSObjectProtocol?
@@ -142,7 +124,7 @@ class BleAutoReconnect {
 // MARK: - Custom Notifications
 extension Notification.Name {
     private static let kPrefix = Bundle.main.bundleIdentifier!
-    static let willReconnectToKnownPeripheral = Notification.Name(kPrefix+".willReconnectToKnownPeripheral")
-    static let didReconnectToKnownPeripheral = Notification.Name(kPrefix+".didReconnectToKnownPeripheral")
-    static let didFailToReconnectToKnownPeripheral = Notification.Name(kPrefix+".didFailToReconnectToKnownPeripheral")
+    public static let willReconnectToKnownPeripheral = Notification.Name(kPrefix+".willReconnectToKnownPeripheral")
+    public static let didReconnectToKnownPeripheral = Notification.Name(kPrefix+".didReconnectToKnownPeripheral")
+    public static let didFailToReconnectToKnownPeripheral = Notification.Name(kPrefix+".didFailToReconnectToKnownPeripheral")
 }

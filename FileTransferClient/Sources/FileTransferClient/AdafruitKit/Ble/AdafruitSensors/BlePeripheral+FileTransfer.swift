@@ -14,7 +14,7 @@ extension BlePeripheral {
     private static let kDebugMessagesEnabled = AppEnvironment.isDebug && true
     
     // Constants
-    static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
+    public static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
     private static let kFileTransferVersionCharacteristicUUID = CBUUID(string: "ADAF0100-4669-6C65-5472-616E73666572")
     private static let kFileTransferDataCharacteristicUUID = CBUUID(string: "ADAF0200-4669-6C65-5472-616E73666572")
     private static let kAdafruitFileTransferVersion = 1
@@ -50,22 +50,28 @@ extension BlePeripheral {
     }
 
     // Data types
-    struct DirectoryEntry {
-        enum EntryType {
+    public struct DirectoryEntry {
+        public enum EntryType {
             case file(size: Int)
             case directory
 
-            enum CodingKeys: String, CodingKey {
+            public enum CodingKeys: String, CodingKey {
                 case file
                 case directory
             }
         }
 
-        let name: String
-        let type: EntryType
-        let modificationDate: Date?
+        public let name: String
+        public let type: EntryType
+        public let modificationDate: Date?
 
-        var isDirectory: Bool {
+        public init(name: String, type: EntryType, modificationDate: Date?) {
+            self.name = name
+            self.type = type
+            self.modificationDate = modificationDate
+        }
+        
+        public var isDirectory: Bool {
             switch type {
             case .directory: return true
             default: return false
@@ -99,13 +105,13 @@ extension BlePeripheral {
     }
 
     // MARK: - Errors
-    enum FileTransferError: LocalizedError {
+    public enum FileTransferError: LocalizedError {
         case invalidData
         case unknownCommand
         case invalidInternalState
         case statusFailed(code: Int)
         
-        var errorDescription: String? {
+        public var errorDescription: String? {
             switch self {
             case .invalidData: return "invalid data"
             case .unknownCommand: return "unknown command"
@@ -302,7 +308,7 @@ extension BlePeripheral {
         sendCommand(data: data, completion: completion)
     }
     
-    func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?) {
+    public func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?) {
         self.adafruitFileTransferDeleteStatus = FileTransferDeleteStatus(completion: completion)
         
         let data = ([UInt8]([0x30, 0x00])).data
@@ -316,7 +322,7 @@ extension BlePeripheral {
         }
     }
     
-    func listDirectory(path: String, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
+    public func listDirectory(path: String, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
         if self.adafruitFileTransferListDirectoryStatus != nil { DLog("Warning: concurrent listDirectory") }
         self.adafruitFileTransferListDirectoryStatus = FileTransferListDirectoryStatus(completion: completion)
                 
@@ -331,7 +337,7 @@ extension BlePeripheral {
         }
     }
     
-    func makeDirectory(path: String, completion: ((Result<Date?, Error>) -> Void)?) {
+    public func makeDirectory(path: String, completion: ((Result<Date?, Error>) -> Void)?) {
         self.adafruitFileTransferMakeDirectoryStatus = FileTransferMakeDirectoryStatus(completion: completion)
         
         var data = ([UInt8]([0x40, 0x00])).data
@@ -649,7 +655,7 @@ extension BlePeripheral {
 
 // MARK: - Codable extension for DirectoryEntry
 extension BlePeripheral.DirectoryEntry.EntryType: Encodable {
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case .directory:
@@ -661,7 +667,7 @@ extension BlePeripheral.DirectoryEntry.EntryType: Encodable {
 }
 
 extension BlePeripheral.DirectoryEntry.EntryType: Decodable {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         if let size = try? decoder.singleValueContainer().decode(Int.self) {
             self = .file(size: size)
         }

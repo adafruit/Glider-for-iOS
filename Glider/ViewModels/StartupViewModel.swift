@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import FileTransferClient
 
 class StartupViewModel: ObservableObject {
     // Config
-    private static let kMaxTimeToWaitForBleSupport: TimeInterval = 1.0
+    private static let kMaxTimeToWaitForBleSupport: TimeInterval = 5.0
     private static let kServicesToReconnect = [BlePeripheral.kFileTransferServiceUUID]
     private static let kReconnectTimeout = 2.0
     
@@ -34,26 +35,28 @@ class StartupViewModel: ObservableObject {
     }
     
     func setupBluetooth() {
-        
-        // check Bluetooth status
-        let bleState = BleManager.shared.state
-        DLog("Initial bluetooth state: \(bleState.rawValue)")
-        if bleState == .unknown || bleState == .resetting {
-            registerBleStateNotifications(enabled: true)
-
-            let semaphoreResult = bleSupportSemaphore.wait(timeout: .now() + Self.kMaxTimeToWaitForBleSupport)
-            if semaphoreResult == .timedOut {
-                DLog("Bluetooth support check time-out. status: \(BleManager.shared.state.rawValue)")
+        DispatchQueue.global().async {      // Important: Launch in background queue
+            // check Bluetooth status
+            let bleState = BleManager.shared.state
+            DLog("Initial bluetooth state: \(bleState.rawValue)")
+            if bleState == .unknown || bleState == .resetting {
+                
+                self.registerBleStateNotifications(enabled: true)
+                
+                let semaphoreResult = self.bleSupportSemaphore.wait(timeout: .now() + Self.kMaxTimeToWaitForBleSupport)
+                if semaphoreResult == .timedOut {
+                    DLog("Bluetooth support check time-out. status: \(BleManager.shared.state.rawValue)")
+                }
+                
+                self.registerBleStateNotifications(enabled: false)
             }
-
-            registerBleStateNotifications(enabled: false)
+            
+            DispatchQueue.main.async {
+                self.checkBleSupport()
+            }
+            
+            self.registerAutoReconnectNotifications(enabled: true)
         }
-        
-        DispatchQueue.main.async {
-            self.checkBleSupport()
-        }
-
-        registerAutoReconnectNotifications(enabled: true)
     }
     
     // MARK: - Check Ble Support
@@ -64,7 +67,6 @@ class StartupViewModel: ObservableObject {
         }
         else {
             AppState.shared.startAutoReconnect()
-            AppState.shared.forceReconnect()
         }
     }
     

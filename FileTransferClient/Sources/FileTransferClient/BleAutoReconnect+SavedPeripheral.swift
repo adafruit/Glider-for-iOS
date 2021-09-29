@@ -5,10 +5,10 @@
 //  Created by Antonio García on 10/10/2019.
 //  Copyright © 2019 Adafruit. All rights reserved.
 //
-
+/*
 import Foundation
 
-class Settings {
+extension BleAutoReconnect {
     private static let userDefaults = UserDefaults(suiteName: "group.com.adafruit.Glider")!        // Shared between the app and extensions
     
     // Constants
@@ -52,11 +52,10 @@ class Settings {
         }
     }*/
     
-    static func clearAutoconnectPeripheral() {
+    public static func clearAutoconnectPeripheral() {
         autoconnectPeripheralUUID = nil
     }
 
-    
 
     // Common load and save
     static func getBoolPreference(key: String) -> Bool {
@@ -66,17 +65,5 @@ class Settings {
     static func setBoolPreference(key: String, newValue: Bool) {
         userDefaults.set(newValue, forKey: key)
     }
-
-    // MARK: - Defaults
-    static func registerDefaults() {
-        let path = Bundle.main.path(forResource: "DefaultPreferences", ofType: "plist")!
-        let defaultPrefs = NSDictionary(contentsOfFile: path) as! [String: AnyObject]
-
-        userDefaults.register(defaults: defaultPrefs)
-    }
-
-    static func resetDefaults() {
-        let appDomain = Bundle.main.bundleIdentifier!
-        userDefaults.removePersistentDomain(forName: appDomain)
-    }
 }
+*/

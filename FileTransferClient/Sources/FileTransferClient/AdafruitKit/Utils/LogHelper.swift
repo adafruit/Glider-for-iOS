@@ -10,13 +10,13 @@ import Foundation
 
 // Note: check that Build Settings -> Project -> Active Compilation Conditions -> Debug, has DEBUG
 
-func DLog(_ message: String, function: String = #function) {
+public func DLog(_ message: String, function: String = #function) {
     if _isDebugAssertConfiguration() {
         NSLog("%@, %@", function, message)
     }
     
-    
+    #if canImport(LogManager)
     LogManager.shared.log(.init(level: .debug, text: message, category: .app))
-    
+    #endif
 }
 

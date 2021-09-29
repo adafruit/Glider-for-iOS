@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct InfoView: View {
     // Params
@@ -39,7 +40,7 @@ struct InfoView: View {
                 // Status
                 VStack {
                     Spacer()
-                    Text("The peripheral is ready.\nYou can now use the Files app to create, move, rename, and delete files or directories.").bold()
+                    Text("\(fileTransferClient?.blePeripheral?.name ?? "Peripheral") is ready.\n\nYou can now use the Files app to create, move, rename, and delete files or directories.").bold()
                     Spacer()
                 }
                 .multilineTextAlignment(.center)
@@ -92,7 +93,7 @@ struct InfoView: View {
                             title: Text("Confirm unpairing"),
                             message: Text("You will need to reset the pairing information for the peripheral on Settings->Bluetooth to re-establish the connnection"),
                             primaryButton: .destructive(Text("Unpair")) {
-                                Settings.clearAutoconnectPeripheral()
+                                //BleAutoReconnect.clearAutoconnectPeripheral()
                                 if let blePeripheral = fileTransferClient?.blePeripheral {
                                     BleManager.shared.disconnect(from: blePeripheral)
                                 }

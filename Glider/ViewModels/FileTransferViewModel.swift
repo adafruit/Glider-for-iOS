@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FileTransferClient
 
 class FileTransferViewModel: ObservableObject {
 
@@ -109,12 +110,13 @@ class FileTransferViewModel: ObservableObject {
     }
     
     // MARK: - Actions
+    /*
     func disconnectAndForgetPairing() {
-        Settings.clearAutoconnectPeripheral()
+        BleAutoReconnect.clearAutoconnectPeripheral()
         if let blePeripheral = fileTransferClient?.blePeripheral {
             bleManager.disconnect(from: blePeripheral)
         }
-    }
+    }*/
     
     func readFile(filename: String) {
         startCommand(description: "Reading \(filename)")

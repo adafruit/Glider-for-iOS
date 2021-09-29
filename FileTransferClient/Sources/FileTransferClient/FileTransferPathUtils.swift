@@ -8,12 +8,12 @@
 import Foundation
 
 // TODO: FileProvider should not use this utils because even if the separators for FileProvider and URLs are the same, it could change in the future
-struct FileTransferPathUtils {
+public struct FileTransferPathUtils {
     static let pathSeparatorCharacter: Character = "/"
-    static let pathSeparator = String(pathSeparatorCharacter)
+    public static let pathSeparator = String(pathSeparatorCharacter)
     
     // MARK: - Path management
-    static func pathRemovingFilename(path: String) -> String {
+    public static func pathRemovingFilename(path: String) -> String {
         guard let filenameIndex = path.lastIndex(of: Self.pathSeparatorCharacter) else {
             return path
         }
@@ -21,7 +21,7 @@ struct FileTransferPathUtils {
         return String(path[path.startIndex...filenameIndex])
     }
     
-    static func upPath(from path: String) -> String {
+    public static func upPath(from path: String) -> String {
         
         // Remove trailing separator if exists
         let filenamePath: String
@@ -37,7 +37,7 @@ struct FileTransferPathUtils {
         return pathWithoutFilename
     }
     
-    static func parentPath(from path: String) -> String {
+    public static func parentPath(from path: String) -> String {
         guard !isRootDirectory(path: path) else { return rootDirectory }     // Root parent is root
         
         let parentPath: String
@@ -54,16 +54,16 @@ struct FileTransferPathUtils {
         return parentPath
     }
     
-    static func pathWithTrailingSeparator(path: String) -> String {
+    public static func pathWithTrailingSeparator(path: String) -> String {
         return path.hasSuffix("/") ? path : path.appending("/")      // Force a trailing separator
     }
     
     // MARK: - Root Directory
-    static var rootDirectory: String {
+    public static var rootDirectory: String {
         return Self.pathSeparator
     }
     
-    static func isRootDirectory(path: String) -> Bool {
+    public static func isRootDirectory(path: String) -> Bool {
         return path == rootDirectory
     }
     

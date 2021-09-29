@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FileTransferClient
 
 class FileChooserViewModel: ObservableObject {
     @Published var isRootDirectory = false

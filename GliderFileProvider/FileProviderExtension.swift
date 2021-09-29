@@ -6,6 +6,7 @@
 //
 
 import FileProvider
+import FileTransferClient
 
 class FileProviderExtension: NSFileProviderExtension {
     // Data
@@ -327,7 +328,7 @@ class FileProviderExtension: NSFileProviderExtension {
         }
         
         // Create fileProviderItem
-        let fileProviderItem = FileProviderItem(path: parentFileProviderItem.fullPath, entry: BlePeripheral.DirectoryEntry(name: directoryName, type: .directory, modificationDate: Date()))
+        let fileProviderItem = FileProviderItem(path: parentFileProviderItem.fullPath, entry: BlePeripheral.DirectoryEntry(name: directoryName, type: BlePeripheral.DirectoryEntry.EntryType.directory, modificationDate: Date()))
         
         createDirectoryLocally(fileProviderItem: fileProviderItem) { result in
             switch result {

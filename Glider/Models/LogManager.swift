@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FileTransferClient
 
 class LogManager: ObservableObject {
     private static let applicationGroupSharedDirectoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.adafruit.Glider")!       // Shared between the app and extensions

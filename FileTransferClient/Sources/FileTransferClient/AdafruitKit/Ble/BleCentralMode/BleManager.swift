@@ -10,23 +10,23 @@ import Foundation
 import CoreBluetooth
 import QuartzCore
 
-class BleManager: NSObject {
+public class BleManager: NSObject {
     // Configuration
     private static let kStopScanningWhenConnectingToPeripheral = false
     private static let kAlwaysAllowDuplicateKeys = true
 
     // Singleton
-    static let shared = BleManager()
+    public static let shared = BleManager()
 
     // Ble
     var centralManager: CBCentralManager?
     private var centralManagerPoweredOnSemaphore = DispatchSemaphore(value: 1)
 
     // Scanning
-    var isScanning: Bool {
+    public var isScanning: Bool {
         return scanningStartTime != nil
     }
-    var scanningElapsedTime: TimeInterval? {
+    public var scanningElapsedTime: TimeInterval? {
         guard let scanningStartTime = scanningStartTime else { return nil }
         return CACurrentMediaTime() - scanningStartTime
     }
@@ -41,7 +41,7 @@ class BleManager: NSObject {
     private var connectionTimeoutTimers = [UUID: Timer]()
 
     // Notifications
-    enum NotificationUserInfoKey: String {
+    public enum NotificationUserInfoKey: String {
         case uuid = "uuid"
         case error = "error"
     }
@@ -102,7 +102,7 @@ class BleManager: NSObject {
     }
 
     // MARK: - Scan
-    func startScan(withServices services: [CBUUID]? = nil) {
+    public func startScan(withServices services: [CBUUID]? = nil) {
         centralManagerPoweredOnSemaphore.wait()
         centralManagerPoweredOnSemaphore.signal()
 
@@ -128,7 +128,7 @@ class BleManager: NSObject {
         isScanningWaitingToStart = false
     }
 
-    func stopScan() {
+    public func stopScan() {
         // DLog("stop scan")
         centralManager?.stopScan()
         scanningStartTime = nil
@@ -136,16 +136,16 @@ class BleManager: NSObject {
         NotificationCenter.default.post(name: .didStopScanning, object: nil)
     }
     
-    func numPeripherals() -> Int {
+    public func numPeripherals() -> Int {
         return peripheralsFound.count
     }
     
-    func peripherals() -> [BlePeripheral] {
+    public func peripherals() -> [BlePeripheral] {
         peripheralsFoundLock.lock(); defer { peripheralsFoundLock.unlock() }
         return Array(peripheralsFound.values)
     }
 
-    func peripheralsSortedByFirstDiscovery() -> [BlePeripheral] {
+    public func peripheralsSortedByFirstDiscovery() -> [BlePeripheral] {
         let now = Date()
         var peripheralsList = peripherals()
         peripheralsList.sort { (p0, p1) -> Bool in
@@ -155,7 +155,7 @@ class BleManager: NSObject {
         return peripheralsList
     }
 
-    func peripheralsSortedByRSSI() -> [BlePeripheral] {
+    public func peripheralsSortedByRSSI() -> [BlePeripheral] {
         var peripheralsList = peripherals()
         peripheralsList.sort { (p0, p1) -> Bool in
             return (p0.rssi ?? -127) > (p1.rssi ?? -127)
@@ -164,19 +164,19 @@ class BleManager: NSObject {
         return peripheralsList
     }
     
-    func connectedPeripherals() -> [BlePeripheral] {
+    public func connectedPeripherals() -> [BlePeripheral] {
         return peripherals().filter {$0.state == .connected}
     }
 
-    func connectingPeripherals() -> [BlePeripheral] {
+    public func connectingPeripherals() -> [BlePeripheral] {
         return peripherals().filter {$0.state == .connecting}
     }
 
-    func connectedOrConnectingPeripherals() -> [BlePeripheral] {
+    public func connectedOrConnectingPeripherals() -> [BlePeripheral] {
         return peripherals().filter {$0.state == .connected || $0.state == .connecting}
     }
 
-    func refreshPeripherals() {
+    public func refreshPeripherals() {
         stopScan()
 
         peripheralsFoundLock.lock()
@@ -195,7 +195,7 @@ class BleManager: NSObject {
     }
 
     // MARK: - Connection Management
-    func connect(to peripheral: BlePeripheral, timeout: TimeInterval? = nil, shouldNotifyOnConnection: Bool = false, shouldNotifyOnDisconnection: Bool = false, shouldNotifyOnNotification: Bool = false) {
+    public func connect(to peripheral: BlePeripheral, timeout: TimeInterval? = nil, shouldNotifyOnConnection: Bool = false, shouldNotifyOnDisconnection: Bool = false, shouldNotifyOnNotification: Bool = false) {
 
         centralManagerPoweredOnSemaphore.wait()
         centralManagerPoweredOnSemaphore.signal()
@@ -240,7 +240,7 @@ class BleManager: NSObject {
         }
     }
 
-    func disconnect(from peripheral: BlePeripheral, waitForQueuedCommands: Bool = false) {
+    public func disconnect(from peripheral: BlePeripheral, waitForQueuedCommands: Bool = false) {
         guard let centralManager = centralManager else { return}
 
         DLog("disconnect")
@@ -254,9 +254,29 @@ class BleManager: NSObject {
         }
     }
     
+    
+    func reconnecToPeripheralsWithServices(_ services: [CBUUID], timeout: Double? = nil) -> Bool {
+        var reconnecting = false
+        
+        if let peripherals = centralManager?.retrieveConnectedPeripherals(withServices: services) {
+            for peripheral in peripherals {
+                
+                discovered(peripheral: peripheral, advertisementData: nil )
+                if let blePeripheral = peripheralsFound[peripheral.identifier] {
+                    connect(to: blePeripheral, timeout: timeout)
+                    reconnecting = true
+                }
+            }
+        }
+        
+        return reconnecting
+    }
+    
+    /*
     func reconnecToPeripherals(peripheralUUIDs identifiers: [UUID]?, withServices services: [CBUUID], timeout: Double? = nil) -> Bool {
         var reconnecting = false
         
+        /*
         // Reconnect to a known identifier
         if let identifiers = identifiers {
             let knownPeripherals = centralManager?.retrievePeripherals(withIdentifiers: identifiers)
@@ -280,10 +300,9 @@ class BleManager: NSObject {
                     }
                 }
             }
-        }
+        }*/
 
         // Reconnect even if no identifier was saved if we are already connected to a device with the expected services
-        /*
         if !reconnecting {
             if let peripherals = centralManager?.retrieveConnectedPeripherals(withServices: services) {
                 for peripheral in peripherals {
@@ -294,10 +313,10 @@ class BleManager: NSObject {
                     }
                 }
             }
-        }*/
+        }
         
         return reconnecting
-    }
+    }*/
 
     private func discovered(peripheral: CBPeripheral, advertisementData: [String: Any]? = nil, rssi: Int? = nil) {
         peripheralsFoundLock.lock(); defer { peripheralsFoundLock.unlock() }
@@ -324,24 +343,24 @@ class BleManager: NSObject {
 
     
     // MARK: - Notifications
-    func peripheral(from notification: Notification) -> BlePeripheral? {
+    public func peripheral(from notification: Notification) -> BlePeripheral? {
         guard let uuid = notification.userInfo?[NotificationUserInfoKey.uuid.rawValue] as? UUID else { return nil }
 
         return peripheral(with: uuid)
     }
 
-    func error(from notification: Notification) -> Error? {
+    public func error(from notification: Notification) -> Error? {
         return notification.userInfo?[NotificationUserInfoKey.error.rawValue] as? Error
     }
     
-    func peripheral(with uuid: UUID) -> BlePeripheral? {
+    public func peripheral(with uuid: UUID) -> BlePeripheral? {
         return peripheralsFound[uuid]
     }
 }
 
 // MARK: - CBCentralManagerDelegate
 extension BleManager: CBCentralManagerDelegate {
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    public func centralManagerDidUpdateState(_ central: CBCentralManager) {
 
         DLog("centralManagerDidUpdateState: \(central.state.rawValue)")
         // Unlock state lock if we have a known state
@@ -374,7 +393,7 @@ extension BleManager: CBCentralManagerDelegate {
      
      }*/
     
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber) {
+    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber) {
         // DLog("didDiscover: \(peripheral.name ?? peripheral.identifier.uuidString)")
         let rssi = RSSI.intValue
         DispatchQueue.main.async {      // This Fixes iOS12 race condition on cached filtered peripherals. TODO: investigate
@@ -383,7 +402,7 @@ extension BleManager: CBCentralManagerDelegate {
         }
     }
     
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+    public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         DLog("didConnect: \(peripheral.identifier)")
         
         // Remove connection timeout if exists
@@ -398,7 +417,7 @@ extension BleManager: CBCentralManagerDelegate {
         }
     }
     
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+    public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         DLog("didFailToConnect: \(String(describing: error))")
         
         // Clean
@@ -413,7 +432,7 @@ extension BleManager: CBCentralManagerDelegate {
         }
     }
     
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+    public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         DLog("didDisconnectPeripheral")
         
         // Clean
@@ -434,13 +453,13 @@ extension BleManager: CBCentralManagerDelegate {
 // MARK: - Custom Notifications
 extension Notification.Name {
     private static let kPrefix = Bundle.main.bundleIdentifier!
-    static let didUpdateBleState = Notification.Name(kPrefix+".didUpdateBleState")
-    static let didStartScanning = Notification.Name(kPrefix+".didStartScanning")
-    static let didStopScanning = Notification.Name(kPrefix+".didStopScanning")
-    static let didDiscoverPeripheral = Notification.Name(kPrefix+".didDiscoverPeripheral")
-    static let didUnDiscoverPeripheral = Notification.Name(kPrefix+".didUnDiscoverPeripheral")
-    static let willConnectToPeripheral = Notification.Name(kPrefix+".willConnectToPeripheral")
-    static let didConnectToPeripheral = Notification.Name(kPrefix+".didConnectToPeripheral")
-    static let willDisconnectFromPeripheral = Notification.Name(kPrefix+".willDisconnectFromPeripheral")
-    static let didDisconnectFromPeripheral = Notification.Name(kPrefix+".didDisconnectFromPeripheral")
+    public static let didUpdateBleState = Notification.Name(kPrefix+".didUpdateBleState")
+    public static let didStartScanning = Notification.Name(kPrefix+".didStartScanning")
+    public static let didStopScanning = Notification.Name(kPrefix+".didStopScanning")
+    public static let didDiscoverPeripheral = Notification.Name(kPrefix+".didDiscoverPeripheral")
+    public static let didUnDiscoverPeripheral = Notification.Name(kPrefix+".didUnDiscoverPeripheral")
+    public static let willConnectToPeripheral = Notification.Name(kPrefix+".willConnectToPeripheral")
+    public static let didConnectToPeripheral = Notification.Name(kPrefix+".didConnectToPeripheral")
+    public static let willDisconnectFromPeripheral = Notification.Name(kPrefix+".willDisconnectFromPeripheral")
+    public static let didDisconnectFromPeripheral = Notification.Name(kPrefix+".didDisconnectFromPeripheral")
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FileTransferClient
 
 class ScanViewModel: ObservableObject {
     // Config
@@ -52,14 +53,20 @@ class ScanViewModel: ObservableObject {
         }
         else {
             */
+        
+        /*
             let isTryingToReconnect = AppState.shared.forceReconnect()
             if isTryingToReconnect {
                 connectionStatus = .restoringConnection
             }
             else {
                 startScanning()
-            }
+            }*/
+        
+       
         //}
+        
+        startScanning()
     }
     
     func onDissapear() {

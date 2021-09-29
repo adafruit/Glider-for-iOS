@@ -9,17 +9,17 @@
 import UIKit
 import CoreBluetooth
 
-class FileTransferClient {
+public class FileTransferClient {
     // Data structs
-    typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)
+    public typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)
     
-    enum ClientError: Error {
+    public enum ClientError: Error {
         //case connectionFailed
         case errorDiscoveringServices
         case serviceNotEnabled
     }
     
-    enum Service: CaseIterable {
+    public enum Service: CaseIterable {
         case filetransfer
         
         var debugName: String {
@@ -36,7 +36,7 @@ class FileTransferClient {
     }
  
     // Data
-    private(set) weak var blePeripheral: BlePeripheral?
+    private(set) public weak var blePeripheral: BlePeripheral?
 
     // MARK: - Init
     /**
@@ -60,7 +60,7 @@ class FileTransferClient {
      - services: list of BoardServices that will be started. Use nil to select all the supported services
      - completion: completion handler
      */
-    init(connectedBlePeripheral blePeripheral: BlePeripheral, services: [Service]? = nil, completion: @escaping (Result<FileTransferClient, Error>) -> Void) {
+    public init(connectedBlePeripheral blePeripheral: BlePeripheral, services: [Service]? = nil, completion: @escaping (Result<FileTransferClient, Error>) -> Void) {
         
         DLog("Discovering services")
         let peripheralIdentifier = blePeripheral.identifier
@@ -127,7 +127,7 @@ class FileTransferClient {
     }
 
     // MARK: - Sensor availability
-    var isFileTransferEnabled: Bool {
+    public var isFileTransferEnabled: Bool {
         return blePeripheral?.adafruitFileTransferIsEnabled() ?? false
     }
     
@@ -140,17 +140,17 @@ class FileTransferClient {
     // MARK: - File Transfer Commands
     
     /// Given a full path, returns the full contents of the file
-    func readFile(path: String, progress: ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+    public func readFile(path: String, progress: ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
         blePeripheral?.readFile(path: path, progress: progress, completion: completion)
     }
 
     ///  Writes the content to the given full path. If the file exists, it will be overwritten
-    func writeFile(path: String, data: Data, progress: ProgressHandler? = nil, completion: ((Result<Date?, Error>) -> Void)?) {
+    public func writeFile(path: String, data: Data, progress: ProgressHandler? = nil, completion: ((Result<Date?, Error>) -> Void)?) {
         blePeripheral?.writeFile(path: path, data: data, progress: progress, completion: completion)
     }
     
     /// Deletes the file or directory at the given full path. Directories must be empty to be deleted
-    func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?) {
+    public func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?) {
         blePeripheral?.deleteFile(path: path, completion: completion)
     }
 
@@ -158,12 +158,12 @@ class FileTransferClient {
      Creates a new directory at the given full path. If a parent directory does not exist, then it will also be created. If any name conflicts with an existing file, an error will be returned
         - Parameter path: Full path
     */
-    func makeDirectory(path: String, completion: ((Result<Date?, Error>) -> Void)?) {
+    public func makeDirectory(path: String, completion: ((Result<Date?, Error>) -> Void)?) {
         blePeripheral?.makeDirectory(path: FileTransferPathUtils.pathWithTrailingSeparator(path: path), completion: completion)
     }
 
     /// Lists all of the contents in a directory given a full path. Returned paths are relative to the given path to reduce duplication
-    func listDirectory(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
+    public func listDirectory(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
         blePeripheral?.listDirectory(path: path, completion: completion)
     }
 }
@@ -171,12 +171,12 @@ class FileTransferClient {
 // MARK: - Custom Notifications
 extension Notification.Name {
     private static let kNotificationsPrefix = Bundle.main.bundleIdentifier!
-    static let willDiscoverServices = Notification.Name(kNotificationsPrefix+".willDiscoverServices")
+    public static let willDiscoverServices = Notification.Name(kNotificationsPrefix+".willDiscoverServices")
  }
 
 // MARK: - Equatable
 extension FileTransferClient: Equatable {
-    static func ==(lhs: FileTransferClient, rhs: FileTransferClient) -> Bool {
+    public static func ==(lhs: FileTransferClient, rhs: FileTransferClient) -> Bool {
         return lhs.blePeripheral == rhs.blePeripheral
     }
 }

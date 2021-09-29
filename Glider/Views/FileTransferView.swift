@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct FileTransferView: View {
     // Config

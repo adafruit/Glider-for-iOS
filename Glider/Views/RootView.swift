@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct RootView: View {
     static let debugForceDestination = AppEnvironment.isDebug && false ? RootViewModel.Destination.debug : nil
@@ -35,11 +36,12 @@ struct RootView: View {
         .onReceive(didUpdateBleStatePublisher) { notification in
             model.showWarningIfBluetoothStateIsNotReady()
         }
+        /*
         .onReceive(didDisconnectFromPeripheralPublisher) { notification in
             if model.destination == .connected {
                 model.destination = .scan
             }
-        }
+        }*/
         .environmentObject(model)
     }
 }

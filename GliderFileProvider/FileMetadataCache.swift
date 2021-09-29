@@ -7,7 +7,7 @@
 
 import Foundation
 import FileProvider
-
+import FileTransferClient
 
 struct FileMetadataCache {
     private static let userDefaults = UserDefaults(suiteName: "group.com.adafruit.Glider")!        // Shared between the app and extensions

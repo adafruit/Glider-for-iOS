@@ -6,6 +6,7 @@
 //
 
 import FileProvider
+import FileTransferClient
 
 /// Enumerator for both directories and files
 class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
@@ -47,7 +48,7 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
          
          If this is an enumerator for a directory, the root container or all directories:
          - perform a server request to fetch directory contents
-         If this is an enumerator for the active set:
+         If this is an enumeratbor for the active set:
          - perform a server request to update your local database
          - fetch the active set from your local database
          
