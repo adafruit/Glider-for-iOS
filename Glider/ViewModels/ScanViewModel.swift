@@ -11,6 +11,7 @@ import FileTransferClient
 class ScanViewModel: ObservableObject {
     // Config
     private static let kRssiRunningAverageFactor = 0.2
+    private static let kRepeatTimeForForcedAutoreconnect: TimeInterval = 10       // Should be bigger than the time assigned to FileClientPeripheralConnectionManager reconnectTimeout (defalts to 2 seconds)
 
     // Published
     enum Destination {
@@ -39,63 +40,20 @@ class ScanViewModel: ObservableObject {
     private let bleManager = BleManager.shared
     private var peripheralList = PeripheralList(bleManager: BleManager.shared)
     private var peripheralAutoConnect = PeripheralAutoConnect()
+    private var autoreconnectTimer: Timer?
     
     // MARK: - Lifecycle
     func onAppear() {
         registerNotifications(enabled: true)
-        /*
-        let wasConnected = disconnectPeripheralAndResetAutoConnect()
-        
-        if wasConnected {
-            DLog("User forced disconnection")
-            AppState.shared.forceReconnect()
-            startScanning()
-        }
-        else {
-            */
-        
-        /*
-            let isTryingToReconnect = AppState.shared.forceReconnect()
-            if isTryingToReconnect {
-                connectionStatus = .restoringConnection
-            }
-            else {
-                startScanning()
-            }*/
-        
-       
-        //}
-        
         startScanning()
     }
-    
+
     func onDissapear() {
         stopScanning()
         registerNotifications(enabled: false)
     }
-    
 
     // MARK: - Scanning Actions
-    /*
-    /// Returns true if it was connnected
-    private func disconnectPeripheralAndResetAutoConnect() -> Bool {
-        var isConnected = false
-        
-        // Disconnect if needed
-        let connectedPeripherals = bleManager.connectedPeripherals()
-        if connectedPeripherals.count == 1, let peripheral = connectedPeripherals.first {
-            DLog("Disconnect from previously connected peripheral")
-            // Disconnect from peripheral
-            disconnect(peripheral: peripheral)
-            isConnected = true
-        }
-        
-        // Autoconnect
-        peripheralAutoConnect.reset()
-        
-        return isConnected
-    }*/
-
     private func startScanning() {
         updateScannedPeripherals()
         
@@ -105,9 +63,18 @@ class ScanViewModel: ObservableObject {
             bleManager.startScan()
             connectionStatus = .scanning
         }
+        
+        // Start autoreconnect timer
+        autoreconnectTimer = Timer.scheduledTimer(withTimeInterval: Self.kRepeatTimeForForcedAutoreconnect, repeats: true, block: { timer in
+            DLog("Autoreconnect fired")
+            FileClientPeripheralConnectionManager.shared.reconnect()
+        })
     }
     
     private func stopScanning() {
+        autoreconnectTimer?.invalidate()
+        autoreconnectTimer = nil
+        
         if bleManager.isScanning {
             bleManager.stopScan()
         }
@@ -151,6 +118,7 @@ class ScanViewModel: ObservableObject {
     private weak var peripheralDidUpdateNameObserver: NSObjectProtocol?
     private weak var willDiscoverServicesObserver: NSObjectProtocol?
     private weak var willReconnectToKnownPeripheralObserver: NSObjectProtocol?
+    private weak var didReconnectToKnownPeripheralObserver: NSObjectProtocol?
     private weak var didFailToReconnectToKnownPeripheralObserver: NSObjectProtocol?
 
     private func registerNotifications(enabled: Bool) {
@@ -164,6 +132,7 @@ class ScanViewModel: ObservableObject {
             peripheralDidUpdateNameObserver = notificationCenter.addObserver(forName: .peripheralDidUpdateName, object: nil, queue: .main, using: {[weak self] notification in self?.peripheralDidUpdateName(notification: notification)})
             willDiscoverServicesObserver = notificationCenter.addObserver(forName: .willDiscoverServices, object: nil, queue: .main, using: {[weak self] notification in self?.willDiscoverServices(notification: notification)})
             willReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .willReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.willReconnectToKnownPeripheral(notification)})
+            didReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .didReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.didReconnectToKnownPeripheral(notification)})
             didFailToReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .didFailToReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.didFailToReconnectToKnownPeripheral(notification)})
 
 
@@ -176,12 +145,13 @@ class ScanViewModel: ObservableObject {
             if let peripheralDidUpdateNameObserver = peripheralDidUpdateNameObserver {notificationCenter.removeObserver(peripheralDidUpdateNameObserver)}
             if let willDiscoverServicesObserver = willDiscoverServicesObserver {notificationCenter.removeObserver(willDiscoverServicesObserver)}
             if let willReconnectToKnownPeripheralObserver = willReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(willReconnectToKnownPeripheralObserver)}
+            if let didReconnectToKnownPeripheralObserver = didReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(didReconnectToKnownPeripheralObserver)}
             if let didFailToReconnectToKnownPeripheralObserver = didFailToReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(didFailToReconnectToKnownPeripheralObserver)}
         }
     }
 
     private func willReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("willReconnectToKnownPeripheral")
+        DLog("scanview willReconnectToKnownPeripheral")
         guard let peripheral = bleManager.peripheral(from: notification) else {
             //DLog("willReconnectToKnownPeripheral detected with unknown peripheral")
             return
@@ -191,14 +161,25 @@ class ScanViewModel: ObservableObject {
         selectedPeripheral = peripheral
     }
     
+    
+    private func didReconnectToKnownPeripheral(_ notification: Notification) {
+        DLog("FileTransfer peripheral connected and ready")
+        
+        // Finished setup
+        self.connectionStatus = .fileTransferReady
+        self.gotoConnected()
+    }
+    
     private func didFailToReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("Reconnect Failed. Start Scanning")
-        startScanning()
+        if !bleManager.isScanning {
+            DLog("Reconnect Failed. Start Scanning")
+            startScanning()
+        }
     }
     
     private func willConnectToPeripheral(notification: Notification) {
         guard let selectedPeripheral = selectedPeripheral, let identifier = notification.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID, selectedPeripheral.identifier == identifier else {
-                 DLog("willConnect to an unexpected peripheral")
+                 //DLog("willConnect to an unexpected peripheral")
                  return
              }
 
@@ -211,42 +192,6 @@ class ScanViewModel: ObservableObject {
             return
         }
         connectionStatus = .connected
-
-        // Setup peripheral
-        AppState.shared.fileTransferClient = FileTransferClient(connectedBlePeripheral: selectedPeripheral, services: [.filetransfer]) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success:
-                DLog("setupPeripheral finished")
-
-                // Check if filetransfer was setup
-                guard let fileTransferClient = AppState.shared.fileTransferClient, fileTransferClient.isFileTransferEnabled else {
-                    DLog("setupPeripheral fileTransfer not enabled")
-                    self.connectionStatus = .fileTransferError
-                    //self.detailText = "Error initializing FileTransfer"
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1)    {
-                        self.disconnect(peripheral: selectedPeripheral)
-                    }
-                    return
-                }
-
-                DLog("setupPeripheral success")
-                
-                // Finished setup
-                self.connectionStatus = .fileTransferReady
-                //self.detailText = "FileTransfer service ready"
-                self.gotoConnected()
-
-            case .failure(let error):
-                DLog("setupPeripheral error: \(error.localizedDescription)")
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.disconnect(peripheral: selectedPeripheral)
-                }
-            }
-        }
     }
 
     private func willDiscoverServices(notification: Notification) {

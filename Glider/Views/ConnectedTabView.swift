@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct ConnectedTabView: View {
     enum Tabs: Int {
@@ -14,11 +15,13 @@ struct ConnectedTabView: View {
         case debug = 2
     }
     
+    @EnvironmentObject var connectionManager: FileClientPeripheralConnectionManager
     @State private var selectedTabIndex: Int = Tabs.connected.rawValue
     
     init() {
         let navigationBarLargeAppearance = UINavigationBarAppearance()
         navigationBarLargeAppearance.configureWithTransparentBackground()
+        
         navigationBarLargeAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarLargeAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
@@ -31,22 +34,40 @@ struct ConnectedTabView: View {
         UINavigationBar.appearance().standardAppearance = navigationBarDefaultAppearance
         UINavigationBar.appearance().compactAppearance = navigationBarDefaultAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navigationBarLargeAppearance
+        
+        #if swift(>=5.5)
+        if #available(iOS 15.0, *) {
+            UINavigationBar.appearance().compactScrollEdgeAppearance = navigationBarDefaultAppearance
+        }
+        #endif
 
         //
+        /*
         UITabBar.appearance().unselectedItemTintColor = UIColor(Color.gray)
         UITabBar.appearance().barTintColor = UIColor(Color("tab_background"))
+        */
+        
+        let tabbarAppearance = UITabBarAppearance()
+        tabbarAppearance.configureWithOpaqueBackground()
+        tabbarAppearance.backgroundColor = UIColor(named: "maintab_background")
+        UITabBar.appearance().standardAppearance = tabbarAppearance
+        #if swift(>=5.5)
+        if #available(iOS 15.0, *) {
+            UITabBar.appearance().scrollEdgeAppearance = tabbarAppearance
+        }
+        #endif
     }
     
     var body: some View {
         TabView(selection: $selectedTabIndex) {
-            InfoView(fileTransferClient: AppState.shared.fileTransferClient)
+            InfoView()
                 .tabItem {
                     Label("Info", systemImage: "link")
                 }
                 .tag(Tabs.connected.rawValue)
 
     
-            FileTransferView(fileTransferClient: AppState.shared.fileTransferClient)
+            FileTransferView(fileTransferClient: connectionManager.selectedClient)
                 .tabItem {
                     Label("Tests", systemImage: "folder")// "folder.badge.gearshape")
                 }
@@ -65,5 +86,6 @@ struct ConnectedTabView: View {
 struct ConnectedView_Previews: PreviewProvider {
     static var previews: some View {
         ConnectedTabView()
+            .environmentObject(FileClientPeripheralConnectionManager.shared)
     }
 }

@@ -66,12 +66,7 @@ public class BleManager: NSObject {
 
     func restoreCentralManager() {
         DLog("Restoring central manager")
-        /*
-        guard centralManager?.delegate !== self else {
-            DLog("No need to restore it. It it still ours")
-            return
-        }*/
-
+        
         // Restore peripherals status
         peripheralsFoundLock.lock()
 
@@ -243,7 +238,7 @@ public class BleManager: NSObject {
     public func disconnect(from peripheral: BlePeripheral, waitForQueuedCommands: Bool = false) {
         guard let centralManager = centralManager else { return}
 
-        DLog("disconnect")
+        DLog("disconnect: \(peripheral.identifier)")
         NotificationCenter.default.post(name: .willDisconnectFromPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
 
         if waitForQueuedCommands {
@@ -254,41 +249,23 @@ public class BleManager: NSObject {
         }
     }
     
-    
-    func reconnecToPeripheralsWithServices(_ services: [CBUUID], timeout: Double? = nil) -> Bool {
+    func reconnecToPeripherals(peripheralUUIDs identifiers: [UUID], withServices services: [CBUUID], timeout: Double? = nil) -> Bool {
         var reconnecting = false
         
-        if let peripherals = centralManager?.retrieveConnectedPeripherals(withServices: services) {
-            for peripheral in peripherals {
-                
-                discovered(peripheral: peripheral, advertisementData: nil )
-                if let blePeripheral = peripheralsFound[peripheral.identifier] {
-                    connect(to: blePeripheral, timeout: timeout)
-                    reconnecting = true
-                }
-            }
-        }
-        
-        return reconnecting
-    }
-    
-    /*
-    func reconnecToPeripherals(peripheralUUIDs identifiers: [UUID]?, withServices services: [CBUUID], timeout: Double? = nil) -> Bool {
-        var reconnecting = false
-        
-        /*
         // Reconnect to a known identifier
-        if let identifiers = identifiers {
+        if !identifiers.isEmpty {
             let knownPeripherals = centralManager?.retrievePeripherals(withIdentifiers: identifiers)
-            if let peripherals = knownPeripherals?.filter({identifiers.contains($0.identifier)}), !peripherals.isEmpty {
+            if let peripherals = knownPeripherals {
+            //if let peripherals = knownPeripherals?.filter({identifiers.contains($0.identifier)}), !peripherals.isEmpty {
                 for peripheral in peripherals {
+                    DLog("Try to connect to known peripheral: \(peripheral.identifier)")
                     discovered(peripheral: peripheral, advertisementData: nil)
                     if let blePeripheral = peripheralsFound[peripheral.identifier] {
                         connect(to: blePeripheral, timeout: timeout)
                         reconnecting = true
                     }
                 }
-            } else {
+            } /* else {
                 let connectedPeripherals = centralManager?.retrieveConnectedPeripherals(withServices: services)
                 if let peripherals = connectedPeripherals?.filter({identifiers.contains($0.identifier)}), !peripherals.isEmpty {
                     for peripheral in peripherals {
@@ -299,13 +276,16 @@ public class BleManager: NSObject {
                         }
                     }
                 }
-            }
-        }*/
+            }*/
+        }
 
         // Reconnect even if no identifier was saved if we are already connected to a device with the expected services
-        if !reconnecting {
-            if let peripherals = centralManager?.retrieveConnectedPeripherals(withServices: services) {
-                for peripheral in peripherals {
+        //if !reconnecting {
+        if let peripherals = centralManager?.retrieveConnectedPeripherals(withServices: services), !peripherals.isEmpty {
+            let alreadyConnectingOrConnectedPeripheralsIds = BleManager.shared.connectedOrConnectingPeripherals().map{$0.identifier}
+            for peripheral in peripherals {
+                if !alreadyConnectingOrConnectedPeripheralsIds.contains(peripheral.identifier) {
+                    DLog("Connect to peripheral with known service: \(peripheral.identifier)")
                     discovered(peripheral: peripheral, advertisementData: nil )
                     if let blePeripheral = peripheralsFound[peripheral.identifier] {
                         connect(to: blePeripheral, timeout: timeout)
@@ -314,9 +294,10 @@ public class BleManager: NSObject {
                 }
             }
         }
+        //}
         
         return reconnecting
-    }*/
+    }
 
     private func discovered(peripheral: CBPeripheral, advertisementData: [String: Any]? = nil, rssi: Int? = nil) {
         peripheralsFoundLock.lock(); defer { peripheralsFoundLock.unlock() }
@@ -343,8 +324,12 @@ public class BleManager: NSObject {
 
     
     // MARK: - Notifications
+    public func peripheralUUID(from notification: Notification) -> UUID? {
+        return notification.userInfo?[NotificationUserInfoKey.uuid.rawValue] as? UUID
+    }
+
     public func peripheral(from notification: Notification) -> BlePeripheral? {
-        guard let uuid = notification.userInfo?[NotificationUserInfoKey.uuid.rawValue] as? UUID else { return nil }
+        guard let uuid = peripheralUUID(from: notification) else { return nil }
 
         return peripheral(with: uuid)
     }
@@ -418,7 +403,7 @@ extension BleManager: CBCentralManagerDelegate {
     }
     
     public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        DLog("didFailToConnect: \(String(describing: error))")
+        DLog("didFailToConnect: \(peripheral.identifier). \(String(describing: error))")
         
         // Clean
         peripheralsFound[peripheral.identifier]?.reset()
@@ -433,7 +418,7 @@ extension BleManager: CBCentralManagerDelegate {
     }
     
     public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        DLog("didDisconnectPeripheral")
+        DLog("didDisconnectPeripheral: \(peripheral.identifier)")
         
         // Clean
         peripheralsFound[peripheral.identifier]?.reset()

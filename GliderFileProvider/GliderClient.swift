@@ -30,7 +30,7 @@ class GliderClient {
     // Data - Bluetooth support
     private let bleSupportSemaphore = DispatchSemaphore(value: 0)
     private var startTime: CFAbsoluteTime!
-    private var autoReconnect: BleAutoReconnect?
+    private var autoReconnect: FileClientPeripheralConnectionManager?
     private let fileTransferSemaphore = DispatchSemaphore(value: 1)
     
     // Data - FileTransfer
@@ -198,26 +198,7 @@ class GliderClient {
     
     // MARK: - Reconnect
     private func startAutoReconnect() {
-        autoReconnect = BleAutoReconnect(
-            servicesToReconnect: [BlePeripheral.kFileTransferServiceUUID],
-            reconnectHandler: { [unowned self] (peripheral: BlePeripheral, completion: @escaping (Result<Void, Error>) -> Void) in
-
-                self.fileTransferClient = FileTransferClient(connectedBlePeripheral: peripheral, services: [.filetransfer]) { result in
-                    
-                    switch result {
-                    case .success(let client):
-                        if client.isFileTransferEnabled {
-                            completion(.success(()))
-                        }
-                        else {
-                            completion(.failure(FileTransferClient.ClientError.serviceNotEnabled))
-                        }
-                        
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                }
-            })
+        autoReconnect = FileClientPeripheralConnectionManager()
     }
     
     private func forceReconnect() -> Bool {

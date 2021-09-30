@@ -54,6 +54,7 @@ struct LogView: View {
                 .onChange(of: entries.count) { count in
                     scroll.scrollTo(logManager.entries.last?.id, anchor: .bottom)
                 }
+                .padding(.vertical, 1)      // Fix scroll shown below navigation and tabbar
             }
             
             /*

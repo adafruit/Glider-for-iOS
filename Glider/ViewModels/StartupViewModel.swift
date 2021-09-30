@@ -66,7 +66,7 @@ class StartupViewModel: ObservableObject {
             self.activeAlert = .bluetoothUnsupported
         }
         else {
-            AppState.shared.startAutoReconnect()
+            FileClientPeripheralConnectionManager.shared.reconnect()
         }
     }
     
@@ -103,17 +103,17 @@ class StartupViewModel: ObservableObject {
     }
     
     private func willReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("willReconnectToKnownPeripheral")
+        DLog("startup willReconnectToKnownPeripheral")
         isRestoringConnection = true
     }
 
     private func didReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("didReconnectToKnownPeripheral")
+        DLog("startup didReconnectToKnownPeripheral")
         self.isStartupFinished = true
     }
 
     private func didFailToReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("didFailToReconnectToKnownPeripheral")
+        DLog("startup didFailToReconnectToKnownPeripheral")
         self.isStartupFinished = true
     }
 }

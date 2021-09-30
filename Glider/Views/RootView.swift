@@ -10,12 +10,11 @@ import FileTransferClient
 
 struct RootView: View {
     static let debugForceDestination = AppEnvironment.isDebug && false ? RootViewModel.Destination.debug : nil
-
     @StateObject private var model = RootViewModel()
+    @ObservedObject private var connectionManager = FileClientPeripheralConnectionManager.shared
     
     let didUpdateBleStatePublisher = NotificationCenter.default.publisher(for: .didUpdateBleState)
-    let didDisconnectFromPeripheralPublisher = NotificationCenter.default.publisher(for: .didDisconnectFromPeripheral)
-
+    
     var body: some View {
         Group {
             switch Self.debugForceDestination ?? model.destination {
@@ -36,13 +35,19 @@ struct RootView: View {
         .onReceive(didUpdateBleStatePublisher) { notification in
             model.showWarningIfBluetoothStateIsNotReady()
         }
-        /*
-        .onReceive(didDisconnectFromPeripheralPublisher) { notification in
-            if model.destination == .connected {
+        .onChange(of: connectionManager.isConnectedOrReconnecting) { isConnectedOrReconnecting in
+            //DLog("isConnectedOrReconnecting: \(isConnectedOrReconnecting)")
+            
+            if !isConnectedOrReconnecting, model.destination == .connected {
                 model.destination = .scan
             }
-        }*/
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            DLog("App moving to the foreground. Force reconnect")
+            FileClientPeripheralConnectionManager.shared.reconnect()
+        }
         .environmentObject(model)
+        .environmentObject(connectionManager)
     }
 }
 
