@@ -43,7 +43,7 @@ public struct FileTransferPathUtils {
         let parentPath: String
         // Remove leading '/' and find the next one. Keep anything after the one found
         let pathWithoutLeadingSlash = path.deletingPrefix(rootDirectory)
-        if let indexOfLastSlash = pathWithoutLeadingSlash.lastIndex(of: "/") {//(pathWithoutLeadingSlash.range(of: "/")?.lowerBound) {
+        if let indexOfLastSlash = pathWithoutLeadingSlash.lastIndex(of: pathSeparatorCharacter) {
             let parentPathWithoutLeadingSlash = String(pathWithoutLeadingSlash.prefix(upTo: indexOfLastSlash))
             parentPath = rootDirectory + parentPathWithoutLeadingSlash
         }
@@ -55,7 +55,7 @@ public struct FileTransferPathUtils {
     }
     
     public static func pathWithTrailingSeparator(path: String) -> String {
-        return path.hasSuffix("/") ? path : path.appending("/")      // Force a trailing separator
+        return path.hasSuffix(Self.pathSeparator) ? path : path.appending(Self.pathSeparator)      // Force a trailing separator
     }
     
     // MARK: - Root Directory

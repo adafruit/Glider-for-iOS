@@ -221,7 +221,7 @@ public class BleManager: NSObject {
 
     @objc private func connectionTimeoutFired(timer: Timer) {
         let peripheralIdentifier = timer.userInfo as! UUID
-        DLog("connection timeout fired: \(peripheralIdentifier)")
+        DLog("connection timeout for: \(peripheralIdentifier)")
         connectionTimeoutTimers[peripheralIdentifier] = nil
 
         NotificationCenter.default.post(name: .willDisconnectFromPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheralIdentifier])
@@ -256,7 +256,6 @@ public class BleManager: NSObject {
         if !identifiers.isEmpty {
             let knownPeripherals = centralManager?.retrievePeripherals(withIdentifiers: identifiers)
             if let peripherals = knownPeripherals {
-            //if let peripherals = knownPeripherals?.filter({identifiers.contains($0.identifier)}), !peripherals.isEmpty {
                 for peripheral in peripherals {
                     DLog("Try to connect to known peripheral: \(peripheral.identifier)")
                     discovered(peripheral: peripheral, advertisementData: nil)
@@ -265,22 +264,10 @@ public class BleManager: NSObject {
                         reconnecting = true
                     }
                 }
-            } /* else {
-                let connectedPeripherals = centralManager?.retrieveConnectedPeripherals(withServices: services)
-                if let peripherals = connectedPeripherals?.filter({identifiers.contains($0.identifier)}), !peripherals.isEmpty {
-                    for peripheral in peripherals {
-                        discovered(peripheral: peripheral, advertisementData: nil )
-                        if let blePeripheral = peripheralsFound[peripheral.identifier] {
-                            connect(to: blePeripheral, timeout: timeout)
-                            reconnecting = true
-                        }
-                    }
-                }
-            }*/
+            }
         }
-
+        
         // Reconnect even if no identifier was saved if we are already connected to a device with the expected services
-        //if !reconnecting {
         if let peripherals = centralManager?.retrieveConnectedPeripherals(withServices: services), !peripherals.isEmpty {
             let alreadyConnectingOrConnectedPeripheralsIds = BleManager.shared.connectedOrConnectingPeripherals().map{$0.identifier}
             for peripheral in peripherals {
@@ -294,7 +281,6 @@ public class BleManager: NSObject {
                 }
             }
         }
-        //}
         
         return reconnecting
     }
@@ -388,7 +374,7 @@ extension BleManager: CBCentralManagerDelegate {
     }
     
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        DLog("didConnect: \(peripheral.identifier)")
+        DLog("didConnect: \(peripheral.name ?? peripheral.identifier.uuidString)")
         
         // Remove connection timeout if exists
         if let timer = connectionTimeoutTimers[peripheral.identifier] {
@@ -403,7 +389,7 @@ extension BleManager: CBCentralManagerDelegate {
     }
     
     public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        DLog("didFailToConnect: \(peripheral.identifier). \(String(describing: error))")
+        DLog("didFailToConnect: \(peripheral.name ?? peripheral.identifier.uuidString). \(String(describing: error))")
         
         // Clean
         peripheralsFound[peripheral.identifier]?.reset()
@@ -418,7 +404,7 @@ extension BleManager: CBCentralManagerDelegate {
     }
     
     public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        DLog("didDisconnectPeripheral: \(peripheral.identifier)")
+        DLog("didDisconnectPeripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
         
         // Clean
         peripheralsFound[peripheral.identifier]?.reset()
@@ -426,12 +412,12 @@ extension BleManager: CBCentralManagerDelegate {
         // Notify
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: .didDisconnectFromPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
+            
+            // Remove from peripheral list (after sending notification so the receiving objects can query about the peripheral before being removed)
+            self.peripheralsFoundLock.lock()
+            self.peripheralsFound.removeValue(forKey: peripheral.identifier)
+            self.peripheralsFoundLock.unlock()
         }
-
-        // Remove from peripheral list (after sending notification so the receiving objects can query about the peripheral before being removed)
-        peripheralsFoundLock.lock()
-        peripheralsFound.removeValue(forKey: peripheral.identifier)
-        peripheralsFoundLock.unlock()
     }
 }
 

@@ -38,7 +38,7 @@ class StartupViewModel: ObservableObject {
         DispatchQueue.global().async {      // Important: Launch in background queue
             // check Bluetooth status
             let bleState = BleManager.shared.state
-            DLog("Initial bluetooth state: \(bleState.rawValue)")
+            //DLog("Initial bluetooth state: \(bleState.rawValue)")
             if bleState == .unknown || bleState == .resetting {
                 
                 self.registerBleStateNotifications(enabled: true)
@@ -103,17 +103,17 @@ class StartupViewModel: ObservableObject {
     }
     
     private func willReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("startup willReconnectToKnownPeripheral")
+        //DLog("startup willReconnectToKnownPeripheral")
         isRestoringConnection = true
     }
 
     private func didReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("startup didReconnectToKnownPeripheral")
+        //DLog("startup didReconnectToKnownPeripheral")
         self.isStartupFinished = true
     }
 
     private func didFailToReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("startup didFailToReconnectToKnownPeripheral")
+        //DLog("startup didFailToReconnectToKnownPeripheral")
         self.isStartupFinished = true
     }
 }

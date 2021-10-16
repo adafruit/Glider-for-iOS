@@ -7,6 +7,7 @@
 
 import Foundation
 import FileTransferClient
+import Combine
 
 class LogManager: ObservableObject {
     private static let applicationGroupSharedDirectoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.adafruit.Glider")!       // Shared between the app and extensions
@@ -18,6 +19,7 @@ class LogManager: ObservableObject {
 
     // Data
     private var isFileProvider: Bool
+    private var cancellable: Cancellable?
     
     init() {
         #if FILEPROVIDER
@@ -27,14 +29,27 @@ class LogManager: ObservableObject {
         #endif
         
         load()
+        
+        // Observe notification center
+        cancellable = NotificationCenter.default.publisher(for: .didLogDebugMessage)
+            .compactMap{ $0.userInfo?["message"] as? String }
+            .sink() { message in self.log(Entry(level: .debug, text: message)) }
     }
     
     init(isFileProvider: Bool) {
         self.isFileProvider = isFileProvider
+
+        // Load
         load()
+
+        // Observe notification center
+        cancellable = NotificationCenter.default.publisher(for: .didLogDebugMessage)
+            .compactMap{ $0.userInfo?["message"] as? String }
+            .sink() { message in self.log(Entry(level: .debug, text: message)) }
     }
     
     deinit {
+        // Save
         save()
     }
 
@@ -80,11 +95,10 @@ class LogManager: ObservableObject {
         static func error(text: String, category: Category, timestamp: CFAbsoluteTime? = nil) -> Self {
             return self.init(level: .error, text: text, category: category, timestamp: timestamp)
         }
-
     }
     
     // Published
-    @Published  var entries: [Entry] = []
+    @Published var entries: [Entry] = []
     
     // MARK: - Actions
     private var defaultFileUrl: URL? {

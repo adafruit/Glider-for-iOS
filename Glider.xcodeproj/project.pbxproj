@@ -17,11 +17,10 @@
 		A947FE8626543894007A5E5A /* View+If.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5226543893007A5E5A /* View+If.swift */; };
 		A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5326543893007A5E5A /* HideKeyboard.swift */; };
 		A947FE8826543894007A5E5A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5426543893007A5E5A /* RootView.swift */; };
-		A947FE8926543894007A5E5A /* FileTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5526543893007A5E5A /* FileTransferView.swift */; };
 		A947FE8B26543894007A5E5A /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5826543893007A5E5A /* TodoView.swift */; };
 		A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5926543893007A5E5A /* RootViewModel.swift */; };
 		A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5A26543893007A5E5A /* StartupViewModel.swift */; };
-		A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */; };
+		A947FE8E26543894007A5E5A /* FileEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5B26543893007A5E5A /* FileEditViewModel.swift */; };
 		A947FE8F26543894007A5E5A /* ScanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5C26543893007A5E5A /* ScanViewModel.swift */; };
 		A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6326543893007A5E5A /* PeripheralList.swift */; };
 		A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */; };
@@ -41,6 +40,12 @@
 		A980AC732704ED3A0093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC722704ED3A0093222F /* FileTransferClient */; };
 		A980AC752704ED450093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC742704ED450093222F /* FileTransferClient */; };
 		A980AC772704ED4A0093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC762704ED4A0093222F /* FileTransferClient */; };
+		A98B67D6271BA58B00787A02 /* FileCommandsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */; };
+		A98B67D8271BA83E00787A02 /* FileCommandsStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */; };
+		A98B67DA271D6D3800787A02 /* PeripheralChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */; };
+		A9D6E353271890870048EB12 /* FileExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E352271890870048EB12 /* FileExplorerView.swift */; };
+		A9D6E35527190A2E0048EB12 /* TransmissionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */; };
+		A9D6E357271918EC0048EB12 /* FileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E356271918EC0048EB12 /* FileEditView.swift */; };
 		A9E3CBAE2704D1FB00CD4BA3 /* GliderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3CBAD2704D1FB00CD4BA3 /* GliderClient.swift */; };
 		A9ED1F292687530700B6C27F /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F282687530700B6C27F /* FileProviderExtension.swift */; };
 		A9ED1F2B2687530700B6C27F /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */; };
@@ -52,8 +57,7 @@
 		A9ED1F6126878ABF00B6C27F /* FileMetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F6026878ABF00B6C27F /* FileMetadataCache.swift */; };
 		A9F116F926895DC7006F8FE4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F116F826895DC7006F8FE4 /* ShareViewController.swift */; };
 		A9F116FC26895DC7006F8FE4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */; };
-		A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F225252659ED8400D3B2C6 /* FileChooserView.swift */; };
-		A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */; };
+		A9F22528265B9DE800D3B2C6 /* FileExplorerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileExplorerViewModel.swift */; };
 		A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */; };
 /* End PBXBuildFile section */
 
@@ -102,11 +106,10 @@
 		A947FE5226543893007A5E5A /* View+If.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+If.swift"; sourceTree = "<group>"; };
 		A947FE5326543893007A5E5A /* HideKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HideKeyboard.swift; sourceTree = "<group>"; };
 		A947FE5426543893007A5E5A /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		A947FE5526543893007A5E5A /* FileTransferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferView.swift; sourceTree = "<group>"; };
 		A947FE5826543893007A5E5A /* TodoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		A947FE5926543893007A5E5A /* RootViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		A947FE5A26543893007A5E5A /* StartupViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupViewModel.swift; sourceTree = "<group>"; };
-		A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferViewModel.swift; sourceTree = "<group>"; };
+		A947FE5B26543893007A5E5A /* FileEditViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileEditViewModel.swift; sourceTree = "<group>"; };
 		A947FE5C26543893007A5E5A /* ScanViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanViewModel.swift; sourceTree = "<group>"; };
 		A947FE6326543893007A5E5A /* PeripheralList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralList.swift; sourceTree = "<group>"; };
 		A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralAutoConnect.swift; sourceTree = "<group>"; };
@@ -122,6 +125,12 @@
 		A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+LightAndDark.swift"; sourceTree = "<group>"; };
 		A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderUtils.swift; sourceTree = "<group>"; };
 		A980AC712704ED2E0093222F /* FileTransferClient */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FileTransferClient; sourceTree = "<group>"; };
+		A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCommandsViewModel.swift; sourceTree = "<group>"; };
+		A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCommandsStatusBarView.swift; sourceTree = "<group>"; };
+		A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralChooserView.swift; sourceTree = "<group>"; };
+		A9D6E352271890870048EB12 /* FileExplorerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExplorerView.swift; sourceTree = "<group>"; };
+		A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransmissionStatus.swift; sourceTree = "<group>"; };
+		A9D6E356271918EC0048EB12 /* FileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEditView.swift; sourceTree = "<group>"; };
 		A9E3CBAD2704D1FB00CD4BA3 /* GliderClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderClient.swift; sourceTree = "<group>"; };
 		A9ED1F262687530700B6C27F /* GliderFileProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9ED1F282687530700B6C27F /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
@@ -139,8 +148,7 @@
 		A9F116F826895DC7006F8FE4 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		A9F116FB26895DC7006F8FE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		A9F116FD26895DC7006F8FE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9F225252659ED8400D3B2C6 /* FileChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileChooserView.swift; sourceTree = "<group>"; };
-		A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileChooserViewModel.swift; sourceTree = "<group>"; };
+		A9F22527265B9DE800D3B2C6 /* FileExplorerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExplorerViewModel.swift; sourceTree = "<group>"; };
 		A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -239,11 +247,13 @@
 				A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */,
 				A947FE5026543893007A5E5A /* ScanView.swift */,
 				A9678E8326E7C98E003936DC /* ConnectedTabView.swift */,
-				A947FE5526543893007A5E5A /* FileTransferView.swift */,
-				A9F225252659ED8400D3B2C6 /* FileChooserView.swift */,
 				A9678E8526E7D191003936DC /* InfoView.swift */,
 				A9678E8926E7FB58003936DC /* LogView.swift */,
 				A947FE5826543893007A5E5A /* TodoView.swift */,
+				A9D6E352271890870048EB12 /* FileExplorerView.swift */,
+				A9D6E356271918EC0048EB12 /* FileEditView.swift */,
+				A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */,
+				A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -281,8 +291,9 @@
 				A947FE5926543893007A5E5A /* RootViewModel.swift */,
 				A947FE5A26543893007A5E5A /* StartupViewModel.swift */,
 				A947FE5C26543893007A5E5A /* ScanViewModel.swift */,
-				A947FE5B26543893007A5E5A /* FileTransferViewModel.swift */,
-				A9F22527265B9DE800D3B2C6 /* FileChooserViewModel.swift */,
+				A9F22527265B9DE800D3B2C6 /* FileExplorerViewModel.swift */,
+				A947FE5B26543893007A5E5A /* FileEditViewModel.swift */,
+				A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -293,6 +304,7 @@
 				A947FE6226543893007A5E5A /* Scanner */,
 				A919BA6926791585000C9291 /* AppState.swift */,
 				A9678E8D26E828E2003936DC /* LogManager.swift */,
+				A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -543,27 +555,31 @@
 			files = (
 				A9678E8E26E828E2003936DC /* LogManager.swift in Sources */,
 				A947FE8F26543894007A5E5A /* ScanViewModel.swift in Sources */,
+				A98B67D6271BA58B00787A02 /* FileCommandsViewModel.swift in Sources */,
 				A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */,
 				A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */,
 				A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */,
 				A947FE8B26543894007A5E5A /* TodoView.swift in Sources */,
 				A919BA6A26791585000C9291 /* AppState.swift in Sources */,
+				A9D6E35527190A2E0048EB12 /* TransmissionStatus.swift in Sources */,
 				A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */,
-				A947FE8926543894007A5E5A /* FileTransferView.swift in Sources */,
+				A98B67D8271BA83E00787A02 /* FileCommandsStatusBarView.swift in Sources */,
 				A9678E8226E78797003936DC /* WaveView.swift in Sources */,
 				A947FE8426543894007A5E5A /* StartupView.swift in Sources */,
 				A9678E8A26E7FB58003936DC /* LogView.swift in Sources */,
 				A947FEA426543894007A5E5A /* GliderApp.swift in Sources */,
 				A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */,
+				A98B67DA271D6D3800787A02 /* PeripheralChooserView.swift in Sources */,
 				A947FE8626543894007A5E5A /* View+If.swift in Sources */,
-				A9F22528265B9DE800D3B2C6 /* FileChooserViewModel.swift in Sources */,
+				A9F22528265B9DE800D3B2C6 /* FileExplorerViewModel.swift in Sources */,
 				A9678E8626E7D191003936DC /* InfoView.swift in Sources */,
 				A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */,
 				A947FE8526543894007A5E5A /* ScanView.swift in Sources */,
-				A9F225262659ED8400D3B2C6 /* FileChooserView.swift in Sources */,
 				A9678E8026E758B2003936DC /* BluetoothStatusView.swift in Sources */,
+				A9D6E357271918EC0048EB12 /* FileEditView.swift in Sources */,
+				A9D6E353271890870048EB12 /* FileExplorerView.swift in Sources */,
 				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
-				A947FE8E26543894007A5E5A /* FileTransferViewModel.swift in Sources */,
+				A947FE8E26543894007A5E5A /* FileEditViewModel.swift in Sources */,
 				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
 				A9678E8426E7C98F003936DC /* ConnectedTabView.swift in Sources */,
 				A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */,

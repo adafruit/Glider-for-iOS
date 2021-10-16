@@ -77,6 +77,10 @@ extension BlePeripheral {
             default: return false
             }
         }
+        
+        public var isHidden: Bool {
+            return name.starts(with: ".")
+        }
     }
 
     private struct FileTransferReadStatus {
@@ -214,7 +218,7 @@ extension BlePeripheral {
             
             switch result {
             case let .success((version, characteristic)):
-                DLog("FileTransfer Protocol v\(version) detected")
+                DLog("\(self.debugName) FileTransfer Protocol v\(version) detected")
                 
                 self.adafruitFileTransferVersion = version
                 self.adafruitFileTransferDataCharacteristic = characteristic
@@ -535,9 +539,10 @@ extension BlePeripheral {
         
         return packetSize       // Return processed bytes
     }
-    
+
     private func decodeDeleteFile(data: Data) -> Int {
-        guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else { DLog("Error: delete invalid internal status. Invalidating all received data..."); return Int.max }
+        guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else {
+            DLog("Error: delete invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferDeleteStatus.completion
 
         guard data.count >= Self.deleteFileResponseHeaderSize else { return 0 }      // Header has not been fully received yet
@@ -545,8 +550,8 @@ extension BlePeripheral {
         let status = data[1]
         let isDeleted = status == 0x01
         
+        self.adafruitFileTransferDeleteStatus = nil
         if isDeleted {
-            self.adafruitFileTransferDeleteStatus = nil
             completion?(.success(()))
         }
         else {
@@ -565,6 +570,7 @@ extension BlePeripheral {
         let status = data[1]
         let isCreated = status == 0x01
         
+        self.adafruitFileTransferMakeDirectoryStatus = nil
         if isCreated {
             var modificationDate: Date? = nil
             if adafruitFileTransferVersion >= 3 {
@@ -572,7 +578,6 @@ extension BlePeripheral {
                 modificationDate = Date(timeIntervalSince1970: TimeInterval(truncatedTime)/(1000*1000*1000))
             }
             
-            self.adafruitFileTransferMakeDirectoryStatus = nil
             completion?(.success(modificationDate))
         }
         else {

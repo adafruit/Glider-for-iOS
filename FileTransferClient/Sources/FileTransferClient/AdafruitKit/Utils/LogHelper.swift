@@ -15,8 +15,15 @@ public func DLog(_ message: String, function: String = #function) {
         NSLog("%@, %@", function, message)
     }
     
-    #if canImport(LogManager)
-    LogManager.shared.log(.init(level: .debug, text: message, category: .app))
-    #endif
+    // Send notification in case we are using LogManager
+    NotificationCenter.default.post(name: .didLogDebugMessage, object: nil, userInfo: ["message" : message])
 }
 
+
+
+// MARK: - Custom Notifications
+extension Notification.Name {
+    private static let kPrefix = Bundle.main.bundleIdentifier!
+    public static let didLogDebugMessage = Notification.Name(kPrefix+".didLogDebugMessage")
+
+}

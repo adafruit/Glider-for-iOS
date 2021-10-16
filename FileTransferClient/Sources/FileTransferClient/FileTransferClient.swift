@@ -62,7 +62,7 @@ public class FileTransferClient {
      */
     public init(connectedBlePeripheral blePeripheral: BlePeripheral, services: [Service]? = nil, completion: @escaping (Result<FileTransferClient, Error>) -> Void) {
         
-        DLog("Discovering services")
+        //DLog("Discovering services")
         let peripheralIdentifier = blePeripheral.identifier
         NotificationCenter.default.post(name: .willDiscoverServices, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheralIdentifier])
         blePeripheral.discover(serviceUuids: nil) { error in
@@ -105,8 +105,9 @@ public class FileTransferClient {
 
         // Wait for all finished
         servicesGroup.notify(queue: .main) { /*[weak self] in*/
-            DLog("setupServices finished")
+            //DLog("setupServices finished")
             
+            /*
             if AppEnvironment.isDebug {
                 /*
                 guard let self = self else {
@@ -116,7 +117,7 @@ public class FileTransferClient {
                 for service in services {
                     DLog(self.isEnabled(service: service) ? "\(service.debugName) reading enabled":"\(service.debugName) service not available")
                 }
-            }
+            }*/
 
             guard error == nil else {
                 completion(.failure(error!))

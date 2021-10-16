@@ -16,26 +16,29 @@ public class FileClientPeripheralConnectionManager: ObservableObject {
     private static let knownPeripheralsKey = "knownPeripherals"
  
     // Published
-    @Published public var peripherals = [BlePeripheral]()
-    @Published public var isConnectedOrReconnecting = false
+    @Published public var peripherals = [BlePeripheral]()           // Peripherals connected or connecting
+    @Published public var isConnectedOrReconnecting = false         // Is any peripheral connected or trying to connect
+    @Published public var selectedPeripheral: BlePeripheral?        // Selected peripheral from all the connected peripherals. User can select it using setSelectedClient, but the system picks one automatically if it gets disconnected or the user didnt select one
+    @Published public var isSelectedPeripheralReconnecting = false
 
-    private var isReconnectingPeripheral = [UUID: Bool]()
-    private var fileTransferClients = [UUID: FileTransferClient]()
-    
-    public var selectedClient: FileTransferClient? {
-        return fileTransferClients.values.first     // TODO: don't use the first one. Add a selector
-    }
-    
     // Parameters
     var userDefaults = UserDefaults.standard        // Can be replaced if data saved needs to be shared
     
     // Data
-    //private var autoconnectingPeripheralUUIDs = [UUID]()
     private let reconnectTimeout: TimeInterval
-  
+    
+    private var isReconnectingPeripheral = [UUID: Bool]()           // Is reconnecting the peripheral with identifier
+    private var fileTransferClients = [UUID: FileTransferClient]()  // FileTransferClient for each peripheral
+    private var userSelectedTransferClient: FileTransferClient? {   // User selected client (or picked automatically by the system if user didnt pick or got disconnected)
+        didSet {
+            updateSelectedPeripheral()
+        }
+    }
+    private var recoveryPeripheralIdentifier: UUID? // (UUID, Timer)?      // Data for a peripheral that was disconnected. There is a timer
+
     //  MARK: - Lifecycle
     public init(reconnectTimeout: TimeInterval = 2) {
-        DLog("Init FileClientPeripheralConnectionManager")
+        //DLog("Init FileClientPeripheralConnectionManager")
         self.reconnectTimeout = reconnectTimeout
         
         // Init peripherals
@@ -49,27 +52,41 @@ public class FileClientPeripheralConnectionManager: ObservableObject {
         // Unregister notifications
         registerConnectionNotifications(enabled: false)
     }
-    
-    private func updateConnectionStatus() {
-        isConnectedOrReconnecting = !peripherals.isEmpty || isReconnectingPeripheral.values.contains(true)
-        //DLog("updateConnectionStatus: \(isConnectedOrReconnecting)")
-    }
+ 
 
     //  MARK: - Actions
+    public var selectedClient: FileTransferClient? {
+        return userSelectedTransferClient ?? fileTransferClients.values.first
+    }
+
+    public func setSelectedClient(blePeripheral: BlePeripheral) {
+        if let client = fileTransferClients[blePeripheral.identifier] {
+            setSelectedClient(client)
+        }
+    }
+    
+    public func setSelectedClient(_ client: FileTransferClient) {
+        userSelectedTransferClient = client
+    }
+    
     /// Returns if is trying to reconnect, or false if it is quickly decided that there is not possible
     @discardableResult
     public func reconnect() -> Bool {
-        let isTryingToReconnect = BleManager.shared.reconnecToPeripherals(peripheralUUIDs: knownPeripheralsUUIDs, withServices: [BlePeripheral.kFileTransferServiceUUID], timeout: reconnectTimeout)
-        if isTryingToReconnect {
-        }
-        else {
+        
+        // Filter-out from knownPeripherals those that are not connected or connecting at the moment
+        let alreadyConnectedOrConnectingUUIDs = peripherals.map{$0.identifier}
+        let reconnectUUIDs = knownPeripheralsUUIDs.filter{ !alreadyConnectedOrConnectingUUIDs.contains($0) }
+        
+        // Reconnect
+        let isTryingToReconnect = BleManager.shared.reconnecToPeripherals(peripheralUUIDs: reconnectUUIDs, withServices: [BlePeripheral.kFileTransferServiceUUID], timeout: reconnectTimeout)
+        if !isTryingToReconnect {
             NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil)
             DLog("No previous connected peripherals detected")
         }
-
+        
         return isTryingToReconnect
     }
-
+    
     // MARK: - Reconnect previously connnected Ble Peripheral
     private func willConnectToPeripheral(_ notification: Notification) {
         guard let peripheralUUID = BleManager.shared.peripheralUUID(from: notification) else {
@@ -88,6 +105,7 @@ public class FileClientPeripheralConnectionManager: ObservableObject {
             // Don't assume that it failed. It could have restored the connection but the internal database in BleManager does not have the BlePeripheral
             DLog("Connected to a not scanned peripheral: \(peripheralUUID)")
             NotificationCenter.default.post(name: .didReconnectToKnownPeripheral, object: nil, userInfo: nil)
+            
             isReconnectingPeripheral[peripheralUUID] = false
             updateConnectionStatus()
             return
@@ -97,16 +115,79 @@ public class FileClientPeripheralConnectionManager: ObservableObject {
     }
 
     private func didDisconnectFromPeripheral(_ notification: Notification) {
+        
         // Update peripherals
         self.peripherals = BleManager.shared.connectedOrConnectingPeripherals()
-        updateConnectionStatus()
         
-        guard let peripheralUUID = BleManager.shared.peripheralUUID(from: notification) else { return }
+        // Get identifier for the disconnected peripheral
+        guard let peripheralUUID = BleManager.shared.peripheralUUID(from: notification) else {
+            DLog("warning: unknown peripheral disconnected")
+            updateConnectionStatus()
+            return
+        }
         
         if isReconnectingPeripheral[peripheralUUID] == true {
-            isReconnectingPeripheral[peripheralUUID] = false
-            updateConnectionStatus()
-            NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil)
+            DLog("recover failed for \(peripheralUUID.uuidString)")
+            setReconnectionFailed(peripheralUUID: peripheralUUID)
+            if self.recoveryPeripheralIdentifier == peripheralUUID {        // If it was recovering then remove it because it failed
+                self.recoveryPeripheralIdentifier = nil
+            }
+            self.updateSelectedPeripheral()
+        }
+        // If it was the selected peripheral try to recover the connection because a peripheral can be disconnected momentarily when writing to the filesystem.
+        else if selectedClient?.blePeripheral?.identifier == peripheralUUID {
+            userSelectedTransferClient = nil
+            
+            // Wait for recovery before connecting to a different one
+            DLog("Try to recover disconnected peripheral: \(selectedPeripheral?.name ?? selectedPeripheral?.identifier.uuidString ?? "nil")")
+            self.recoveryPeripheralIdentifier = peripheralUUID
+            self.isSelectedPeripheralReconnecting = true
+            
+            DispatchQueue.main.async {      // Important: add delay because the disconnection process will remove the peripheral from the discovered list and the reconnectToPeripherals will add it back, so wait before adding or it will be removed
+                // Reconnect
+                let isTryingToReconnect = BleManager.shared.reconnecToPeripherals(peripheralUUIDs: [peripheralUUID], withServices: [BlePeripheral.kFileTransferServiceUUID], timeout: self.reconnectTimeout)
+                if !isTryingToReconnect {
+                    DLog("recover failed. Autoselect another peripheral")
+                    self.fileTransferClients[peripheralUUID] = nil      // Remove info from disconnnected peripheral (it will change selectedClient)
+                    self.updateSelectedPeripheral()
+                    self.isSelectedPeripheralReconnecting = false
+                }
+            }
+        }
+                
+        updateConnectionStatus()
+    }
+    
+    private func setReconnectionFailed(peripheralUUID: UUID) {
+        isReconnectingPeripheral[peripheralUUID] = false
+        
+        if peripheralUUID == selectedPeripheral?.identifier {       // If it the selectedPeripheral, then the reconnection failed
+            self.isSelectedPeripheralReconnecting = false
+        }
+        fileTransferClients[peripheralUUID] = nil  // Remove info from disconnnected peripheral
+        NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil)
+    }
+    
+    // MARK: - Utils
+    private func updateConnectionStatus() {
+        let isConnectedOrReconnecting = !peripherals.isEmpty || isReconnectingPeripheral.values.contains(true) || recoveryPeripheralIdentifier != nil
+        guard isConnectedOrReconnecting != self.isConnectedOrReconnecting else { return }       // Only update if changed
+
+        // Update @Published value
+        self.isConnectedOrReconnecting = isConnectedOrReconnecting
+        //DLog("updateConnectionStatus: \(isConnectedOrReconnecting)")
+    }
+    
+    private func updateSelectedPeripheral() {
+        guard selectedClient?.blePeripheral != selectedPeripheral else { return }
+        
+        // Update @Published value
+        selectedPeripheral = selectedClient?.blePeripheral
+        DLog("selectedPeripheral: \(selectedPeripheral?.name ?? selectedPeripheral?.identifier.uuidString ?? "nil")")
+        
+        // Check that the selected client corresponds to the selected peripheral
+        if let selectedPeripheralIdentifier = selectedPeripheral?.identifier, let selectedPeripheralClient = fileTransferClients[selectedPeripheralIdentifier],  selectedClient != selectedPeripheralClient {
+            setSelectedClient(selectedPeripheralClient)
         }
     }
     
@@ -120,28 +201,34 @@ public class FileClientPeripheralConnectionManager: ObservableObject {
         updateConnectionStatus()
         
         // Finish FileTransfer setup on connection
-        let fileTransferClient = FileTransferClient(connectedBlePeripheral: peripheral, services: [.filetransfer]) { result in
+        let _ = FileTransferClient(connectedBlePeripheral: peripheral, services: [.filetransfer]) { result in
             
             switch result {
             case .success(let client):
                 if client.isFileTransferEnabled {
-                    DLog("Reconnected to peripheral successfully")
+                    //DLog("Reconnected to peripheral successfully")
+                    self.fileTransferClients[peripheral.identifier] = client
+
+                    if peripheral.identifier == self.selectedPeripheral?.identifier {       // If it the selectedPeripheral, then the reconnection finished successfuly
+                        self.isSelectedPeripheralReconnecting = false
+                    }
+
+                    self.updateSelectedPeripheral()
                     self.addKnownPeripheralsUUIDs(peripheral.identifier)
+                    
                     NotificationCenter.default.post(name: .didReconnectToKnownPeripheral, object: nil, userInfo: [BleManager.NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
                 }
                 else {
                     DLog("Failed setup file transfer")
-                    NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil, userInfo: [BleManager.NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
+                    self.setReconnectionFailed(peripheralUUID: peripheral.identifier)
                 }
                 
             case .failure(let error):
                 DLog("Failed to setup peripheral: \(error.localizedDescription)")
-                NotificationCenter.default.post(name: .didFailToReconnectToKnownPeripheral, object: nil, userInfo: [BleManager.NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
+                self.setReconnectionFailed(peripheralUUID: peripheral.identifier)
             }
         }
-        self.fileTransferClients[peripheral.identifier] = fileTransferClient
     }
-    
     
     // MARK: - Known periperhals
     private var knownPeripheralsUUIDs: [UUID] {

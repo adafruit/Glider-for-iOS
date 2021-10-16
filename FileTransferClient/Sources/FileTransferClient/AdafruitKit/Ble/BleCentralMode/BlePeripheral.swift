@@ -59,6 +59,10 @@ public class BlePeripheral: NSObject {
     public var name: String? {
         return peripheral.name
     }
+    
+    public var debugName: String {
+        return peripheral.name ?? peripheral.identifier.uuidString
+    }
 
     public var state: CBPeripheralState {
         return peripheral.state
