@@ -21,6 +21,14 @@ public struct FileTransferPathUtils {
         return String(path[path.startIndex...filenameIndex])
     }
     
+    public static func filenameFromPath(path: String) -> String {
+        guard let filenameIndex = path.lastIndex(of: Self.pathSeparatorCharacter) else {
+            return path
+        }
+        
+        return String(String(path[filenameIndex...]).dropFirst())
+    }
+    
     public static func upPath(from path: String) -> String {
         
         // Remove trailing separator if exists

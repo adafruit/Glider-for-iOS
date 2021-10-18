@@ -12,9 +12,15 @@ struct TransmissionProgress {
     var transmittedBytes: Int
     var totalBytes: Int?
     
-    init (description: String) {
+    init(description: String) {
         self.description = description
         transmittedBytes = 0
+    }
+    
+    init(description: String, transmittedBytes: Int, totalBytes: Int?) {
+        self.description = description
+        self.transmittedBytes = transmittedBytes
+        self.totalBytes = totalBytes
     }
 }
 
@@ -23,6 +29,7 @@ struct TransmissionLog: Equatable {
         case read(size: Int)
         case write(size: Int, date: Date?)
         case delete
+        case move
         case listDirectory(numItems: Int?)
         case makeDirectory
         case error(message: String)
@@ -47,6 +54,7 @@ struct TransmissionLog: Equatable {
             formatter.timeStyle = .short
             modeText = (size == 0 ? "Created empty file" : "Sent \(size) bytes") + (date == nil ? "" : ". Modification time: \(formatter.string(from: date!))")
         case .delete: modeText = "Deleted file"
+        case .move: modeText = "Moved file"
         case .listDirectory(numItems: let numItems): modeText = numItems != nil ? "Listed directory: \(numItems!) items" : "Listed nonexistent directory"
         case .makeDirectory: modeText = "Created directory"
         case .error(let message): modeText = message

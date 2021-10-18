@@ -21,6 +21,7 @@ extension BlePeripheral {
 
     private static let readFileResponseHeaderSize = 16      // (1+1+2+4+4+4+variable)
     private static let deleteFileResponseHeaderSize = 2     // (1+1)
+    private static let moveFileResponseHeaderSize = 2     // (1+1)
 
     private func writeFileResponseHeaderSize(protocolVersion: Int) -> Int {
         if protocolVersion >= 3 {
@@ -107,6 +108,11 @@ extension BlePeripheral {
     private struct FileTransferMakeDirectoryStatus {
         var completion: ((Result<Date?, Error>) -> Void)?
     }
+    
+    private struct FileTransferMoveStatus {
+        var completion: ((Result<Void, Error>) -> Void)?
+    }
+
 
     // MARK: - Errors
     public enum FileTransferError: LocalizedError {
@@ -135,8 +141,8 @@ extension BlePeripheral {
         static var adafruitFileTransferDeleteStatus: FileTransferDeleteStatus?
         static var adafruitFileTransferListDirectoryStatus: FileTransferListDirectoryStatus?
         static var adafruitFileTransferMakeDirectoryStatus: FileTransferMakeDirectoryStatus?
+        static var adafruitFileTransferMoveStatus: FileTransferMoveStatus?
     }
-
     
     private var adafruitFileTransferVersion: Int {
         get {
@@ -207,6 +213,15 @@ extension BlePeripheral {
         }
         set {
             objc_setAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferMakeDirectoryStatus, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+    
+    private var adafruitFileTransferMoveStatus: FileTransferMoveStatus? {
+        get {
+            return objc_getAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferMoveStatus) as? FileTransferMoveStatus
+        }
+        set {
+            objc_setAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferMoveStatus, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
     
@@ -360,7 +375,24 @@ extension BlePeripheral {
             }
         }
     }
-
+    
+    public func moveFile(fromPath: String, toPath: String, completion: ((Result<Void, Error>) -> Void)?) {
+        self.adafruitFileTransferMoveStatus = FileTransferMoveStatus(completion: completion)
+      
+        let data = ([UInt8]([0x60, 0x00])).data
+            + UInt16(fromPath.utf8.count).littleEndian.data
+            + UInt16(toPath.utf8.count).littleEndian.data
+            + Data(fromPath.utf8)
+            + UInt8(0x00).data           // Padding byte
+            + Data(toPath.utf8)
+        
+        sendCommand(data: data)  { result in
+            if case .failure(let error) = result {
+                completion?(.failure(error))
+            }
+        }
+    }
+    
     private func sendCommand(data: Data, completion: ((Result<Void, Error>) -> Void)?) {
         guard let adafruitFileTransferDataCharacteristic = adafruitFileTransferDataCharacteristic else {
             completion?(.failure(PeripheralAdafruitError.invalidCharacteristic))
@@ -431,6 +463,9 @@ extension BlePeripheral {
         case 0x51:
             bytesProcessed = decodeListDirectory(data: data)
 
+        case 0x61:
+            bytesProcessed = decodeMoveFile(data: data)
+
         default:
             DLog("Error: unknown command: \(HexUtils.hexDescription(bytes: [command], prefix: "0x")). Invalidating all received data...")
          
@@ -440,6 +475,26 @@ extension BlePeripheral {
         return bytesProcessed
     }
 
+    private func decodeMoveFile(data: Data) -> Int {
+        guard let adafruitFileTransferMoveStatus = adafruitFileTransferMoveStatus else { DLog("Error: write invalid internal status. Invalidating all received data..."); return Int.max }
+        let completion = adafruitFileTransferMoveStatus.completion
+
+        guard data.count >= Self.moveFileResponseHeaderSize else { return 0 }      // Header has not been fully received yet
+
+        let status = data[1]
+        let isMoved = status == 0x01
+        
+        self.adafruitFileTransferWriteStatus = nil
+        if isMoved {
+            completion?(.success(()))
+        }
+        else {
+            completion?(.failure(FileTransferError.statusFailed(code: Int(status))))
+        }
+        
+        return Self.moveFileResponseHeaderSize        // Return processed bytes
+    }
+    
     private func decodeWriteFile(data: Data) -> Int {
         guard let adafruitFileTransferWriteStatus = adafruitFileTransferWriteStatus else { DLog("Error: write invalid internal status. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferWriteStatus.completion

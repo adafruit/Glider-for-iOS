@@ -18,6 +18,7 @@ struct ConnectedTabView: View {
     @EnvironmentObject private var connectionManager: FileClientPeripheralConnectionManager
     @State private var selectedTabIndex: Int = Tabs.connected.rawValue
     
+     // MARK: - Lifecycle
     init() {
         let navigationBarLargeAppearance = UINavigationBarAppearance()
         navigationBarLargeAppearance.configureWithTransparentBackground()
@@ -58,28 +59,24 @@ struct ConnectedTabView: View {
         #endif
     }
     
+    // MARK: - View
     var body: some View {
+        
+        // TabView
         TabView(selection: $selectedTabIndex) {
             InfoView()
                 .tabItem {
                     Label("Info", systemImage: "link")
                 }
                 .tag(Tabs.connected.rawValue)
-
-
+            
+            
             FileExplorerView()
                 .tabItem {
                     Label("Explorer", systemImage: "folder")// "folder.badge.gearshape")
                 }
                 .tag(Tabs.debug.rawValue)
-
-            /*
-            FileTransferView(fileTransferClient: connectionManager.selectedClient)
-                .tabItem {
-                    Label("Tests", systemImage: "folder")// "folder.badge.gearshape")
-                }
-                .tag(Tabs.debug.rawValue)
-            */
+            
             LogView()
                 .tabItem {
                     Label("Log", systemImage: "terminal")

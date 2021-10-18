@@ -37,12 +37,15 @@
 		A9678E9026E8C980003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
 		A9678E9226E91B90003936DC /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */; };
 		A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
+		A96E4E2A271D9BA70023C03A /* FileSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4E29271D9BA70023C03A /* FileSystemView.swift */; };
+		A96E4E2C271F00B20023C03A /* SnackBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4E2B271F00B20023C03A /* SnackBarView.swift */; };
 		A980AC732704ED3A0093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC722704ED3A0093222F /* FileTransferClient */; };
 		A980AC752704ED450093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC742704ED450093222F /* FileTransferClient */; };
 		A980AC772704ED4A0093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC762704ED4A0093222F /* FileTransferClient */; };
 		A98B67D6271BA58B00787A02 /* FileCommandsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */; };
 		A98B67D8271BA83E00787A02 /* FileCommandsStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */; };
 		A98B67DA271D6D3800787A02 /* PeripheralChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */; };
+		A98B67DC271D999200787A02 /* FileMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67DB271D999100787A02 /* FileMoveView.swift */; };
 		A9D6E353271890870048EB12 /* FileExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E352271890870048EB12 /* FileExplorerView.swift */; };
 		A9D6E35527190A2E0048EB12 /* TransmissionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */; };
 		A9D6E357271918EC0048EB12 /* FileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E356271918EC0048EB12 /* FileEditView.swift */; };
@@ -57,7 +60,7 @@
 		A9ED1F6126878ABF00B6C27F /* FileMetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F6026878ABF00B6C27F /* FileMetadataCache.swift */; };
 		A9F116F926895DC7006F8FE4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F116F826895DC7006F8FE4 /* ShareViewController.swift */; };
 		A9F116FC26895DC7006F8FE4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */; };
-		A9F22528265B9DE800D3B2C6 /* FileExplorerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileExplorerViewModel.swift */; };
+		A9F22528265B9DE800D3B2C6 /* FileSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileSystemViewModel.swift */; };
 		A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */; };
 /* End PBXBuildFile section */
 
@@ -124,10 +127,13 @@
 		A9678E8D26E828E2003936DC /* LogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
 		A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+LightAndDark.swift"; sourceTree = "<group>"; };
 		A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderUtils.swift; sourceTree = "<group>"; };
+		A96E4E29271D9BA70023C03A /* FileSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemView.swift; sourceTree = "<group>"; };
+		A96E4E2B271F00B20023C03A /* SnackBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackBarView.swift; sourceTree = "<group>"; };
 		A980AC712704ED2E0093222F /* FileTransferClient */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FileTransferClient; sourceTree = "<group>"; };
 		A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCommandsViewModel.swift; sourceTree = "<group>"; };
 		A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCommandsStatusBarView.swift; sourceTree = "<group>"; };
 		A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralChooserView.swift; sourceTree = "<group>"; };
+		A98B67DB271D999100787A02 /* FileMoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMoveView.swift; sourceTree = "<group>"; };
 		A9D6E352271890870048EB12 /* FileExplorerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExplorerView.swift; sourceTree = "<group>"; };
 		A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransmissionStatus.swift; sourceTree = "<group>"; };
 		A9D6E356271918EC0048EB12 /* FileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEditView.swift; sourceTree = "<group>"; };
@@ -148,7 +154,7 @@
 		A9F116F826895DC7006F8FE4 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		A9F116FB26895DC7006F8FE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		A9F116FD26895DC7006F8FE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9F22527265B9DE800D3B2C6 /* FileExplorerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExplorerViewModel.swift; sourceTree = "<group>"; };
+		A9F22527265B9DE800D3B2C6 /* FileSystemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemViewModel.swift; sourceTree = "<group>"; };
 		A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -254,6 +260,8 @@
 				A9D6E356271918EC0048EB12 /* FileEditView.swift */,
 				A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */,
 				A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */,
+				A98B67DB271D999100787A02 /* FileMoveView.swift */,
+				A96E4E29271D9BA70023C03A /* FileSystemView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -263,6 +271,7 @@
 			children = (
 				A947FE4C26543893007A5E5A /* ButtonStyles.swift */,
 				A9678E8126E78797003936DC /* WaveView.swift */,
+				A96E4E2B271F00B20023C03A /* SnackBarView.swift */,
 			);
 			path = Decoration;
 			sourceTree = "<group>";
@@ -291,7 +300,7 @@
 				A947FE5926543893007A5E5A /* RootViewModel.swift */,
 				A947FE5A26543893007A5E5A /* StartupViewModel.swift */,
 				A947FE5C26543893007A5E5A /* ScanViewModel.swift */,
-				A9F22527265B9DE800D3B2C6 /* FileExplorerViewModel.swift */,
+				A9F22527265B9DE800D3B2C6 /* FileSystemViewModel.swift */,
 				A947FE5B26543893007A5E5A /* FileEditViewModel.swift */,
 				A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */,
 			);
@@ -560,6 +569,7 @@
 				A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */,
 				A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */,
 				A947FE8B26543894007A5E5A /* TodoView.swift in Sources */,
+				A96E4E2A271D9BA70023C03A /* FileSystemView.swift in Sources */,
 				A919BA6A26791585000C9291 /* AppState.swift in Sources */,
 				A9D6E35527190A2E0048EB12 /* TransmissionStatus.swift in Sources */,
 				A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */,
@@ -571,7 +581,8 @@
 				A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */,
 				A98B67DA271D6D3800787A02 /* PeripheralChooserView.swift in Sources */,
 				A947FE8626543894007A5E5A /* View+If.swift in Sources */,
-				A9F22528265B9DE800D3B2C6 /* FileExplorerViewModel.swift in Sources */,
+				A98B67DC271D999200787A02 /* FileMoveView.swift in Sources */,
+				A9F22528265B9DE800D3B2C6 /* FileSystemViewModel.swift in Sources */,
 				A9678E8626E7D191003936DC /* InfoView.swift in Sources */,
 				A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */,
 				A947FE8526543894007A5E5A /* ScanView.swift in Sources */,
@@ -581,6 +592,7 @@
 				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
 				A947FE8E26543894007A5E5A /* FileEditViewModel.swift in Sources */,
 				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
+				A96E4E2C271F00B20023C03A /* SnackBarView.swift in Sources */,
 				A9678E8426E7C98F003936DC /* ConnectedTabView.swift in Sources */,
 				A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */,
 				A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */,
@@ -778,7 +790,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -788,7 +800,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6;
+				MARKETING_VERSION = 0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -804,7 +816,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				ENABLE_PREVIEWS = YES;
@@ -814,7 +826,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6;
+				MARKETING_VERSION = 0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

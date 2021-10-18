@@ -53,6 +53,7 @@ struct PrimaryButtonStyle: ButtonStyle {
 struct MainButtonStyle: ButtonStyle {
     var isDark = true
     var backgroundColor = Color("accent_main")
+    var isBackgroundFilled = true
     
     func makeBody(configuration: ButtonStyle.Configuration) -> some View {
         let backgroundPressed = isDark ? backgroundColor.darker() : backgroundColor.lighter()
@@ -64,10 +65,18 @@ struct MainButtonStyle: ButtonStyle {
             .padding(.horizontal)
             .padding(.vertical, 12)
             .contentShape(Rectangle())
-            .background(
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(configuration.isPressed ? backgroundPressed : backgroundColor)
-            )
+            .if(isBackgroundFilled) {
+                $0.background(
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(configuration.isPressed ? backgroundPressed : backgroundColor)
+                )
+            }
+            .if(!isBackgroundFilled) {
+                $0.background(
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(configuration.isPressed ? backgroundPressed : backgroundColor)
+                )
+            }
     }
 }
 

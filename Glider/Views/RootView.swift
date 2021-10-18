@@ -9,14 +9,23 @@ import SwiftUI
 import FileTransferClient
 
 struct RootView: View {
-    static let debugForceDestination = AppEnvironment.isDebug && false ? RootViewModel.Destination.debug : nil
+    // Debug
+    private static let debugForceDestination = AppEnvironment.isDebug && false ? RootViewModel.Destination.debug : nil
+    
+    //
     @StateObject private var model = RootViewModel()
     @ObservedObject private var connectionManager = FileClientPeripheralConnectionManager.shared
+
+    // Snackbar
+    @State private var snackBarIsShowing = false
+    @State private var snackBarTitle = "Test"
+    @State private var snacBarBackgroundColor = Color.gray
     
-    let didUpdateBleStatePublisher = NotificationCenter.default.publisher(for: .didUpdateBleState)
-    
+
+    // MARK: - View
     var body: some View {
-        Group {
+        // Main screen
+        ZStack {
             switch Self.debugForceDestination ?? model.destination {
             case .startup:
                 StartupView()
@@ -31,8 +40,22 @@ struct RootView: View {
             default:
                 TodoView()
             }
+            
+            // SnackBar
+            SnackBarView(isShowing: $snackBarIsShowing, title: snackBarTitle, backgroundColor: snacBarBackgroundColor)
+                .padding(.bottom, 80)
+                .onReceive(NotificationCenter.default.publisher(for: .didSelectPeripheralForFileTransfer)) { notification in
+                    
+                    let name = BleManager.shared.peripheral(from: notification)?.debugName ?? "<unknown>"
+                    showSnackBar(title: "Connected to: \(name)", backgroundColor: .gray)
+                }
+                .onChange(of: connectionManager.isSelectedPeripheralReconnecting) { isSelectedPeripheralReconnecting in
+                    if isSelectedPeripheralReconnecting {
+                        showSnackBar(title: "Reconnecting...", backgroundColor: .orange)
+                    }
+                }
         }
-        .onReceive(didUpdateBleStatePublisher) { notification in
+        .onReceive(NotificationCenter.default.publisher(for: .didUpdateBleState)) { notification in
             model.showWarningIfBluetoothStateIsNotReady()
         }
         .onChange(of: connectionManager.isConnectedOrReconnecting) { isConnectedOrReconnecting in
@@ -48,6 +71,28 @@ struct RootView: View {
         }
         .environmentObject(model)
         .environmentObject(connectionManager)
+    }
+    
+    // MARK: - SnackBar
+    private func showSnackBar(title: String, backgroundColor: Color? = nil) {
+        self.snackBarTitle = title
+        self.snacBarBackgroundColor = backgroundColor ?? Color.gray
+        
+        let showHandler = {
+            withAnimation {
+                snackBarIsShowing = true
+            }
+        }
+        
+        if snackBarIsShowing {
+            snackBarIsShowing = false
+            DispatchQueue.main.async {
+                showHandler()
+            }
+        }
+        else {
+            showHandler()
+        }
     }
 }
 

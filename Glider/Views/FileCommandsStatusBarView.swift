@@ -30,11 +30,11 @@ struct FileCommandsStatusBarView: View {
             // Progress
             ZStack {
                 if let progress = model.transmissionProgress, let totalBytes = progress.totalBytes {
-                    ProgressView(""/*progress.description*/, value: Float(progress.transmittedBytes), total: Float(totalBytes))
+                    ProgressView(value: Float(progress.transmittedBytes), total: Float(totalBytes))
                         .accentColor(Color("accent_main"))
                         .font(.callout)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                }
+                }                
             }
             .frame(height: 4)
         }

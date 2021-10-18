@@ -1,5 +1,5 @@
 //
-//  FileExplorerViewModel.swift
+//  FileSystemViewModel.swift
 //  Glider
 //
 //  Created by Antonio García on 24/5/21.
@@ -8,7 +8,8 @@
 import Foundation
 import FileTransferClient
 
-class FileExplorerViewModel: FileCommandsViewModel {
+class FileSystemViewModel: FileCommandsViewModel {
+    
     
     // MARK: - Lifecycle
     func setup(directory: String, fileTransferClient: FileTransferClient) {

@@ -17,7 +17,10 @@ class FileCommandsViewModel: ObservableObject {
     @Published var isTransmiting = false
     @Published var transmissionProgress: TransmissionProgress?
     @Published var lastTransmit: TransmissionLog? = TransmissionLog(type: .write(size: 334, date: nil))
- 
+
+    // Params
+    var showOnlyDirectories = false
+
     // MARK: - Actions
     func listDirectory(directory: String, fileTransferClient: FileTransferClient) {
         startCommand(description: "List directory")
@@ -84,8 +87,17 @@ class FileCommandsViewModel: ObservableObject {
     }
     
     private func setEntries(_ entries: [BlePeripheral.DirectoryEntry]) {
-        // Order by directory and as a second criteria order by name
-        self.entries = entries.sorted(by: {
+        // Filter if needed
+        let filteredEntries: [BlePeripheral.DirectoryEntry]
+        if showOnlyDirectories {
+            filteredEntries = entries.filter{$0.isDirectory}
+        }
+        else {
+            filteredEntries = entries
+        }
+                
+        // Sort by directory and as a second criteria order by name
+        self.entries = filteredEntries.sorted(by: {
             if case .directory = $0.type, case .directory = $1.type  {    // Both directories: order alphabetically
                 return $0.name < $1.name
             }
@@ -110,15 +122,15 @@ class FileCommandsViewModel: ObservableObject {
         let filename = path + entry.name
         startCommand(description: "Deleting \(filename)")
         isTransmiting = true
-        fileTransferClient.deleteFile(path: filename) { [weak self]  result in
+        fileTransferClient.deleteFile(path: filename) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
                 self.isTransmiting = false
                 
                 switch result {
-                case .success(let success):
-                    DLog("deleteFile \(filename) success: \(success)")
+                case .success:
+                    DLog("deleteFile \(filename)")
                     self.listDirectory(directory: self.path, fileTransferClient: fileTransferClient)      // Force list again directory
                     self.lastTransmit = TransmissionLog(type: .delete)
                     
@@ -187,13 +199,43 @@ class FileCommandsViewModel: ObservableObject {
                 case .success(let date):
                     self.lastTransmit = TransmissionLog(type: .write(size: data.count, date: date))
                     completion?(.success(date))
-                    
+
                 case .failure(let error):
                     DLog("writeFile \(filename) error: \(error)")
                     self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
                     completion?(.failure(error))
                 }
                 
+                self.endCommand()
+            }
+        }
+    }
+    
+    func moveFile(fromPath: String, toPath: String, fileTransferClient: FileTransferClient?, completion: ((Result<Void, Error>) -> Void)? = nil) {
+        guard let fileTransferClient = fileTransferClient else { return }
+        startCommand(description: "Moving from \(fromPath) to \(toPath)")
+        
+        isTransmiting = true
+        
+        fileTransferClient.moveFile(fromPath: fromPath, toPath: toPath) { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                self.isTransmiting = false
+
+                switch result {
+                case .success:
+                    DLog("moveFile from \(fromPath) to \(toPath)")
+                   // self.listDirectory(directory: self.path, fileTransferClient: fileTransferClient)      // Force list again directory
+                    self.lastTransmit = TransmissionLog(type: .move)
+                    completion?(.success(()))
+
+                case .failure(let error):
+                    DLog("moveFile  from \(fromPath) to \(toPath). error: \(error)")
+                    self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
+                    completion?(.failure(error))
+                }
+
                 self.endCommand()
             }
         }

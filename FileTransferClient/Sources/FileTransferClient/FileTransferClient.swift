@@ -40,6 +40,17 @@ public class FileTransferClient {
 
     // MARK: - Init
     /**
+     Don't use this init.
+     It is provided to help testing views in Xcode
+     */
+    public init() {
+        guard AppEnvironment.inXcodePreviewMode else {
+            assert(false)
+            return
+        }
+    }
+    
+    /**
      Init from CBPeripheral
      
      - parameters:
@@ -167,6 +178,12 @@ public class FileTransferClient {
     public func listDirectory(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
         blePeripheral?.listDirectory(path: path, completion: completion)
     }
+    
+    /// Moves a single file from fromPath to toPath
+    public func moveFile(fromPath: String, toPath: String, completion: ((Result<Void, Error>) -> Void)?) {
+        blePeripheral?.moveFile(fromPath: fromPath, toPath: toPath, completion: completion)
+    }
+
 }
 
 // MARK: - Custom Notifications

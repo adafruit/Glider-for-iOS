@@ -183,10 +183,12 @@ public class FileClientPeripheralConnectionManager: ObservableObject {
         
         // Update @Published value
         selectedPeripheral = selectedClient?.blePeripheral
+        
         DLog("selectedPeripheral: \(selectedPeripheral?.name ?? selectedPeripheral?.identifier.uuidString ?? "nil")")
+        NotificationCenter.default.post(name: .didSelectPeripheralForFileTransfer, object: nil, userInfo: [BleManager.NotificationUserInfoKey.uuid.rawValue: selectedPeripheral?.identifier as Any])
         
         // Check that the selected client corresponds to the selected peripheral
-        if let selectedPeripheralIdentifier = selectedPeripheral?.identifier, let selectedPeripheralClient = fileTransferClients[selectedPeripheralIdentifier],  selectedClient != selectedPeripheralClient {
+        if let selectedPeripheralIdentifier = selectedPeripheral?.identifier, let selectedPeripheralClient = fileTransferClients[selectedPeripheralIdentifier], userSelectedTransferClient != selectedPeripheralClient {
             setSelectedClient(selectedPeripheralClient)
         }
     }
@@ -275,6 +277,7 @@ extension Notification.Name {
     public static let willReconnectToKnownPeripheral = Notification.Name(kPrefix+".willReconnectToKnownPeripheral")
     public static let didReconnectToKnownPeripheral = Notification.Name(kPrefix+".didReconnectToKnownPeripheral")
     public static let didFailToReconnectToKnownPeripheral = Notification.Name(kPrefix+".didFailToReconnectToKnownPeripheral")
+    public static let didSelectPeripheralForFileTransfer = Notification.Name(kPrefix+".didSelectPeripheralForFileTransfer")
 }
 
 
