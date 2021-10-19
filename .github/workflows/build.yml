@@ -9,7 +9,6 @@ jobs:
   build-stable:
     name: Build the Glider in stable Xcode
     runs-on: macos-11
-    needs: build-stable
     strategy:
       matrix:
         xcode: ['13.0']
