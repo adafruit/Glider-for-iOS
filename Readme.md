@@ -7,7 +7,10 @@ This BLE service is geared towards file transfer to and from a device running th
 
 ## Installing
 
-TODO: Add Swift Package Manager Support
+#### Swift Package Manager
+
+- File > Swift Packages > Add Package Dependency
+- Add `https://github.com/adafruit/Glider-for-iOS/tree/multiconnection/FileTransferClient`
 
 
 ## Usage
@@ -41,11 +44,17 @@ TODO: Add Swift Package Manager Support
 	completion is called with *.success* wjith the modification Date or *.failure* with an *Error*
         progress is called with the transmission status *typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)*
 
-- **deleteFile**: Deletes the file or directory at the given full path. Directories must be empty to be deleted.
+- **deleteFile**: Deletes the file or directory at the given full path
 
 		func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?)
 
 	completion is called with *.success* or *.failure* with an *Error*
+
+- **moveFile**: Moves the file at the origin full path to the destination full path
+
+        func moveFile(fromPath: String, toPath: String, completion: ((Result<Void, Error>) -> Void)?)
+
+    completion is called with *.success* or *.failure* with an *Error*
 
 
 - **makeDirectory**: Creates a new directory at the given full path. If a parent directory does not exist, then it will also be created. If any name conflicts with an existing file, an error will be returned
