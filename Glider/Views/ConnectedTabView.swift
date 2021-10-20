@@ -15,7 +15,7 @@ struct ConnectedTabView: View {
         case debug = 2
     }
     
-    @EnvironmentObject private var connectionManager: FileClientPeripheralConnectionManager
+    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
     @State private var selectedTabIndex: Int = Tabs.connected.rawValue
     
      // MARK: - Lifecycle
@@ -90,6 +90,6 @@ struct ConnectedTabView: View {
 struct ConnectedView_Previews: PreviewProvider {
     static var previews: some View {
         ConnectedTabView()
-            .environmentObject(FileClientPeripheralConnectionManager.shared)
+            .environmentObject(FileTransferConnectionManager.shared)
     }
 }

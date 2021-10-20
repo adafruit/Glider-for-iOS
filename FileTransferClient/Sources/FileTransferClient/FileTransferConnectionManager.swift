@@ -1,5 +1,5 @@
 //
-//  FileClientPeripheralConnectionManager.swift
+//  FileTransferConnectionManager.swift
 //  Glider
 //
 //  Created by Antonio García on 21/6/21.
@@ -8,24 +8,24 @@
 import Foundation
 import CoreBluetooth
 
-public class FileClientPeripheralConnectionManager: ObservableObject {
+public class FileTransferConnectionManager: ObservableObject {
     // Singleton
-    public static let shared = FileClientPeripheralConnectionManager()
+    public static let shared = FileTransferConnectionManager()
     
     // Constants
     private static let knownPeripheralsKey = "knownPeripherals"
  
     // Published
     @Published public var peripherals = [BlePeripheral]()           // Peripherals connected or connecting
+    @Published public var selectedPeripheral: BlePeripheral?        // Selected peripheral from all the connected peripherals. User can select it using setSelectedClient. The system picks one automatically if it gets disconnected or the user didnt select one
+    @Published public var isSelectedPeripheralReconnecting = false  // Is the selected peripheral reconnecting
     @Published public var isConnectedOrReconnecting = false         // Is any peripheral connected or trying to connect
-    @Published public var selectedPeripheral: BlePeripheral?        // Selected peripheral from all the connected peripherals. User can select it using setSelectedClient, but the system picks one automatically if it gets disconnected or the user didnt select one
-    @Published public var isSelectedPeripheralReconnecting = false
 
     // Parameters
     var userDefaults = UserDefaults.standard        // Can be replaced if data saved needs to be shared
     
     // Data
-    private let reconnectTimeout: TimeInterval
+    private let reconnectTimeout: TimeInterval = 2
     
     private var isReconnectingPeripheral = [UUID: Bool]()           // Is reconnecting the peripheral with identifier
     private var fileTransferClients = [UUID: FileTransferClient]()  // FileTransferClient for each peripheral
@@ -37,9 +37,9 @@ public class FileClientPeripheralConnectionManager: ObservableObject {
     private var recoveryPeripheralIdentifier: UUID? // (UUID, Timer)?      // Data for a peripheral that was disconnected. There is a timer
 
     //  MARK: - Lifecycle
-    public init(reconnectTimeout: TimeInterval = 2) {
+    private init() {//(reconnectTimeout: TimeInterval = 2) {
         //DLog("Init FileClientPeripheralConnectionManager")
-        self.reconnectTimeout = reconnectTimeout
+        //self.reconnectTimeout = reconnectTimeout
         
         // Init peripherals
         self.peripherals = BleManager.shared.connectedOrConnectingPeripherals()

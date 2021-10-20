@@ -26,7 +26,7 @@ class RootViewModel: ObservableObject {
     // MARK: - Actions
     func gotoMain() {
         // Check if we are reconnecting to a known Peripheral. If AppState.shared.fileTransferClient is not nil, no need to scan, just go to the connected screen
-        if FileClientPeripheralConnectionManager.shared.selectedClient != nil {
+        if FileTransferConnectionManager.shared.selectedClient != nil {
             destination = .connected
         }
         else {

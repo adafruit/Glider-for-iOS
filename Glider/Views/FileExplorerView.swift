@@ -10,7 +10,7 @@ import FileTransferClient
 
 struct FileExplorerView: View {
     
-    @EnvironmentObject private var connectionManager: FileClientPeripheralConnectionManager
+    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
     @StateObject private var model = FileSystemViewModel()
     @State private var path = FileTransferPathUtils.rootDirectory
     @State private var isShowingPeripheralChooser = false
@@ -198,7 +198,7 @@ struct FileExplorerView_Previews: PreviewProvider {
                 .tabItem {
                     Label("Explorer", systemImage: "folder")
                 }
-                .environmentObject(FileClientPeripheralConnectionManager.shared)
+                .environmentObject(FileTransferConnectionManager.shared)
         }
     }
 }

@@ -10,7 +10,7 @@ import FileTransferClient
 
 struct PeripheralChooserView: View {
     // Params
-    @EnvironmentObject private var connectionManager: FileClientPeripheralConnectionManager
+    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
   
     // Data
     enum ActiveAlert: Identifiable {
@@ -41,7 +41,7 @@ struct PeripheralChooserView: View {
                         Spacer()
                         Button(
                             action: {
-                                FileClientPeripheralConnectionManager.shared.reconnect()
+                                FileTransferConnectionManager.shared.reconnect()
                             },
                             label: {
                                 Label("Find paired peripherals", systemImage: "arrow.clockwise")
@@ -55,13 +55,13 @@ struct PeripheralChooserView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         else {
-                        let selectedPeripheral = FileClientPeripheralConnectionManager.shared.selectedPeripheral
+                        let selectedPeripheral = FileTransferConnectionManager.shared.selectedPeripheral
                         ForEach(connectedPeripherals, id: \.identifier) { peripheral in
                             
                             HStack {
                                 Button(action: {
                                     DLog("Select: \(peripheral.name ?? peripheral.identifier.uuidString)")
-                                    FileClientPeripheralConnectionManager.shared.setSelectedClient(blePeripheral: peripheral)
+                                    FileTransferConnectionManager.shared.setSelectedClient(blePeripheral: peripheral)
                                 }, label: {
                                     Text(verbatim: "\(peripheral.name ?? "<unknown>")")
                                         .if(selectedPeripheral?.identifier == peripheral.identifier) {
@@ -113,7 +113,7 @@ struct PeripheralChooserView: View {
 struct PeripheralChooserView_Previews: PreviewProvider {
     static var previews: some View {
         PeripheralChooserView()
-            .environmentObject(FileClientPeripheralConnectionManager.shared)
+            .environmentObject(FileTransferConnectionManager.shared)
 
     }
 }

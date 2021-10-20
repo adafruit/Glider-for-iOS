@@ -10,7 +10,7 @@ import FileTransferClient
 
 struct InfoView: View {
     // Params
-    @EnvironmentObject private var connectionManager: FileClientPeripheralConnectionManager
+    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
     
     // Data
     enum ActiveAlert: Identifiable {
@@ -88,7 +88,7 @@ struct InfoView_Previews: PreviewProvider {
                 .tabItem {
                     Label("Info", systemImage: "link")
                 }
-                .environmentObject(FileClientPeripheralConnectionManager.shared)
+                .environmentObject(FileTransferConnectionManager.shared)
         }
     }
 }

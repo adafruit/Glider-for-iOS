@@ -31,22 +31,9 @@ class FileProviderExtension: NSFileProviderExtension {
         DLog("FileProviderExtension deinit")
         LogManager.shared.save()
     }
+
     
-    /*
-     private weak var extensionDidBecomeActiveObserver: NSObjectProtocol?
-     private func registerNotifications(enabled: Bool) {
-     if enabled {
-     extensionDidBecomeActiveObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.NSExtensionHostDidBecomeActive, object: nil, queue: .main, using: { notification in
-     
-     })
-     
-     } else {
-     if let extensionDidBecomeActiveObserver = extensionDidBecomeActiveObserver {NotificationCenter.default.removeObserver(extensionDidBecomeActiveObserver)}
-     
-     }
-     }*/
-    
-    // MARK: - Mandatory
+    // MARK: - Mandatory methods
     override func item(for identifier: NSFileProviderItemIdentifier) throws -> NSFileProviderItem {
         //DLog("item: \(identifier.rawValue)")
         guard let item = gliderClient.metadataCache.fileProviderItem(for: identifier) else {
@@ -269,25 +256,16 @@ class FileProviderExtension: NSFileProviderExtension {
     }
     
     
-    // MARK: - Actions
-    
-    /* implement the actions for items here
-     each of the actions follows the same pattern:
-     - make a note of the change in the local model
-     - schedule a server request as a background task to inform the server of the change
-     - call the completion block with the modified item in its post-modification state
-     */
-    
+   
     // MARK: - Enumeration
-    
     override func enumerator(for containerItemIdentifier: NSFileProviderItemIdentifier) throws -> NSFileProviderEnumerator {
-        let maybeEnumerator: NSFileProviderEnumerator? = nil
-        if (containerItemIdentifier == NSFileProviderItemIdentifier.rootContainer) {
+        let enumerator: NSFileProviderEnumerator? = nil
+        if containerItemIdentifier == NSFileProviderItemIdentifier.rootContainer {
             // instantiate an enumerator for the container root
             DLog("enumerator for rootContainer")
             return FileProviderEnumerator(gliderClient: gliderClient, path: FileTransferPathUtils.rootDirectory, filename: nil )
             
-        } else if (containerItemIdentifier == NSFileProviderItemIdentifier.workingSet) {
+        } else if containerItemIdentifier == NSFileProviderItemIdentifier.workingSet {
             // TODO: instantiate an enumerator for the working set
             DLog("TODO: enumerator for workingSet")
             
@@ -310,7 +288,7 @@ class FileProviderExtension: NSFileProviderExtension {
                 }
             }
         }
-        guard let enumerator = maybeEnumerator else {
+        guard let enumerator = enumerator else {
             DLog("TODO: enumerator")
             throw NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:])
         }
@@ -318,7 +296,15 @@ class FileProviderExtension: NSFileProviderExtension {
     }
     
     
-    // MARK: - Optional
+    // MARK: - Actions
+    
+    /* implement the actions for items here
+     each of the actions follows the same pattern:
+     - make a note of the change in the local model
+     - schedule a server request as a background task to inform the server of the change
+     - call the completion block with the modified item in its post-modification state
+     */
+    
     override func createDirectory(withName directoryName: String, inParentItemIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
         DLog("createDirectory: '\(directoryName)' at \(parentItemIdentifier.rawValue)")
         
@@ -712,3 +698,19 @@ class FileProviderExtension: NSFileProviderExtension {
         return localFileHasChanges
     }
 }
+
+
+
+/*
+ private weak var extensionDidBecomeActiveObserver: NSObjectProtocol?
+ private func registerNotifications(enabled: Bool) {
+ if enabled {
+ extensionDidBecomeActiveObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.NSExtensionHostDidBecomeActive, object: nil, queue: .main, using: { notification in
+ 
+ })
+ 
+ } else {
+ if let extensionDidBecomeActiveObserver = extensionDidBecomeActiveObserver {NotificationCenter.default.removeObserver(extensionDidBecomeActiveObserver)}
+ 
+ }
+ }*/

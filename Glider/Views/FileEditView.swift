@@ -15,7 +15,7 @@ struct FileEditView: View {
     @Environment(\.filename) private var filename
     
     //
-    @EnvironmentObject private var connectionManager: FileClientPeripheralConnectionManager
+    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
     
     // Data
     @StateObject private var model = FileEditViewModel()
@@ -137,7 +137,7 @@ struct FileEditView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             FileEditView(fileTransferClient: nil, path: "/")
-                .environmentObject(FileClientPeripheralConnectionManager.shared)
+                .environmentObject(FileTransferConnectionManager.shared)
                 .environment(\.filename, "test.txt")
         }
         .navigationViewStyle(StackNavigationViewStyle())

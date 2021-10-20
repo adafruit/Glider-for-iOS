@@ -14,7 +14,7 @@ struct RootView: View {
     
     //
     @StateObject private var model = RootViewModel()
-    @ObservedObject private var connectionManager = FileClientPeripheralConnectionManager.shared
+    @ObservedObject private var connectionManager = FileTransferConnectionManager.shared
 
     // Snackbar
     @State private var snackBarIsShowing = false
@@ -67,7 +67,7 @@ struct RootView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             DLog("App moving to the foreground. Force reconnect")
-            FileClientPeripheralConnectionManager.shared.reconnect()
+            FileTransferConnectionManager.shared.reconnect()
         }
         .environmentObject(model)
         .environmentObject(connectionManager)

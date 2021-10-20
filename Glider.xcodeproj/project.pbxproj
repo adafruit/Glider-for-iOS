@@ -364,8 +364,8 @@
 			isa = PBXGroup;
 			children = (
 				A9ED1F282687530700B6C27F /* FileProviderExtension.swift */,
-				A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */,
 				A9ED1F2C2687530700B6C27F /* FileProviderEnumerator.swift */,
+				A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */,
 				A9E3CBAD2704D1FB00CD4BA3 /* GliderClient.swift */,
 				A9ED1F2E2687530700B6C27F /* Info.plist */,
 				A9ED1F2F2687530700B6C27F /* GliderFileProvider.entitlements */,
@@ -838,15 +838,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.6;
+				MARKETING_VERSION = 0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -859,15 +860,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.6;
+				MARKETING_VERSION = 0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -881,15 +883,16 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.6;
+				MARKETING_VERSION = 0.7;
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -905,15 +908,16 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.6;
+				MARKETING_VERSION = 0.7;
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";

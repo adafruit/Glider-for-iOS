@@ -9,7 +9,7 @@ import SwiftUI
 import FileTransferClient
 
 struct FileMoveView: View {
-    @EnvironmentObject private var connectionManager: FileClientPeripheralConnectionManager
+    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
     @Environment(\.presentationMode) private var presentationMode
 
     @StateObject private var model = FileSystemViewModel()
@@ -131,6 +131,6 @@ struct FileMoveView: View {
 struct FileMoveView_Previews: PreviewProvider {
     static var previews: some View {
         FileMoveView(fromPath: FileTransferPathUtils.rootDirectory, fileTransferClient: nil)
-            .environmentObject(FileClientPeripheralConnectionManager.shared)
+            .environmentObject(FileTransferConnectionManager.shared)
     }
 }

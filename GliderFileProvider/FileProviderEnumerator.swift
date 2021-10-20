@@ -57,9 +57,9 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
          */
         
         
-        // Enumerate items for .rootDirectory
         DLog("Enumerate for '\(self.fullPath)' requested")
         
+        // Enumerate items for .rootDirectory
         gliderClient.listDirectory(path: self.path) { [weak self] result in
             guard let self = self else { return }
             

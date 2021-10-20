@@ -66,7 +66,7 @@ class StartupViewModel: ObservableObject {
             self.activeAlert = .bluetoothUnsupported
         }
         else {
-            FileClientPeripheralConnectionManager.shared.reconnect()
+            FileTransferConnectionManager.shared.reconnect()
         }
     }
     

@@ -12,27 +12,26 @@ class GliderClient {
     // Config
     private static let maxTimeToWaitForBleSupport: TimeInterval = 1.0
     private static let willDeviceDisconnectAfterWrite = true    // If the device automatically disconnects after a write, dont signal on write. Wait for the disconnection to happen
-    //private let clientSemaphore = DispatchSemaphore(value: 0)
-    
+
     enum GliderError: LocalizedError {
         case bluetoothNotSupported
         case connectionFailed
         case invalidInternalState
         case undefinedFileProviderItem(identifier: String)
     }
-    
+
     // Singleton (used to manage concurrency)
     static let shared = GliderClient()
-    
+
     // Data
     private var setupFileTransferCompletion: ((Result<FileTransferClient, Error>)->Void)?       // Saved completion handler when setupFileTransferIfNeeded is in progress
 
     // Data - Bluetooth support
     private let bleSupportSemaphore = DispatchSemaphore(value: 0)
     private var startTime: CFAbsoluteTime!
-    private var autoReconnect: FileClientPeripheralConnectionManager?
+    private var autoReconnect: FileTransferConnectionManager?
     private let fileTransferSemaphore = DispatchSemaphore(value: 1)
-    
+
     // Data - FileTransfer
     private var fileTransferClient: FileTransferClient?
 
@@ -198,7 +197,7 @@ class GliderClient {
     
     // MARK: - Reconnect
     private func startAutoReconnect() {
-        autoReconnect = FileClientPeripheralConnectionManager()
+        autoReconnect = FileTransferConnectionManager.shared
     }
     
     private func forceReconnect() -> Bool {
@@ -290,29 +289,3 @@ class GliderClient {
         }
     }
 }
-
-
-/*
-extension GliderClient.GliderError {
-    var errorDescription: String? {
-        switch self {
-        case .bluetoothNotSupported: return "Bluetooth not supported"
-        case .connectionFailed: return "Connection Failed"
-        case .invalidInternalState: return "Invalid internal state"
-        case .undefinedFileProviderItem(let path): return "Undefined item: \(path)"
-        }
-    }
-    
-    var failureReason: String? {
-        return errorDescription
-    }
-    
-    var helpAnchor: String? {
-        return errorDescription
-    }
-    
-    var recoverySuggestion: String? {
-        return errorDescription
-    }
-}
-*/

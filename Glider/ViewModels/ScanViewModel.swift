@@ -67,7 +67,7 @@ class ScanViewModel: ObservableObject {
         // Start autoreconnect timer
         autoreconnectTimer = Timer.scheduledTimer(withTimeInterval: Self.kRepeatTimeForForcedAutoreconnect, repeats: true, block: { timer in
             DLog("Scan periodic autoreconnect check...")
-            FileClientPeripheralConnectionManager.shared.reconnect()
+            FileTransferConnectionManager.shared.reconnect()
         })
     }
     
