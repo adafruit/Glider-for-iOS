@@ -250,11 +250,12 @@ public class BleManager: NSObject {
     }
     
     func reconnecToPeripherals(peripheralUUIDs identifiers: [UUID], withServices services: [CBUUID], timeout: Double? = nil) -> Bool {
+        guard let centralManager = centralManager else { return false }
         var reconnecting = false
         
         // Reconnect to a known identifier
         if !identifiers.isEmpty {
-            let knownPeripherals = centralManager?.retrievePeripherals(withIdentifiers: identifiers)
+            let knownPeripherals = centralManager.retrievePeripherals(withIdentifiers: identifiers)
             if let peripherals = knownPeripherals {
                 for peripheral in peripherals {
                     DLog("Try to connect to known peripheral: \(peripheral.identifier)")
@@ -268,7 +269,7 @@ public class BleManager: NSObject {
         }
         
         // Reconnect even if no identifier was saved if we are already connected to a device with the expected services
-        if let peripherals = centralManager?.retrieveConnectedPeripherals(withServices: services), !peripherals.isEmpty {
+        if let peripherals = centralManager.retrieveConnectedPeripherals(withServices: services), !peripherals.isEmpty {
             let alreadyConnectingOrConnectedPeripheralsIds = BleManager.shared.connectedOrConnectingPeripherals().map{$0.identifier}
             for peripheral in peripherals {
                 if !alreadyConnectingOrConnectedPeripheralsIds.contains(peripheral.identifier) {

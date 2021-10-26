@@ -11,7 +11,6 @@ import FileTransferClient
 class StartupViewModel: ObservableObject {
     // Config
     private static let kMaxTimeToWaitForBleSupport: TimeInterval = 5.0
-    private static let kServicesToReconnect = [BlePeripheral.kFileTransferServiceUUID]
     private static let kReconnectTimeout = 2.0
     
     // Published

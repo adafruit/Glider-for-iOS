@@ -46,8 +46,9 @@ struct RootView: View {
                 .padding(.bottom, 80)
                 .onReceive(NotificationCenter.default.publisher(for: .didSelectPeripheralForFileTransfer)) { notification in
                     
-                    let name = BleManager.shared.peripheral(from: notification)?.debugName ?? "<unknown>"
-                    showSnackBar(title: "Connected to: \(name)", backgroundColor: .gray)
+                    if let peripheral = BleManager.shared.peripheral(from: notification) {
+                        showSnackBar(title: "Connected to: \(peripheral.debugName)", backgroundColor: .gray)
+                    }
                 }
                 .onChange(of: connectionManager.isSelectedPeripheralReconnecting) { isSelectedPeripheralReconnecting in
                     if isSelectedPeripheralReconnecting {
