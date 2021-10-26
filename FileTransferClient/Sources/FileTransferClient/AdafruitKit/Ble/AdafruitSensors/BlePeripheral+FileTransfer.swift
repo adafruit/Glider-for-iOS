@@ -51,15 +51,16 @@ extension BlePeripheral {
     }
 
     // Data types
-    public struct DirectoryEntry {
-        public enum EntryType {
+    public struct DirectoryEntry: Codable {
+        public enum EntryType: Codable {
             case file(size: Int)
             case directory
 
+            /*
             public enum CodingKeys: String, CodingKey {
                 case file
                 case directory
-            }
+            }*/
         }
 
         public let name: String
@@ -713,6 +714,7 @@ extension BlePeripheral {
     }
 }
 
+/*
 // MARK: - Codable extension for DirectoryEntry
 extension BlePeripheral.DirectoryEntry.EntryType: Encodable {
     public func encode(to encoder: Encoder) throws {
@@ -738,3 +740,4 @@ extension BlePeripheral.DirectoryEntry.EntryType: Decodable {
 }
 
 extension BlePeripheral.DirectoryEntry: Codable { }
+*/

@@ -11,45 +11,36 @@ import FileTransferClient
 class GliderClient {
     // Config
     private static let maxTimeToWaitForBleSupport: TimeInterval = 1.0
-    private static let willDeviceDisconnectAfterWrite = true    // If the device automatically disconnects after a write, dont signal on write. Wait for the disconnection to happen
+    private static let willDeviceDisconnectAfterWrite = true    // If the device automatically disconnects after a write, don't signal on write. Wait for the disconnection to happen
 
     enum GliderError: LocalizedError {
         case bluetoothNotSupported
         case connectionFailed
-        case invalidInternalState
+        //case invalidInternalState
         case undefinedFileProviderItem(identifier: String)
     }
 
     // Singleton (used to manage concurrency)
-    static let shared = GliderClient()
+    private static var sharedInstances = [UUID: GliderClient]()
+    static func shared(peripheralIdentifier: UUID) -> GliderClient {
+        guard let instance = sharedInstances[peripheralIdentifier] else {
+            // Create new instance
+            DLog("Create GliderClient instance for \(peripheralIdentifier)")
+            let client = GliderClient(identifier: peripheralIdentifier)
+            sharedInstances[peripheralIdentifier] = client
+            return client
+        }
+        return instance     // Return existing instance
+    }
 
     // Data
-    private var setupFileTransferCompletion: ((Result<FileTransferClient, Error>)->Void)?       // Saved completion handler when setupFileTransferIfNeeded is in progress
-
-    // Data - Bluetooth support
-    private let bleSupportSemaphore = DispatchSemaphore(value: 0)
-    private var startTime: CFAbsoluteTime!
-    private var autoReconnect: FileTransferConnectionManager?
+    private let identifier: UUID
     private let fileTransferSemaphore = DispatchSemaphore(value: 1)
-
-    // Data - FileTransfer
-    private var fileTransferClient: FileTransferClient?
-
-    // Data - Metadata Cache
-    var metadataCache = FileMetadataCache()
-    
     
     // MARK: -
-    private init() {
-        registerDisconnectionNotifications(enabled: true)
+    private init(identifier: UUID) {
+        self.identifier = identifier
     }
-    
-    deinit {
-        registerDisconnectionNotifications(enabled: false)
-        disconnect()
-        registerAutoReconnectNotifications(enabled: false)
-    }
-    
     
     // MARK: - Commands (with semaphore to avoid concurrent requests)
     func readFile(path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
@@ -147,145 +138,35 @@ class GliderClient {
     }
     
     private func setupFileTransferIfNeeded(completion: @escaping (Result<FileTransferClient, Error>)->Void) {
+        let fileTransferClient = FileTransferConnectionManager.shared.fileTransferClient(fromIdentifier: identifier)
         guard fileTransferClient == nil || !fileTransferClient!.isFileTransferEnabled else {
             // It is already setup
-            self.bleSupportSemaphore.signal()
             completion(.success(fileTransferClient!))
             return
         }
-
-        self.setupFileTransferCompletion = completion
         
-        // check Bluetooth status
-        startTime = CFAbsoluteTimeGetCurrent()
-        let bleState = BleManager.shared.state
-        DLog("Initial bluetooth state: \(bleState.rawValue)")
-        if bleState == .unknown || bleState == .resetting {
-            registerBleStateNotifications(enabled: true)
-
-            let semaphoreResult = bleSupportSemaphore.wait(timeout: .now() + Self.maxTimeToWaitForBleSupport)
-            if semaphoreResult == .timedOut {
-                DLog("Bluetooth support check time-out. status: \(BleManager.shared.state.rawValue)")
-            }
-
-            registerBleStateNotifications(enabled: false)
-        }
-        
-        DispatchQueue.main.async {
-            self.checkBleSupport()
-        }
-
-        if willReconnectToKnownPeripheralObserver == nil  { // Check that observer is null to avoid multiple observers
-            registerAutoReconnectNotifications(enabled: true)
-        }
-    }
-    
-    // MARK: - Check Ble Support
-    private func checkBleSupport() {
+        // Check ble supported
         if BleManager.shared.state == .unsupported {
             DLog("Bluetooth unsupported")
-            setupFileTransferCompletion?(.failure(GliderError.bluetoothNotSupported))
+            completion(.failure(GliderError.bluetoothNotSupported))
+        }
+
+        // Wait until ble status is known
+        FileTransferConnectionManager.shared.waitForKnownBleStatusSynchronously()
+        let isTryingToReconnect = FileTransferConnectionManager.shared.reconnect()
+        
+        // Wait until connections are restored (if needed)
+        if isTryingToReconnect {
+            FileTransferConnectionManager.shared.waitForStableConnectionsSynchronously()
+        }
+
+        // Result with fileTransferClient
+        if let fileTransferClient = FileTransferConnectionManager.shared.fileTransferClient(fromIdentifier: identifier) {
+            completion(.success(fileTransferClient))
         }
         else {
-            startAutoReconnect()
-            let isTryingToConnect = forceReconnect()
-            if (!isTryingToConnect) {
-                
-            }
+            completion(.failure(GliderError.connectionFailed))
         }
-    }
-    
-    // MARK: - Reconnect
-    private func startAutoReconnect() {
-        autoReconnect = FileTransferConnectionManager.shared
-    }
-    
-    private func forceReconnect() -> Bool {
-        guard let autoReconnect = autoReconnect else { DLog("Error: reconnect called without calling startAutoReconnect"); return false }
-        return autoReconnect.reconnect()
-    }
-    
-    func disconnect() {
-        if let blePeripheral = fileTransferClient?.blePeripheral {
-            BleManager.shared.disconnect(from: blePeripheral)
-        }
-        
-        fileTransferClient = nil
-    }
-    
-    // MARK: - Autoreconect Notifications
-    private var didUpdateBleStateObserver: NSObjectProtocol?
-
-    private func registerBleStateNotifications(enabled: Bool) {
-        let notificationCenter = NotificationCenter.default
-        if enabled {
-            didUpdateBleStateObserver = notificationCenter.addObserver(forName: .didUpdateBleState, object: nil, queue: nil) { [weak self] _ in
-                // Status received. Continue executing...
-                DLog("Bluetooth status received: \(BleManager.shared.state.rawValue)")
-                self?.bleSupportSemaphore.signal()
-             }
-        } else {
-            if let didUpdateBleStateObserver = didUpdateBleStateObserver {notificationCenter.removeObserver(didUpdateBleStateObserver)}
-        }
-    }
-    
-    private weak var willReconnectToKnownPeripheralObserver: NSObjectProtocol?
-    private weak var didReconnectToKnownPeripheralObserver: NSObjectProtocol?
-    private weak var didFailToReconnectToKnownPeripheralObserver: NSObjectProtocol?
-    
-    private func registerAutoReconnectNotifications(enabled: Bool) {
-        if enabled  {
-            willReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .willReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.willReconnectToKnownPeripheral(notification)})
-            didReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .didReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.didReconnectToKnownPeripheral(notification)})
-            didFailToReconnectToKnownPeripheralObserver = NotificationCenter.default.addObserver(forName: .didFailToReconnectToKnownPeripheral, object: nil, queue: .main, using: { [weak self] notification in self?.didFailToReconnectToKnownPeripheral(notification)})
-        } else {
-            if let willReconnectToKnownPeripheralObserver = willReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(willReconnectToKnownPeripheralObserver)}
-            if let didReconnectToKnownPeripheralObserver = didReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(didReconnectToKnownPeripheralObserver)}
-            if let didFailToReconnectToKnownPeripheralObserver = didFailToReconnectToKnownPeripheralObserver {NotificationCenter.default.removeObserver(didFailToReconnectToKnownPeripheralObserver)}
-        }
-    }
-    
-    
-    private func willReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("GliderClient willReconnectToKnownPeripheral")
-        //isRestoringConnection = true
     }
 
-    private func didReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("GliderClient didReconnectToKnownPeripheral")
-        guard let fileTransferClient = fileTransferClient else {
-            setupFileTransferCompletion?(.failure(GliderError.invalidInternalState))
-            return
-        }
-
-        setupFileTransferCompletion?(.success((fileTransferClient)))
-    }
-
-    private func didFailToReconnectToKnownPeripheral(_ notification: Notification) {
-        DLog("GliderClient didFailToReconnectToKnownPeripheral")
-        setupFileTransferCompletion?(.failure(GliderError.connectionFailed))
-    }
-    
-    // MARK: - Disconnection Notifications
-    private weak var didDisconnectFromPeripheralObserver: NSObjectProtocol?
-
-    private func registerDisconnectionNotifications(enabled: Bool) {
-        let notificationCenter = NotificationCenter.default
-        
-        DLog("Register disconnection notification enabled: \(enabled)")
-        if enabled {
-          didDisconnectFromPeripheralObserver = notificationCenter.addObserver(forName: .didDisconnectFromPeripheral, object: nil, queue: .main, using: {[weak self] notification in self?.didDisconnectFromPeripheral(notification: notification)})
- 
-        } else {
-            if let didDisconnectFromPeripheralObserver = didDisconnectFromPeripheralObserver {notificationCenter.removeObserver(didDisconnectFromPeripheralObserver)}
-        }
-    }
-    
-    private func didDisconnectFromPeripheral(notification: Notification) {
-        DLog("Warning: peripheral has disconnected!!")
-        fileTransferClient = nil
-        if Self.willDeviceDisconnectAfterWrite {
-            fileTransferSemaphore.signal()
-        }
-    }
 }

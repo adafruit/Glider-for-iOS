@@ -255,23 +255,22 @@ public class BleManager: NSObject {
         
         // Reconnect to a known identifier
         if !identifiers.isEmpty {
-            let knownPeripherals = centralManager.retrievePeripherals(withIdentifiers: identifiers)
-            if let peripherals = knownPeripherals {
-                for peripheral in peripherals {
-                    DLog("Try to connect to known peripheral: \(peripheral.identifier)")
-                    discovered(peripheral: peripheral, advertisementData: nil)
-                    if let blePeripheral = peripheralsFound[peripheral.identifier] {
-                        connect(to: blePeripheral, timeout: timeout)
-                        reconnecting = true
-                    }
+            let peripheralsWithIdentifiers = centralManager.retrievePeripherals(withIdentifiers: identifiers)
+            for peripheral in peripheralsWithIdentifiers {
+                DLog("Try to connect to known peripheral: \(peripheral.identifier)")
+                discovered(peripheral: peripheral, advertisementData: nil)
+                if let blePeripheral = peripheralsFound[peripheral.identifier] {
+                    connect(to: blePeripheral, timeout: timeout)
+                    reconnecting = true
                 }
             }
         }
         
         // Reconnect even if no identifier was saved if we are already connected to a device with the expected services
-        if let peripherals = centralManager.retrieveConnectedPeripherals(withServices: services), !peripherals.isEmpty {
+        let peripheralsWithServices = centralManager.retrieveConnectedPeripherals(withServices: services)
+        if !peripheralsWithServices.isEmpty {
             let alreadyConnectingOrConnectedPeripheralsIds = BleManager.shared.connectedOrConnectingPeripherals().map{$0.identifier}
-            for peripheral in peripherals {
+            for peripheral in peripheralsWithServices {
                 if !alreadyConnectingOrConnectedPeripheralsIds.contains(peripheral.identifier) {
                     DLog("Connect to peripheral with known service: \(peripheral.identifier)")
                     discovered(peripheral: peripheral, advertisementData: nil )

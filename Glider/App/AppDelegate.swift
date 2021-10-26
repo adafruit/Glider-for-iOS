@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import FileTransferClient
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
         // UI
         setupAppearances()
+        
+        // Setup FileTransferConnectionManager userDefaults
+        FileTransferConnectionManager.shared.userDefaults = UserDefaults(suiteName: "group.com.adafruit.Glider")!
         
         return true
     }

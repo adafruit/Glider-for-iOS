@@ -7,8 +7,13 @@
 
 import Foundation
 import CoreBluetooth
+import Combine
 
 public class FileTransferConnectionManager: ObservableObject {
+    // Config
+    private static let kMaxTimeToWaitForBleSupport: TimeInterval = 5.0
+    private static let kMaxTimeToWaitForPeripheralConnection: TimeInterval = 5.0
+
     // Singleton
     public static let shared = FileTransferConnectionManager()
     
@@ -20,22 +25,29 @@ public class FileTransferConnectionManager: ObservableObject {
     @Published public var selectedPeripheral: BlePeripheral?        // Selected peripheral from all the connected peripherals. User can select it using setSelectedClient. The system picks one automatically if it gets disconnected or the user didnt select one
     @Published public var isSelectedPeripheralReconnecting = false  // Is the selected peripheral reconnecting
     @Published public var isConnectedOrReconnecting = false         // Is any peripheral connected or trying to connect
-
-    // Parameters
-    var userDefaults = UserDefaults.standard        // Can be replaced if data saved needs to be shared
+    @Published public var isAnyPeripheralConnecting = false
     
+    // Parameters
+    public var userDefaults = UserDefaults.standard        // Can be replaced if data saved needs to be shared
+
     // Data
     private let reconnectTimeout: TimeInterval = 2
     
     private var isReconnectingPeripheral = [UUID: Bool]()           // Is reconnecting the peripheral with identifier
     private var fileTransferClients = [UUID: FileTransferClient]()  // FileTransferClient for each peripheral
-    private var userSelectedTransferClient: FileTransferClient? {   // User selected client (or picked automatically by the system if user didnt pick or got disconnected)
+    private var userSelectedTransferClient: FileTransferClient? {   // User selected client (or picked automatically by the system if user didn't pick or got disconnected)
         didSet {
             updateSelectedPeripheral()
         }
     }
     private var recoveryPeripheralIdentifier: UUID? // (UUID, Timer)?      // Data for a peripheral that was disconnected. There is a timer
 
+    // Data - Ble status
+    private let bleSupportSemaphore = DispatchSemaphore(value: 0)
+    private let connectionSemaphore = DispatchSemaphore(value: 0)
+    private var cancellables = Set<AnyCancellable>()
+
+    
     //  MARK: - Lifecycle
     private init() {//(reconnectTimeout: TimeInterval = 2) {
         //DLog("Init FileClientPeripheralConnectionManager")
@@ -69,10 +81,54 @@ public class FileTransferConnectionManager: ObservableObject {
         userSelectedTransferClient = client
     }
     
+    public func peripheral(fromIdentifier identifier: UUID) -> BlePeripheral? {
+        return self.peripherals.first(where: {$0.identifier == identifier})
+    }
+    
+    public func fileTransferClient(fromIdentifier identifier: UUID) -> FileTransferClient? {
+        return self.fileTransferClients[identifier]
+    }
+    
+    public func waitForKnownBleStatusSynchronously() {
+        let bleState = BleManager.shared.state
+        if bleState == .unknown || bleState == .resetting {
+            NotificationCenter.default.publisher(for: .didUpdateBleState)
+                .sink { [weak self] notification in
+                    guard let self = self else { return }
+                    DLog("Bluetooth status received: \(BleManager.shared.state.rawValue)")
+                    self.bleSupportSemaphore.signal()
+                    self.cancellables.removeAll()       // Notification observer no longer needed
+                }
+                .store(in: &cancellables)
+
+            let semaphoreResult = self.bleSupportSemaphore.wait(timeout: .now() + Self.kMaxTimeToWaitForBleSupport)
+            if semaphoreResult == .timedOut {
+                DLog("Bluetooth support check time-out. status: \(BleManager.shared.state.rawValue)")
+            }
+        }
+    }
+    
+    public func waitForStableConnectionsSynchronously() {
+        guard isAnyPeripheralConnecting else  { return }
+        DLog("Wait for connection started")
+        $isAnyPeripheralConnecting.sink { isAnyPeripheralConnecting in
+            if !isAnyPeripheralConnecting {
+                DLog("Wait for connection finished")
+                self.connectionSemaphore.signal()
+                self.cancellables.removeAll()       // Notification observer no longer needed
+            }
+        }
+        .store(in: &cancellables)
+        
+        let semaphoreResult = self.connectionSemaphore.wait(timeout: .now() + Self.kMaxTimeToWaitForPeripheralConnection)
+        if semaphoreResult == .timedOut {
+            DLog("Wait for connection check time-out")
+        }
+    }
+    
     /// Returns if is trying to reconnect, or false if it is quickly decided that there is not possible
     @discardableResult
     public func reconnect() -> Bool {
-        
         // Filter-out from knownPeripherals those that are not connected or connecting at the moment
         let alreadyConnectedOrConnectingUUIDs = peripherals.map{$0.identifier}
         let reconnectUUIDs = knownPeripheralsUUIDs.filter{ !alreadyConnectedOrConnectingUUIDs.contains($0) }
@@ -170,7 +226,14 @@ public class FileTransferConnectionManager: ObservableObject {
     
     // MARK: - Utils
     private func updateConnectionStatus() {
-        let isConnectedOrReconnecting = !peripherals.isEmpty || isReconnectingPeripheral.values.contains(true) || recoveryPeripheralIdentifier != nil
+        // Update @Published isAnyPeripheralConnecting
+        let isAnyPeripheralConnecting = isReconnectingPeripheral.values.contains(true)
+        if isAnyPeripheralConnecting != self.isAnyPeripheralConnecting {
+            self.isAnyPeripheralConnecting = isAnyPeripheralConnecting
+        }
+        
+        // Update @Published isConnectedOrReconnecting
+        let isConnectedOrReconnecting = !peripherals.isEmpty || isAnyPeripheralConnecting || recoveryPeripheralIdentifier != nil
         guard isConnectedOrReconnecting != self.isConnectedOrReconnecting else { return }       // Only update if changed
 
         // Update @Published value
@@ -199,19 +262,19 @@ public class FileTransferConnectionManager: ObservableObject {
         
         // Update peripherals
         self.peripherals = BleManager.shared.connectedOrConnectingPeripherals()
-        isReconnectingPeripheral[peripheral.identifier] = false // Finished reconnection process
-        updateConnectionStatus()
         
         // Finish FileTransfer setup on connection
-        let _ = FileTransferClient(connectedBlePeripheral: peripheral, services: [.filetransfer]) { result in
-            
+        let _ = FileTransferClient(connectedBlePeripheral: peripheral, services: [.filetransfer]) { [unowned self] result in
+            self.isReconnectingPeripheral[peripheral.identifier] = false // Finished reconnection process
+            self.updateConnectionStatus()
+
             switch result {
             case .success(let client):
                 if client.isFileTransferEnabled {
                     //DLog("Reconnected to peripheral successfully")
                     self.fileTransferClients[peripheral.identifier] = client
 
-                    if peripheral.identifier == self.selectedPeripheral?.identifier {       // If it the selectedPeripheral, then the reconnection finished successfuly
+                    if peripheral.identifier == self.selectedPeripheral?.identifier {       // If it is the selectedPeripheral, then the reconnection finished successfuly
                         self.isSelectedPeripheralReconnecting = false
                     }
 

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A905E1DF26824ADA0051C558 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = A905E1DE26824AD90051C558 /* Readme.md */; };
-		A919BA6A26791585000C9291 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919BA6926791585000C9291 /* AppState.swift */; };
 		A947FE432654383A007A5E5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FE422654383A007A5E5A /* Preview Assets.xcassets */; };
 		A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4C26543893007A5E5A /* ButtonStyles.swift */; };
 		A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4E26543893007A5E5A /* DefaultBackground.swift */; };
@@ -98,7 +97,6 @@
 
 /* Begin PBXFileReference section */
 		A905E1DE26824AD90051C558 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
-		A919BA6926791585000C9291 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		A947FE3826543839007A5E5A /* Glider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glider.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A947FE422654383A007A5E5A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A947FE442654383A007A5E5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -311,7 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				A947FE6226543893007A5E5A /* Scanner */,
-				A919BA6926791585000C9291 /* AppState.swift */,
 				A9678E8D26E828E2003936DC /* LogManager.swift */,
 				A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */,
 			);
@@ -570,7 +567,6 @@
 				A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */,
 				A947FE8B26543894007A5E5A /* TodoView.swift in Sources */,
 				A96E4E2A271D9BA70023C03A /* FileSystemView.swift in Sources */,
-				A919BA6A26791585000C9291 /* AppState.swift in Sources */,
 				A9D6E35527190A2E0048EB12 /* TransmissionStatus.swift in Sources */,
 				A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */,
 				A98B67D8271BA83E00787A02 /* FileCommandsStatusBarView.swift in Sources */,

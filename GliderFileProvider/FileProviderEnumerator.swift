@@ -11,7 +11,8 @@ import FileTransferClient
 /// Enumerator for both directories and files
 class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
     // Data
-    private let gliderClient: GliderClient
+    private var metadataCache: FileMetadataCache
+    private let blePeripheral: BlePeripheral?
     private let path: String
     private let filename: String?       // If not nil the enumerator will only return information for a specific file
     
@@ -21,8 +22,9 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
     // MARK: -
     
     /// Set the filename to nil to enumerate directories, or provide a filename to enumerate only that specific file
-    init (gliderClient: GliderClient, path: String, filename: String?) {
-        self.gliderClient = gliderClient
+    init (metadataCache: FileMetadataCache, blePeripheral: BlePeripheral?, path: String = FileTransferPathUtils.rootDirectory, filename: String? = nil) {
+        self.metadataCache = metadataCache
+        self.blePeripheral = blePeripheral
         self.path = path
         self.filename = filename
         super.init()
@@ -57,24 +59,40 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
          */
         
         
-        DLog("Enumerate for '\(self.fullPath)' requested")
-        
-        // Enumerate items for .rootDirectory
+        DLog("Enumerate '\(blePeripheral?.debugName ?? "")\(FileProviderItem.peripheralSeparator)\(self.fullPath)' requested")
+        if let blePeripheral = blePeripheral {
+            enumeratePeripheralItems(blePeripheral: blePeripheral, for: observer, startingAt: page)
+        }
+        else {
+            let peripherals = FileTransferConnectionManager.shared.peripherals
+            let items = peripherals.map { FileProviderItem(blePeripheralIdentifier: $0.identifier) }
+            
+            self.metadataCache.setDirectoryItems(items: items)
+            self.lastUpdateDate = Date()
+            
+            observer.didEnumerate(items)
+            observer.finishEnumerating(upTo: nil)
+            DLog("Enumerate '\(blePeripheral?.debugName ?? "")\(FileProviderItem.peripheralSeparator)\(self.fullPath)' finished. \(items.count) found")
+        }
+    }
+    
+    private func enumeratePeripheralItems(blePeripheral: BlePeripheral, for observer: NSFileProviderEnumerationObserver, startingAt page: NSFileProviderPage) {
+        let gliderClient = GliderClient.shared(peripheralIdentifier: blePeripheral.identifier)
         gliderClient.listDirectory(path: self.path) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let entries):
-                
                 if let entries = entries {
+                    
                     // Always update all items returned, even if we are enumerating an specific file
-                    let items = entries.map { FileProviderItem(path: self.path, entry: $0) }
+                    let items = entries.map { FileProviderItem(blePeripheralIdentifier: blePeripheral.identifier, path: self.path, entry: $0) }
                     //DLog("listDirectory returned \(items.count) items")
-                    self.gliderClient.metadataCache.setDirectoryItems(items: items)
+                    self.metadataCache.setDirectoryItems(items: items)
                     self.lastUpdateDate = Date()
                     
                     if let filename = self.filename {   // If the enumerator only asked for a specific file, then return only that file
-                        let item = entries.filter{$0.name == filename}.first.map { FileProviderItem(path: self.path, entry: $0) }
+                        let item = entries.filter{$0.name == filename}.first.map { FileProviderItem(blePeripheralIdentifier: blePeripheral.identifier, path: self.path, entry: $0) }
                         if let item = item {
                             observer.didEnumerate([item])
                             observer.finishEnumerating(upTo: nil)
@@ -98,10 +116,15 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
             case .failure(let error):
                 observer.finishEnumeratingWithError(NSFileProviderError(.serverUnreachable))
                 //observer.finishEnumeratingWithError(NSFileProviderError(.notAuthenticated))
-                DLog("listDirectory '\(self.path)' error: \(error)")
+                if self.blePeripheral == nil {
+                    DLog("Error: enumeratePeripheralItems with nil peripehral")
+                }
+                else {
+                    DLog("listDirectory '\(self.path)' error: \(error)")
+                }
             }
             
-            DLog("Enumerate for '\(self.fullPath)' finished")
+            DLog("Enumerate for '\(blePeripheral.debugName)\(FileProviderItem.peripheralSeparator)\(self.fullPath)' finished")
         }
     }
     
@@ -121,7 +144,6 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
         let anchorDate = Date(timeIntervalSince1970: data)
         DLog("enumerateChanges for anchor date: \(anchorDate)")
     }
-
     
     func currentSyncAnchor(completionHandler: @escaping (NSFileProviderSyncAnchor?) -> Void) {
         guard let lastUpdateDate = self.lastUpdateDate else { completionHandler(nil); return }
