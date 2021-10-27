@@ -629,11 +629,11 @@ class FileProviderExtension: NSFileProviderExtension {
             completionHandler(nil, NSFileProviderError(.noSuchItem))
             return
         }
-        
+        /*
         // Save sync date
         fileProviderItem.lastUpdate = lastUsedDate ?? fileProviderItem.creation     // If no lastUsedDate is provided, we set the creation date
         self.metadataCache.setFileProviderItem(item: fileProviderItem)
-        
+        */
         // Upload lastUpdate to the peripheral
         // TODO: there is no API available on the FileTransfer protocol to do it
         

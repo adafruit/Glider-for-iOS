@@ -20,7 +20,8 @@ class FileMetadataCache {
     private static let buildNumberKey = "buildNumber"
 
     private var metadata = [NSFileProviderItemIdentifier: FileProviderItem]()
-            
+    private var dataSemaphore = DispatchSemaphore(value: 1)
+
     // MARK: - Lifecycle
     private init() {
         // Load from userDefaults
@@ -53,10 +54,14 @@ class FileMetadataCache {
     }*/
     
     func setFileProviderItem(item: FileProviderItem) {
+        dataSemaphore.wait()        // Don't append more data, till the delegate has finished processing it
+        
         metadata[item.itemIdentifier] = item
                 
         // Update user Defaults
         saveToUserDefaults()
+        
+        dataSemaphore.signal()  // Ready to receive more data
     }
     
     func setDirectoryItems(items: [FileProviderItem]) {
@@ -68,6 +73,9 @@ class FileMetadataCache {
             DLog("setDirectoryItems error: all items should have the same directory ")
             return
         }
+        
+        dataSemaphore.wait()        // Don't append more data, till the delegate has finished processing it
+
         
         // Sync: Delete any previous contents of the directory that is not present in the new items array
         let itemsIdentifiers = items.map {$0.itemIdentifier}
@@ -89,14 +97,24 @@ class FileMetadataCache {
         
         // Update user Defaults
         saveToUserDefaults()
+        
+        dataSemaphore.signal()  // Ready to receive more data
     }
     
     func deleteFileProviderItem(identifier: NSFileProviderItemIdentifier) {
+        dataSemaphore.wait()        // Don't append more data, till the delegate has finished processing it
+        
         metadata.removeValue(forKey: identifier)
         //metadata[identifier] = nil
+        
+        dataSemaphore.signal()  // Ready to receive more data
     }
     
     func fileProviderItem(for identifier: NSFileProviderItemIdentifier) -> FileProviderItem? {
+        defer {
+            dataSemaphore.signal()  // Ready to receive more data
+        }
+        dataSemaphore.wait()        // Don't append more data, till the delegate has finished processing it
         return metadata[identifier]
     }
     
@@ -108,15 +126,19 @@ class FileMetadataCache {
     }
     
     private func loadFromUserDefaults() {
+        dataSemaphore.wait()        // Don't append more data, till the delegate has finished processing it
         guard let decodedData = Self.userDefaults.object(forKey: Self.fileMetadataKey) as? Data else { return }
         guard let decodedMetadata = try? JSONDecoder().decode([NSFileProviderItemIdentifier: FileProviderItem].self, from: decodedData) else {  DLog("Error decoding metadata"); return  }
         
         self.metadata = decodedMetadata
+        dataSemaphore.signal()  // Ready to receive more data
     }
     
     private func clear() {
+        dataSemaphore.wait()        // Don't append more data, till the delegate has finished processing it
         metadata = [:]
         saveToUserDefaults()
+        dataSemaphore.signal()  // Ready to receive more data
     }
 }
 
