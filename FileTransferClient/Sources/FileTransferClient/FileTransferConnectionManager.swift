@@ -89,6 +89,10 @@ public class FileTransferConnectionManager: ObservableObject {
         return self.fileTransferClients[identifier]
     }
     
+    public func isReconnectingPeripheral(withIdentifier identifier: UUID) -> Bool {
+        return isReconnectingPeripheral[identifier] ?? false
+    }
+    
     public func waitForKnownBleStatusSynchronously() {
         let bleState = BleManager.shared.state
         if bleState == .unknown || bleState == .resetting {
@@ -207,6 +211,14 @@ public class FileTransferConnectionManager: ObservableObject {
                     self.fileTransferClients[peripheralUUID] = nil      // Remove info from disconnnected peripheral (it will change selectedClient)
                     self.updateSelectedPeripheral()
                     self.isSelectedPeripheralReconnecting = false
+                }
+            }
+        }
+        else {      // Any other peripheral -> Also try to reconnect but status will not affect the selected client
+            DispatchQueue.main.async {
+                let isTryingToReconnect = BleManager.shared.reconnecToPeripherals(peripheralUUIDs: [peripheralUUID], withServices: [BlePeripheral.kFileTransferServiceUUID], timeout: self.reconnectTimeout)
+                if !isTryingToReconnect {
+                    self.fileTransferClients[peripheralUUID] = nil      // Remove info
                 }
             }
         }

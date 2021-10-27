@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A905E1DF26824ADA0051C558 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = A905E1DE26824AD90051C558 /* Readme.md */; };
+		A944E6862729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */; };
 		A947FE432654383A007A5E5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FE422654383A007A5E5A /* Preview Assets.xcassets */; };
 		A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4C26543893007A5E5A /* ButtonStyles.swift */; };
 		A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4E26543893007A5E5A /* DefaultBackground.swift */; };
@@ -97,6 +98,7 @@
 
 /* Begin PBXFileReference section */
 		A905E1DE26824AD90051C558 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
+		A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitWidthOnRegularSizeClass.swift; sourceTree = "<group>"; };
 		A947FE3826543839007A5E5A /* Glider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glider.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A947FE422654383A007A5E5A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A947FE442654383A007A5E5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				A947FE4E26543893007A5E5A /* DefaultBackground.swift */,
+				A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -572,6 +575,7 @@
 				A98B67D8271BA83E00787A02 /* FileCommandsStatusBarView.swift in Sources */,
 				A9678E8226E78797003936DC /* WaveView.swift in Sources */,
 				A947FE8426543894007A5E5A /* StartupView.swift in Sources */,
+				A944E6862729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift in Sources */,
 				A9678E8A26E7FB58003936DC /* LogView.swift in Sources */,
 				A947FEA426543894007A5E5A /* GliderApp.swift in Sources */,
 				A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */,

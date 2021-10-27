@@ -72,6 +72,7 @@ struct InfoView: View {
                 
                 Spacer()
             }
+            .limitWidthOnRegularSizeClass()
             .foregroundColor(Color.white)
             .padding(.bottom)
             .defaultGradientBackground()

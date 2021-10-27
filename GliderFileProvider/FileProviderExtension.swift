@@ -12,7 +12,7 @@ class FileProviderExtension: NSFileProviderExtension {
     // Data
     private var metadataCache = FileMetadataCache.shared
     private var fileManager = FileManager()
-    private var backgroundQueue = DispatchQueue.global(qos: .utility)
+    private var backgroundQueue = DispatchQueue.global(qos: .userInitiated)
     
     // MARK: -
     override init() {
@@ -64,7 +64,7 @@ class FileProviderExtension: NSFileProviderExtension {
 
         let partialPath = item.fullFilePath.deletingPrefix(FileTransferPathUtils.pathSeparator)
         let url = NSFileProviderManager.default.documentStorageURL.appendingPathComponent(partialPath, isDirectory: item.isDirectory)
-        DLog("urlForItem at: \(identifier.rawValue) -> \(url.absoluteString) isDirectory: \(item.isDirectory)")
+        //DLog("urlForItem at: \(identifier.rawValue) -> \(url.absoluteString) isDirectory: \(item.isDirectory)")
         return url
     }
     
@@ -358,18 +358,18 @@ class FileProviderExtension: NSFileProviderExtension {
     
     override func createDirectory(withName directoryName: String, inParentItemIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
         DLog("createDirectory: '\(directoryName)' at \(parentItemIdentifier.rawValue)")
-        
+
         guard let parentFileProviderItem = try? item(for: parentItemIdentifier) as? FileProviderItem else {
             completionHandler(nil, NSFileProviderError(.noSuchItem))
             return
         }
-        
+
         guard let blePeripheral = FileTransferConnectionManager.shared.selectedPeripheral else {
             DLog("Error: createDirectory with nil peripehral")
             completionHandler(nil, NSFileProviderError(.noSuchItem))
             return
         }
-        
+
         // Create fileProviderItem
         let fileProviderItem = FileProviderItem(blePeripheralIdentifier: blePeripheral.identifier, path: parentFileProviderItem.fileTransferPath, entry: BlePeripheral.DirectoryEntry(name: directoryName, type: BlePeripheral.DirectoryEntry.EntryType.directory, modificationDate: Date()))
         
@@ -427,7 +427,7 @@ class FileProviderExtension: NSFileProviderExtension {
         }
         
         deleteItemLocally(itemIdentifier: itemIdentifier) { result in
-            // Note: .failure not checked to avoid irresoluble situations when in an inconsist internal state (i.e. item exists in metadata but not locally)
+            // Note: .failure not checked to avoid irresoluble situations when in an inconsistent internal state (i.e. item exists in metadata but not locally)
             
             // Schedule delete in background
             backgroundQueue.async {
@@ -572,23 +572,24 @@ class FileProviderExtension: NSFileProviderExtension {
                             case .success(_ /*let date*/):
                                 DLog("rename step 1: createDirectory '\(renamedItem.fullFilePath)' result successful")
                                 
-                                
-                                gliderClient.deleteFile(path: fileProviderItem.fileTransferPath) { result in
-                                    switch result {
-                                    case .success:
-                                        DLog("rename step 2: deleteFile \(fileProviderItem.fullFilePath) result successful")
-                                        
-                                        
-                                    case .failure(let error):
-                                        DLog("rename step 2: deleteFile error: \(error)")
-                                        
-                                        if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
-                                            DLog("rename step 2 signal parent enumerator")
-                                            NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
-                                                DLog("rename step 2 parent enumerator signal finished")
+                                self.backgroundQueue.async {
+                                    gliderClient.deleteFile(path: fileProviderItem.fileTransferPath) { result in
+                                        switch result {
+                                        case .success:
+                                            DLog("rename step 2: deleteFile \(fileProviderItem.fullFilePath) result successful")
+                                            
+                                            
+                                        case .failure(let error):
+                                            DLog("rename step 2: deleteFile error: \(error)")
+                                            
+                                            if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                                                DLog("rename step 2 signal parent enumerator")
+                                                NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                                    DLog("rename step 2 parent enumerator signal finished")
+                                                }
                                             }
+                                            
                                         }
-                                        
                                     }
                                 }
                                 
@@ -720,9 +721,16 @@ class FileProviderExtension: NSFileProviderExtension {
         // Update metadata
         self.metadataCache.setFileProviderItem(item: fileProviderItem)
         
-        guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else { DLog("Error obtaining local url for createDirectory: \(fileProviderItem.fullFilePath)"); return }
+        guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else {
+            DLog("Error obtaining local url for createDirectory: \(fileProviderItem.fullFilePath)")
+            completion(.failure(GliderClient.GliderError.invalidInternalState))
+            return
+        }
         
-        guard !fileManager.fileExists(atPath: localUrl.path) else { completion(.success(())); return }
+        guard !fileManager.fileExists(atPath: localUrl.path) else {
+            completion(.success(()))
+            return
+        }
         
         do {
             try fileManager.createDirectory(at: localUrl, withIntermediateDirectories: true, attributes: [:])
@@ -735,7 +743,11 @@ class FileProviderExtension: NSFileProviderExtension {
     }
     
     private func deleteItemLocally(itemIdentifier: NSFileProviderItemIdentifier, completion: (Result<Void, Error>)->Void) {
-        guard let localUrl = self.urlForItem(withPersistentIdentifier: itemIdentifier) else { DLog("Error obtaining local url for deleteItem: \(itemIdentifier.rawValue)"); return }
+        guard let localUrl = self.urlForItem(withPersistentIdentifier: itemIdentifier) else {
+            DLog("Error obtaining local url for deleteItem: \(itemIdentifier.rawValue)")
+            completion(.failure(GliderClient.GliderError.invalidInternalState))
+            return
+        }
         
         // Update metadata (before real delete)
         self.metadataCache.deleteFileProviderItem(identifier: itemIdentifier)

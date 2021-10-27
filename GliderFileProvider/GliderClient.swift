@@ -16,7 +16,7 @@ class GliderClient {
     enum GliderError: LocalizedError {
         case bluetoothNotSupported
         case connectionFailed
-        //case invalidInternalState
+        case invalidInternalState
         case undefinedFileProviderItem(identifier: String)
     }
 
@@ -139,7 +139,8 @@ class GliderClient {
     
     private func setupFileTransferIfNeeded(completion: @escaping (Result<FileTransferClient, Error>)->Void) {
         let fileTransferClient = FileTransferConnectionManager.shared.fileTransferClient(fromIdentifier: identifier)
-        guard fileTransferClient == nil || !fileTransferClient!.isFileTransferEnabled else {
+        let isReconnecting = FileTransferConnectionManager.shared.isReconnectingPeripheral(withIdentifier: identifier)
+        guard fileTransferClient == nil || !fileTransferClient!.isFileTransferEnabled || isReconnecting else {
             // It is already setup
             completion(.success(fileTransferClient!))
             return
@@ -153,18 +154,27 @@ class GliderClient {
 
         // Wait until ble status is known
         FileTransferConnectionManager.shared.waitForKnownBleStatusSynchronously()
-        let isTryingToReconnect = FileTransferConnectionManager.shared.reconnect()
-        
-        // Wait until connections are restored (if needed)
-        if isTryingToReconnect {
+        if isReconnecting {     // Already reconnecting, just wait
+            DLog("Reconnecting. Wait...")
             FileTransferConnectionManager.shared.waitForStableConnectionsSynchronously()
+        }
+        else {
+            let isTryingToReconnect = FileTransferConnectionManager.shared.reconnect()
+            
+            // Wait until connections are restored (if needed)
+            if isTryingToReconnect {
+                DLog("Forced reconnecting. Wait...")
+                FileTransferConnectionManager.shared.waitForStableConnectionsSynchronously()
+            }
         }
 
         // Result with fileTransferClient
         if let fileTransferClient = FileTransferConnectionManager.shared.fileTransferClient(fromIdentifier: identifier) {
+            DLog("Connection ready")
             completion(.success(fileTransferClient))
         }
         else {
+            DLog("Connection failed")
             completion(.failure(GliderError.connectionFailed))
         }
     }
