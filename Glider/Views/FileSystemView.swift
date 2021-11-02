@@ -109,15 +109,13 @@ struct FileSystemView: View {
                             Label("Delete", systemImage: "trash")
                         }
                     }
-                    .if(!entry.isDirectory) {       // Move is available only for files
-                        $0.swipeActions(edge: .leading) {
-                            Button {
-                                isShowingMoveView.toggle()
-                            } label: {
-                                Label("Move", systemImage: "rectangle.2.swap")
-                            }
-                            .tint(.indigo)
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            isShowingMoveView.toggle()
+                        } label: {
+                            Label("Move", systemImage: "rectangle.2.swap")
                         }
+                        .tint(.indigo)
                     }
                     .sheet(isPresented: $isShowingMoveView, onDismiss: {
                         // Reload directory after moving

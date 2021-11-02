@@ -89,7 +89,7 @@ class ScanViewModel: ObservableObject {
     private func updateScannedPeripherals() {
         // Update peripheralAutoconnect
         if let peripheral = peripheralAutoConnect.update(peripheralList: peripheralList) {
-            // Connect to closest CPB
+            // Connect to closest peripheral
             connect(peripheral: peripheral)
         }
         
