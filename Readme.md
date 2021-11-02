@@ -41,7 +41,7 @@ This BLE service is geared towards file transfer to and from a device running th
 
 		func writeFile(path: String, data: Data, progress: ProgressHandler? = nil, completion: ((Result<Date?, Error>) -> Void)?)
 		
-	completion is called with *.success* wjith the modification Date or *.failure* with an *Error*
+	completion is called with *.success* with the modification Date or *.failure* with an *Error*
         progress is called with the transmission status *typealias ProgressHandler = ((_ transmittedBytes: Int, _ totalBytes: Int) -> Void)*
 
 - **deleteFile**: Deletes the file or directory at the given full path
