@@ -7,6 +7,7 @@
 
 import UIKit
 import FileProviderUI
+import FileTransferClient
 
 class DocumentActionViewController: FPUIActionExtensionViewController {
     

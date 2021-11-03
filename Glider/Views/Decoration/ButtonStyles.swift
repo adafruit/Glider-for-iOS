@@ -45,7 +45,7 @@ struct PrimaryButtonStyle: ButtonStyle {
                         .stroke(isEnabled ? color : Color.clear, lineWidth: 1)
                         .background((isEnabled ? (configuration.isPressed ? Color("button_primary_accent") :  Color.clear) : Color.gray).cornerRadius(8))
                 )
-                .animation(.easeOut(duration: 0.1))
+                //.animation(.easeOut(duration: 0.1))
         }
     }
 }
@@ -53,6 +53,7 @@ struct PrimaryButtonStyle: ButtonStyle {
 struct MainButtonStyle: ButtonStyle {
     var isDark = true
     var backgroundColor = Color("accent_main")
+    var isBackgroundFilled = true
     
     func makeBody(configuration: ButtonStyle.Configuration) -> some View {
         let backgroundPressed = isDark ? backgroundColor.darker() : backgroundColor.lighter()
@@ -64,9 +65,41 @@ struct MainButtonStyle: ButtonStyle {
             .padding(.horizontal)
             .padding(.vertical, 12)
             .contentShape(Rectangle())
+            .if(isBackgroundFilled) {
+                $0.background(
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(configuration.isPressed ? backgroundPressed : backgroundColor)
+                )
+            }
+            .if(!isBackgroundFilled) {
+                $0.background(
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(configuration.isPressed ? backgroundPressed : backgroundColor)
+                )
+            }
+    }
+}
+
+struct ListFooterButtonStyle: ButtonStyle {
+    var isDark = true
+    var backgroundColor = Color("accent_main")
+    
+    func makeBody(configuration: ButtonStyle.Configuration) -> some View {
+        let backgroundPressed = isDark ? backgroundColor.darker() : backgroundColor.lighter()
+        
+        configuration.label
+            .foregroundColor(configuration.isPressed ? backgroundPressed : backgroundColor)
+           // .font(.caption.bold())
+            //.textCase(.uppercase)
+        
+            //.foregroundColor(isDark ? Color("button_main_text") : Color(.white))
+            //.padding(.horizontal)
+            //.padding(.vertical, 2)
+            //.contentShape(Rectangle())
+        /*
             .background(
                 RoundedRectangle(cornerRadius: 4)
                     .fill(configuration.isPressed ? backgroundPressed : backgroundColor)
-            )
+            )*/
     }
 }

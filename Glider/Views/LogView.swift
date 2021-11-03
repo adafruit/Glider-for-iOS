@@ -13,7 +13,7 @@ struct LogView: View {
 //    @State private var showAppLog = true
     @State private var showFileProviderLog = false
     
-    @ObservedObject var logManagerFileProvider = LogManager(isFileProvider: true)
+    @StateObject private var logManagerFileProvider = LogManager(isFileProvider: true)
     
     init() {
         dateFormatter = DateFormatter()
@@ -36,6 +36,7 @@ struct LogView: View {
                                     .foregroundColor(.gray)
                                     .frame(width: 56, alignment: .leading)
                                 Text("\(entry.text)")
+                                    .font(.caption)
                                     .multilineTextAlignment(.leading)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .foregroundColor(showFileProviderLog ? .orange : .white)
@@ -54,6 +55,7 @@ struct LogView: View {
                 .onChange(of: entries.count) { count in
                     scroll.scrollTo(logManager.entries.last?.id, anchor: .bottom)
                 }
+                .padding(.vertical, 1)      // Fix scroll shown below navigation and tabbar
             }
             
             /*

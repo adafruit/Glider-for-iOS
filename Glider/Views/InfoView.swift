@@ -6,19 +6,24 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct InfoView: View {
     // Params
-    let fileTransferClient: FileTransferClient?
-  
+    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
+    
     // Data
     enum ActiveAlert: Identifiable {
-        case confirmUnpair
+        case confirmUnpair(blePeripheral: BlePeripheral)
         
-        var id: Int { hashValue }
+        var id: Int {
+            switch self {
+            case .confirmUnpair: return 1
+            }
+        }
     }
     @State private var activeAlert: ActiveAlert?
-
+    
     enum Destination {
         case todo
     }
@@ -33,13 +38,18 @@ struct InfoView: View {
                     destination: TodoView(),
                     tag: .todo,
                     selection: $destination) {
-                    EmptyView()
-                }
+                        EmptyView()
+                    }
                 
                 // Status
                 VStack {
+                    
+                    PeripheralChooserView()
+                        .padding(.top, 1) // Don't go below the navigation bar
+                    
                     Spacer()
-                    Text("The peripheral is ready.\nYou can now use the Files app to create, move, rename, and delete files or directories.").bold()
+                        .frame(height: 20)
+                    Text("You can now use the Files app to create, move, rename, and delete files or directories.").bold()
                     Spacer()
                 }
                 .multilineTextAlignment(.center)
@@ -56,61 +66,30 @@ struct InfoView: View {
                         Text("How to use the files app")
                             .frame(maxWidth: .infinity)
                     })
-                    .buttonStyle(MainButtonStyle())
-                    
-                    Button(action: {
-                        activeAlert = .confirmUnpair
-                    }, label: {
-                        Text("Disconnect and unpair...")
-                            .frame(maxWidth: .infinity)
-                    })
-                    .buttonStyle(MainButtonStyle(isDark: false, backgroundColor: Color("button_warning_background")))
+                        .buttonStyle(MainButtonStyle())
                 }
                 .padding(.horizontal)
-
+                
                 Spacer()
             }
+            .limitWidthOnRegularSizeClass()
             .foregroundColor(Color.white)
             .padding(.bottom)
             .defaultGradientBackground()
-            .navigationBarTitle("Connected", displayMode: .large)
-            .modifier(Alerts(activeAlert: $activeAlert, fileTransferClient: fileTransferClient))
+            .navigationBarTitle("Info", displayMode: .large)
         }
         .navigationViewStyle(StackNavigationViewStyle())
-    }
-    
-    private struct Alerts: ViewModifier {
-        @Binding var activeAlert: ActiveAlert?
-        let fileTransferClient: FileTransferClient?
-        
-        func body(content: Content) -> some View {
-            content
-                .alert(item: $activeAlert, content:  { alert in
-                    switch alert {
-                    case .confirmUnpair:
-                        return Alert(
-                            title: Text("Confirm unpairing"),
-                            message: Text("You will need to reset the pairing information for the peripheral on Settings->Bluetooth to re-establish the connnection"),
-                            primaryButton: .destructive(Text("Unpair")) {
-                                Settings.clearAutoconnectPeripheral()
-                                if let blePeripheral = fileTransferClient?.blePeripheral {
-                                    BleManager.shared.disconnect(from: blePeripheral)
-                                }
-                            },
-                            secondaryButton: .cancel(Text("Cancel")) {})
-                    }
-                })
-        }
     }
 }
 
 struct InfoView_Previews: PreviewProvider {
     static var previews: some View {
         TabView {
-            InfoView(fileTransferClient: nil)
+            InfoView()
                 .tabItem {
                     Label("Info", systemImage: "link")
                 }
+                .environmentObject(FileTransferConnectionManager.shared)
         }
     }
 }

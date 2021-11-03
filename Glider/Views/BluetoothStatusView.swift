@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct BluetoothStatusView: View {
     @State private var messageTitle: String

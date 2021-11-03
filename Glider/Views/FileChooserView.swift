@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct FileChooserView: View {
     @Environment(\.presentationMode) private var presentationMode
@@ -139,11 +140,10 @@ struct FileChooserView: View {
                 }
             }
         }
-        
     }
 }
 
-struct DirectoryChooserView_Previews: PreviewProvider {
+struct FileChooserViewView_Previews: PreviewProvider {
     static var previews: some View {
         FileChooserView(directory: .constant(FileTransferPathUtils.rootDirectory), fileTransferClient: nil)
     }

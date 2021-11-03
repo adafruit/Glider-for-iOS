@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FileTransferClient
 
 class RootViewModel: ObservableObject {
     
@@ -15,6 +16,7 @@ class RootViewModel: ObservableObject {
         case bluetoothStatus
         case scan
         case connected
+        case debug
         case test
         case todo
     }
@@ -24,7 +26,7 @@ class RootViewModel: ObservableObject {
     // MARK: - Actions
     func gotoMain() {
         // Check if we are reconnecting to a known Peripheral. If AppState.shared.fileTransferClient is not nil, no need to scan, just go to the connected screen
-        if AppState.shared.fileTransferClient != nil {
+        if FileTransferConnectionManager.shared.selectedClient != nil {
             destination = .connected
         }
         else {
