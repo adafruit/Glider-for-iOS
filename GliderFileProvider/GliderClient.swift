@@ -147,9 +147,10 @@ class GliderClient {
         }
         
         // Check ble supported
-        if BleManager.shared.state == .unsupported {
+        guard BleManager.shared.state != .unsupported else {
             DLog("Bluetooth unsupported")
             completion(.failure(GliderError.bluetoothNotSupported))
+            return
         }
 
         // Wait until ble status is known
