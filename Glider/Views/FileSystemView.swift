@@ -101,7 +101,6 @@ struct FileSystemView: View {
         func body(content: Content) -> some View {
             if #available(iOS 15.0, *) {
                 content
-                
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
                             model.delete(entry: entry, fileTransferClient: fileTransferClient)

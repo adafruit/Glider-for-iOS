@@ -14,6 +14,7 @@ struct LogView: View {
     @State private var showFileProviderLog = false
     
     @StateObject private var logManagerFileProvider = LogManager(isFileProvider: true)
+    @State private var updateScroll: Int = 0
     
     init() {
         dateFormatter = DateFormatter()
@@ -29,7 +30,8 @@ struct LogView: View {
                 ScrollView(.vertical) {
                     
                     LazyVStack {
-                        ForEach(entries, id: \.id) { entry in
+                        
+                        ForEach(Array(entries.enumerated()), id: \.offset) { index, entry in
                             HStack(alignment: .firstTextBaseline, spacing: 0) {
                                 Text(entry.date, formatter: dateFormatter)
                                     .font(.caption)
@@ -41,49 +43,18 @@ struct LogView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .foregroundColor(showFileProviderLog ? .orange : .white)
                             }
-                            .id(entry.id)
+                            .id(index)
                         }
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 40)
-                    
                 }
-             
-                .onDidAppear {      // Warning: there is a SwiftUI bug and onAppear is called when the view dissapears. More info: https://developer.apple.com/forums/thread/655338?page=3
-                    logManagerFileProvider.load()
-                    if let id = entries.last?.id {
-                        scroll.scrollTo(id, anchor: .bottom)
-                    }
-                }
-                .onChange(of: entries.count) { count in
-                    if let id = entries.last?.id {
-                        scroll.scrollTo(id, anchor: .bottom)
-                    }
+                .onChange(of: self.updateScroll) { _ in
+                    // Update scroll
+                    scroll.scrollTo(entries.count - 1, anchor: .bottom)
                 }
                 .padding(.vertical, 1)      // Fix scroll shown below navigation and tabbar
             }
-            
-            /*
-             HStack(spacing: 30) {
-             Toggle(isOn: $showAppLog) {
-             Text("Glider App")
-             .foregroundColor(.white)
-             }
-             .toggleStyle(SwitchToggleStyle(tint: Color("accent_main")))
-             
-             Toggle(isOn: $showFileProviderLog) {
-             Text("File-Provider")
-             .foregroundColor(.orange)
-             // .frame(maxWidth: .infinity, alignment: .trailing)
-             }
-             .toggleStyle(SwitchToggleStyle(tint: Color("accent_main")))
-             
-             }
-             .padding()
-             .frame(maxWidth: .infinity)
-             .background(Color.white.opacity(0.5))
-             
-             }*/
             .foregroundColor(.white)
             .defaultGradientBackground()
             .navigationBarTitle(showFileProviderLog ? "FileProvider Log" : "App Log", displayMode: .large)
@@ -110,6 +81,14 @@ struct LogView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {     // SwiftUI bug: onAppear does not work inside NavigationView, so use it here to trigger an update inside the NavigationView. More info: https://developer.apple.com/forums/thread/655338?page=3
+            logManagerFileProvider.load()
+
+            // Trigger scroll update
+            DispatchQueue.main.async {
+                self.updateScroll += 1
+            }
+        }
     }
 }
 
