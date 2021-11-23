@@ -13,7 +13,8 @@ class LogManager: ObservableObject {
     private static let applicationGroupSharedDirectoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.adafruit.Glider")!       // Shared between the app and extensions
     private static let logFilename = "log.json"
     private static let fileProviderFilename = "fileprovider_log.json"
-
+    private static let maxEntries = 10000
+    
     // Singleton
     static let shared = LogManager()
 
@@ -133,6 +134,9 @@ class LogManager: ObservableObject {
     func log(_ entry: Entry) {
         let appendHandler = {
             self.entries.append(entry)
+            
+            // Limit entries count
+            self.limitSizeIfNeeded()
         }
         
         // Make sure that we are publishing changes from the main thread
@@ -151,5 +155,12 @@ class LogManager: ObservableObject {
         entries.removeAll()
         save()
         Entry.idCounter = 0
+    }
+    
+    private func limitSizeIfNeeded() {
+        let currentSize = entries.count
+        if currentSize > Self.maxEntries {
+            entries.removeFirst(currentSize - Self.maxEntries)
+        }
     }
 }

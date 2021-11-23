@@ -48,12 +48,17 @@ struct LogView: View {
                     .padding(.bottom, 40)
                     
                 }
-                .onAppear {
+             
+                .onDidAppear {      // Warning: there is a SwiftUI bug and onAppear is called when the view dissapears. More info: https://developer.apple.com/forums/thread/655338?page=3
                     logManagerFileProvider.load()
-                    scroll.scrollTo(entries.last?.id, anchor: .bottom)
+                    if let id = entries.last?.id {
+                        scroll.scrollTo(id, anchor: .bottom)
+                    }
                 }
                 .onChange(of: entries.count) { count in
-                    scroll.scrollTo(logManager.entries.last?.id, anchor: .bottom)
+                    if let id = entries.last?.id {
+                        scroll.scrollTo(id, anchor: .bottom)
+                    }
                 }
                 .padding(.vertical, 1)      // Fix scroll shown below navigation and tabbar
             }

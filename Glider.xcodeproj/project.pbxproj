@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A905E1DF26824ADA0051C558 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = A905E1DE26824AD90051C558 /* Readme.md */; };
+		A91C52C7274D387600552886 /* UIView+AppearanceHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C52C6274D387600552886 /* UIView+AppearanceHandlers.swift */; };
 		A944E6862729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */; };
 		A947FE432654383A007A5E5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FE422654383A007A5E5A /* Preview Assets.xcassets */; };
 		A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4C26543893007A5E5A /* ButtonStyles.swift */; };
@@ -98,6 +99,7 @@
 
 /* Begin PBXFileReference section */
 		A905E1DE26824AD90051C558 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
+		A91C52C6274D387600552886 /* UIView+AppearanceHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+AppearanceHandlers.swift"; sourceTree = "<group>"; };
 		A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitWidthOnRegularSizeClass.swift; sourceTree = "<group>"; };
 		A947FE3826543839007A5E5A /* Glider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glider.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A947FE422654383A007A5E5A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 				A947FE5226543893007A5E5A /* View+If.swift */,
 				A947FE5326543893007A5E5A /* HideKeyboard.swift */,
 				A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */,
+				A91C52C6274D387600552886 /* UIView+AppearanceHandlers.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -581,6 +584,7 @@
 				A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */,
 				A98B67DA271D6D3800787A02 /* PeripheralChooserView.swift in Sources */,
 				A947FE8626543894007A5E5A /* View+If.swift in Sources */,
+				A91C52C7274D387600552886 /* UIView+AppearanceHandlers.swift in Sources */,
 				A98B67DC271D999200787A02 /* FileMoveView.swift in Sources */,
 				A9F22528265B9DE800D3B2C6 /* FileSystemViewModel.swift in Sources */,
 				A9678E8626E7D191003936DC /* InfoView.swift in Sources */,
@@ -838,7 +842,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -847,7 +851,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.7;
+				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -860,7 +864,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -869,7 +873,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.7;
+				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -883,7 +887,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -892,7 +896,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.7;
+				MARKETING_VERSION = 0.8;
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -908,7 +912,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -917,7 +921,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.7;
+				MARKETING_VERSION = 0.8;
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
