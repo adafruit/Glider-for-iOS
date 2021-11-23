@@ -55,8 +55,7 @@ class LogManager: ObservableObject {
     }
 
     // Data
-    struct Entry: /*Identifiable, */Hashable, Codable {
-        //static var idCounter = 0
+    struct Entry: Hashable, Codable {
         
         enum Category: Int, Codable {
             case unknown = -1
@@ -71,7 +70,6 @@ class LogManager: ObservableObject {
             case error = 1
         }
         
-        //let id: Int
         var category: Category
         var level: Level
         var text: String
@@ -85,8 +83,6 @@ class LogManager: ObservableObject {
             self.level = level
             self.text = text
             self.timestamp = timestamp ?? CFAbsoluteTimeGetCurrent()
-            //self.id = Self.idCounter
-            //Self.idCounter += 1
         }
         
         static func debug(text: String, category: Category, timestamp: CFAbsoluteTime? = nil) -> Self {
@@ -114,7 +110,6 @@ class LogManager: ObservableObject {
         do {
             let data = try Data(contentsOf: fileUrl, options: [])
             entries = try JSONDecoder().decode([Entry].self, from: data)
-            //Entry.idCounter = entries.count
         } catch {
             print("Log load error: \(error.localizedDescription)")      // don't use DLog to avoid recurve calls durint initilization
         }
@@ -154,7 +149,6 @@ class LogManager: ObservableObject {
     func clear() {
         entries.removeAll()
         save()
-        //Entry.idCounter = 0
     }
     
     private func limitSizeIfNeeded() {

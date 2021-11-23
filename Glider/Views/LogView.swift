@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import FileTransferClient
 
 struct LogView: View {
     private let dateFormatter: DateFormatter
     @ObservedObject var logManager = LogManager.shared
-//    @State private var showAppLog = true
     @State private var showFileProviderLog = false
     
     @StateObject private var logManagerFileProvider = LogManager(isFileProvider: true)
-    @State private var updateScroll: Int = 0
+    @State private var updateScrollId: Int = 0      // Scroll position is updated when this variable is changed
+    @State private var isShareSheetPresented = false
     
     init() {
         dateFormatter = DateFormatter()
@@ -49,7 +50,7 @@ struct LogView: View {
                     .padding(.horizontal)
                     .padding(.bottom, 40)
                 }
-                .onChange(of: self.updateScroll) { _ in
+                .onChange(of: self.updateScrollId) { _ in
                     // Update scroll
                     scroll.scrollTo(entries.count - 1, anchor: .bottom)
                 }
@@ -60,6 +61,14 @@ struct LogView: View {
             .navigationBarTitle(showFileProviderLog ? "FileProvider Log" : "App Log", displayMode: .large)
             .toolbar {
                 HStack {
+                    // Export
+                    Button(action: {
+                        isShareSheetPresented = true
+                    }, label: {
+                        Image(systemName: "square.and.arrow.up")
+                    })
+                    
+                    // Change between AppLog and FileProviderLog
                     Button(action: {
                         showFileProviderLog.toggle()
                     }, label: {
@@ -71,12 +80,20 @@ struct LogView: View {
                         }
                     })
                     
-                    
+                    // Clear log
                     Button(action: {
                         LogManager.shared.clear()
                     }, label: {
                         Image(systemName: "trash")
                     })
+                }
+            }
+            .sheet(isPresented: $isShareSheetPresented, onDismiss: nil) {
+                let entries = showFileProviderLog ? logManagerFileProvider.entries : logManager.entries
+                let text = shareText(entries: entries)
+                let filename = "\(showFileProviderLog ? "AppLog":"FileProvider")_b\(AppEnvironment.buildNumber ?? "-")"
+                if let data = text.data(using: .utf8), let textUrl = saveToTemporaryDirectory(data: data, resourceName: filename, fileExtension: "txt") {
+                    ActivityViewController(activityItems: [textUrl])
                 }
             }
         }
@@ -86,9 +103,32 @@ struct LogView: View {
 
             // Trigger scroll update
             DispatchQueue.main.async {
-                self.updateScroll += 1
+                self.updateScrollId += 1
             }
         }
+    }
+    
+    private func shareText(entries: [LogManager.Entry]) -> String {
+        var text = ""
+        for entry in entries {
+            let dateString = dateFormatter.string(from: entry.date)
+            text.append("\(dateString): \(entry.text)\n")
+        }
+        return text
+    }
+    
+    private func saveToTemporaryDirectory(data: Data, resourceName: String, fileExtension: String) -> URL? {
+        let tempDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        let targetURL = tempDirectoryURL.appendingPathComponent(resourceName).appendingPathExtension(fileExtension)
+        
+        do {
+            try data.write(to: targetURL, options: .atomic)
+            return targetURL
+        } catch let error {
+            DLog("Unable to create file: \(resourceName).\(fileExtension): \(error)")
+        }
+        
+        return nil
     }
 }
 

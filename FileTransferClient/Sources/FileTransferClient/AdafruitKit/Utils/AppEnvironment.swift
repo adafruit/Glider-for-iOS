@@ -32,4 +32,8 @@ public struct AppEnvironment {
     public static var appVersion: String? {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     }
+    
+    public static var buildNumber: String? {
+        return Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+    }
 }
