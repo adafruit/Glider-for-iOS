@@ -60,6 +60,7 @@ struct ScanView: View {
                         model.destination = .troubleshootConnection
                     }
                     .buttonStyle(MainButtonStyle())
+                    .hidden()   // Hidden until throubleshoot guide is ready
                     
                 }
                 .padding(.top, 40)

@@ -91,7 +91,7 @@ struct LogView: View {
             .sheet(isPresented: $isShareSheetPresented, onDismiss: nil) {
                 let entries = showFileProviderLog ? logManagerFileProvider.entries : logManager.entries
                 let text = shareText(entries: entries)
-                let filename = "\(showFileProviderLog ? "AppLog":"FileProvider")_b\(AppEnvironment.buildNumber ?? "-")"
+                let filename = "\(showFileProviderLog ? "AppLog":"FileProviderLog")_b\(AppEnvironment.buildNumber ?? "-")"
                 if let data = text.data(using: .utf8), let textUrl = saveToTemporaryDirectory(data: data, resourceName: filename, fileExtension: "txt") {
                     ActivityViewController(activityItems: [textUrl])
                 }
