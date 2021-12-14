@@ -163,7 +163,7 @@ struct FileExplorerView: View {
                     .buttonStyle(PrimaryButtonStyle(height: 36, foregroundColor: mainColor))
                     .disabled(isLoading)
                     .alert(isPresented: $showNewDirectoryDialog, TextFieldAlert(title: "New Directory", message: "Enter name for the new directory") { directoryName in
-                        if let directoryName = directoryName {
+                        if let selectedClient = selectedClient, let directoryName = directoryName {
                             let path = model.path + directoryName
                             model.makeDirectory(path: path, fileTransferClient: selectedClient)
                         }
@@ -181,9 +181,9 @@ struct FileExplorerView: View {
                     .buttonStyle(PrimaryButtonStyle(height: 36, foregroundColor: mainColor))
                     .disabled(isLoading)
                     .alert(isPresented: $showNewFileDialog, TextFieldAlert(title: "New File", message: "Enter name for the new file") { fileName in
-                        if let fileName = fileName {
+                        if let selectedClient = selectedClient, let fileName = fileName {
                             let path = model.path + fileName
-                            model.writeFile(filename: path, data: Data(), fileTransferClient: selectedClient)
+                            model.makeFile(filename: path, fileTransferClient: selectedClient)
                         }
                     })
             }

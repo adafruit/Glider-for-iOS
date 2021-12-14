@@ -74,7 +74,7 @@ struct FileEditView: View {
                 let hasChanged = (model.text ?? "") != editedContents
                 
                 Button(action: {
-                    if let data = editedContents.data(using: .utf8) {
+                    if let fileTransferClient = fileTransferClient, let data = editedContents.data(using: .utf8) {
                         model.writeFile(filename: filePath, data: data, fileTransferClient: fileTransferClient)
                     }
                     

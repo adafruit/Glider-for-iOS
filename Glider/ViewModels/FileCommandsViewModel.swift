@@ -57,9 +57,7 @@ class FileCommandsViewModel: ObservableObject {
         }
     }
     
-    func makeDirectory(path: String, fileTransferClient: FileTransferClient?) {
-        guard let fileTransferClient = fileTransferClient else { return }
-        
+    func makeDirectory(path: String, fileTransferClient: FileTransferClient) {
         // Make sure that the path ends with the separator
         //DLog("makeDirectory: \(path)")
         startCommand(description: "Creating \(path)")
@@ -82,6 +80,14 @@ class FileCommandsViewModel: ObservableObject {
                 }
                 
                 self.endCommand()
+            }
+        }
+    }
+    
+    func makeFile(filename: String, fileTransferClient: FileTransferClient) {
+        writeFile(filename: filename, data: Data(), fileTransferClient: fileTransferClient) { result in
+            if case .success = result {
+                self.listDirectory(directory: self.path, fileTransferClient: fileTransferClient)      // Force list again directory
             }
         }
     }
@@ -144,8 +150,7 @@ class FileCommandsViewModel: ObservableObject {
         }
     }
     
-    func readFile(filePath: String, fileTransferClient: FileTransferClient?, completion: ((Result<Data, Error>) -> Void)? = nil) {
-        guard let fileTransferClient = fileTransferClient else { return }
+    func readFile(filePath: String, fileTransferClient: FileTransferClient, completion: ((Result<Data, Error>) -> Void)? = nil) {
         startCommand(description: "Reading \(filePath)")
         isTransmiting = true
         
@@ -178,8 +183,7 @@ class FileCommandsViewModel: ObservableObject {
         }
     }
     
-    func writeFile(filename: String, data: Data, fileTransferClient: FileTransferClient?, completion: ((Result<Date?, Error>) -> Void)? = nil) {
-        guard let fileTransferClient = fileTransferClient else { return }
+    func writeFile(filename: String, data: Data, fileTransferClient: FileTransferClient, completion: ((Result<Date?, Error>) -> Void)? = nil) {
         startCommand(description: "Writing \(filename)")
         
         isTransmiting = true

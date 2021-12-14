@@ -37,18 +37,20 @@ class FileEditViewModel: FileCommandsViewModel {
         self.path = filePath
         
         // Initial read
-        readFile(filePath: filePath, fileTransferClient: fileTransferClient) { result in
-            switch result {
-            case .success(let data):
-                self.setData(data)
-            case .failure:
-                break
+        if let fileTransferClient = fileTransferClient {
+            readFile(filePath: filePath, fileTransferClient: fileTransferClient) { result in
+                switch result {
+                case .success(let data):
+                    self.setData(data)
+                case .failure:
+                    break
+                }
             }
         }
     }
     
  
-    override func writeFile(filename: String, data: Data, fileTransferClient: FileTransferClient?, completion: ((Result<Date?, Error>) -> Void)? = nil) {
+    override func writeFile(filename: String, data: Data, fileTransferClient: FileTransferClient, completion: ((Result<Date?, Error>) -> Void)? = nil) {
         super.writeFile(filename: filename, data: data, fileTransferClient: fileTransferClient) { result in
             switch result {
             case .success:
