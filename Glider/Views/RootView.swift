@@ -15,7 +15,7 @@ struct RootView: View {
     //
     @StateObject private var model = RootViewModel()
     @ObservedObject private var connectionManager = FileTransferConnectionManager.shared
-
+    
     // Snackbar
     @State private var snackBarIsShowing = false
     @State private var snackBarTitle = "Test"
@@ -57,7 +57,9 @@ struct RootView: View {
                 }
         }
         .onReceive(NotificationCenter.default.publisher(for: .didUpdateBleState)) { notification in
-            model.showWarningIfBluetoothStateIsNotReady()
+            if !Config.isSimulatingBluetooth {
+                model.showWarningIfBluetoothStateIsNotReady()
+            }
         }
         .onChange(of: connectionManager.isConnectedOrReconnecting) { isConnectedOrReconnecting in
             //DLog("isConnectedOrReconnecting: \(isConnectedOrReconnecting)")

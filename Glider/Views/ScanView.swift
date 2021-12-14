@@ -62,6 +62,22 @@ struct ScanView: View {
                     .buttonStyle(MainButtonStyle())
                     .hidden()   // Hidden until throubleshoot guide is ready
                     
+                    // Invisible button to autoconnect when simulating bluetooth
+                    #if SIMULATEBLUETOOTH
+                    if Config.isSimulatingBluetooth {
+                        Button {
+                            FileTransferConnectionManager.shared.simulateConnect()
+                            model.destination = .connected
+                        } label: {
+                            Text("-")
+                                .opacity(0.01)
+                                .contentShape(Rectangle())
+                                .frame(maxWidth: .infinity)
+                        }
+                        .frame(height: 44)
+                    }
+                    #endif
+                    
                 }
                 .padding(.top, 40)
             }
@@ -111,10 +127,15 @@ struct ScanView: View {
             }
             .frame(width: min(400, UIScreen.main.bounds.width))
             .onAppear {
+                if Config.isSimulatingBluetooth {
+                    animationCurrentFactor = 0.9
+                }
+                else {
                 DispatchQueue.main.async {
                     withAnimation(.linear(duration: WaveOpacityModifier.waveAnimationDuration).delay(0.5).repeatForever(autoreverses: false)) {
                         animationCurrentFactor = 1
                     }
+                }
                 }
             }
         }
@@ -227,7 +248,9 @@ extension View {
 
 struct ScanView_Previews: PreviewProvider {
     static var previews: some View {
+    
         ScanView()
+            .environmentObject(RootViewModel())
         //.previewDevice(PreviewDevice(rawValue: "iPad Air (4th generation)"))
         //.previewDevice(PreviewDevice(rawValue: "iPhone 12"))
         //.previewDevice(PreviewDevice(rawValue: "iPhone 12 Pro Max"))

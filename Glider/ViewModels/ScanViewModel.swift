@@ -52,7 +52,7 @@ class ScanViewModel: ObservableObject {
         stopScanning()
         registerNotifications(enabled: false)
     }
-
+    
     // MARK: - Scanning Actions
     private func startScanning() {
         updateScannedPeripherals()
