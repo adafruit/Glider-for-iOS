@@ -92,6 +92,14 @@ class FileCommandsViewModel: ObservableObject {
         }
     }
     
+    func renameFile(fromPath: String, toPath: String, fileTransferClient: FileTransferClient) {
+        moveFile(fromPath: fromPath, toPath: toPath, fileTransferClient: fileTransferClient)  { result in
+            if case .success = result {
+                self.listDirectory(directory: self.path, fileTransferClient: fileTransferClient)      // Force list again directory
+            }
+        }
+    }
+    
     private func setEntries(_ entries: [BlePeripheral.DirectoryEntry]) {
         // Filter if needed
         let filteredEntries: [BlePeripheral.DirectoryEntry]
