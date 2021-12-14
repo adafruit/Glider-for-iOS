@@ -16,7 +16,8 @@ struct FileEditView: View {
     
     //
     @EnvironmentObject private var connectionManager: FileTransferConnectionManager
-    
+    @Environment(\.safeAreaInsets) private var safeAreaInsets
+   
     // Data
     @StateObject private var model = FileEditViewModel()
     @State private var editedContents = "" //FileEditViewModel.defaultFileContentePlaceholder
@@ -110,7 +111,11 @@ struct FileEditView: View {
                 }
             }
             .padding(.horizontal)
+            .if(safeAreaInsets.bottom == 0) {       // Add bottom margin for devices without bottom safe area
+                $0.padding(.bottom)
+            }
         }
+        .padding(.bottom)
         .defaultGradientBackground(hidesKeyboardOnTap: true)
         .navigationBarTitle(filename, displayMode: .inline)
         .allowsHitTesting(!isInteractionDisabled)
@@ -141,5 +146,6 @@ struct FileEditView_Previews: PreviewProvider {
                 .environment(\.filename, "test.txt")
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        //.previewDevice(PreviewDevice(rawValue: "iPhone SE (2nd generation)"))
     }
 }

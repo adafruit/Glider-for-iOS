@@ -11,7 +11,8 @@ import FileTransferClient
 struct FileMoveView: View {
     @EnvironmentObject private var connectionManager: FileTransferConnectionManager
     @Environment(\.presentationMode) private var presentationMode
-
+    @Environment(\.safeAreaInsets) private var safeAreaInsets
+ 
     @StateObject private var model = FileSystemViewModel()
     let fromPath: String?
     let fileTransferClient: FileTransferClient?
@@ -121,6 +122,9 @@ struct FileMoveView: View {
                 }
             }
             .padding(.horizontal)
+            .if(safeAreaInsets.bottom == 0) {       // Add bottom margin for devices without bottom safe area
+                $0.padding(.bottom)
+            }
             .defaultGradientBackground()
             .navigationBarTitle("Move File", displayMode: .inline)
         }

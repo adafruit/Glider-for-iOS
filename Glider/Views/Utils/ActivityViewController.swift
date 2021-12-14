@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// from: https://stackoverflow.com/questions/56533564/showing-uiactivityviewcontroller-in-swiftui
 struct ActivityViewController: UIViewControllerRepresentable {
 
     var activityItems: [Any]
