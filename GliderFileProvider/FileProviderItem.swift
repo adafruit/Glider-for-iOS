@@ -118,7 +118,7 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
             }
         }
         else if blePeripheralIdentifier != nil { // Peripheral root
-            return [.allowsContentEnumerating, .allowsAddingSubItems, .allowsRenaming, .allowsDeleting]
+            return [.allowsContentEnumerating, .allowsAddingSubItems]
         }
         else {   // Root
             return [.allowsContentEnumerating]

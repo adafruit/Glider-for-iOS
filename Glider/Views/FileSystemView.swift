@@ -96,12 +96,12 @@ struct FileSystemView: View {
         let entry: BlePeripheral.DirectoryEntry
         let fileTransferClient: FileTransferClient
         @State private var isShowingMoveView = false
+        @State private var isShowingRenameView = false
 
         @ViewBuilder
         func body(content: Content) -> some View {
             if #available(iOS 15.0, *) {
                 content
-                
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
                             model.delete(entry: entry, fileTransferClient: fileTransferClient)
@@ -116,6 +116,15 @@ struct FileSystemView: View {
                             Label("Move", systemImage: "rectangle.2.swap")
                         }
                         .tint(.indigo)
+                      
+                        
+                        Button {
+                            isShowingRenameView.toggle()
+                        } label: {
+                            Label("Rename", systemImage: "pencil")
+                        }
+                        .tint(.cyan)
+                        
                     }
                     .sheet(isPresented: $isShowingMoveView, onDismiss: {
                         // Reload directory after moving
@@ -125,6 +134,13 @@ struct FileSystemView: View {
                     }) {
                         FileMoveView(fromPath: path + entry.name, fileTransferClient: fileTransferClient)
                     }
+                    .alert(isPresented: $isShowingRenameView, TextFieldAlert(title: "Rename", message: "Enter new name for '\(entry.name)'") { fileName in
+                        if let fileName = fileName, fileName != entry.name {
+                            let fromPath = model.path + entry.name
+                            let toPath = model.path + fileName
+                            model.renameFile(fromPath: fromPath, toPath: toPath, fileTransferClient: fileTransferClient)
+                        }
+                    })
             } else {
                 content
             }

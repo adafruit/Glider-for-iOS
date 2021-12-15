@@ -67,6 +67,7 @@ struct InfoView: View {
                             .frame(maxWidth: .infinity)
                     })
                         .buttonStyle(MainButtonStyle())
+                        .hidden()   // Hidden until throubleshoot guide is ready
                 }
                 .padding(.horizontal)
                 

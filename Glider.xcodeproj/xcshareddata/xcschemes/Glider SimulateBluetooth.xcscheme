@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1250"
+   LastUpgradeVersion = "1320"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A947FE3726543839007A5E5A"
-               BuildableName = "Glider.app"
-               BlueprintName = "Glider"
+               BlueprintIdentifier = "A908EA732768D8FD00320AFE"
+               BuildableName = "Glider SimulateBluetooth.app"
+               BlueprintName = "Glider SimulateBluetooth"
+               ReferencedContainer = "container:Glider.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A99BCD5B2768C2DC00AE8C8B"
+               BuildableName = "GliderUITests.xctest"
+               BlueprintName = "GliderUITests"
                ReferencedContainer = "container:Glider.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +46,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A99BCD5B2768C2DC00AE8C8B"
-               BuildableName = "GliderUITests.xctest"
-               BlueprintName = "GliderUITests"
+               BlueprintIdentifier = "A98254B72768FB0200DA1F75"
+               BuildableName = "Glider SimulateBluetoothUITests.xctest"
+               BlueprintName = "Glider SimulateBluetoothUITests"
                ReferencedContainer = "container:Glider.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -54,9 +68,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A947FE3726543839007A5E5A"
-            BuildableName = "Glider.app"
-            BlueprintName = "Glider"
+            BlueprintIdentifier = "A908EA732768D8FD00320AFE"
+            BuildableName = "Glider SimulateBluetooth.app"
+            BlueprintName = "Glider SimulateBluetooth"
             ReferencedContainer = "container:Glider.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -71,9 +85,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A947FE3726543839007A5E5A"
-            BuildableName = "Glider.app"
-            BlueprintName = "Glider"
+            BlueprintIdentifier = "A908EA732768D8FD00320AFE"
+            BuildableName = "Glider SimulateBluetooth.app"
+            BlueprintName = "Glider SimulateBluetooth"
             ReferencedContainer = "container:Glider.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

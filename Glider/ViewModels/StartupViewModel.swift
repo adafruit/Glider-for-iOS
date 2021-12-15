@@ -34,6 +34,11 @@ class StartupViewModel: ObservableObject {
     }
     
     func setupBluetooth() {
+        guard !Config.isSimulatingBluetooth else {
+            isStartupFinished = true
+            return
+        }
+        
         DispatchQueue.global().async {      // Important: Launch in background queue
             // check Bluetooth status
             let bleState = BleManager.shared.state
