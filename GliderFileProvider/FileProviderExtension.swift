@@ -12,7 +12,6 @@ class FileProviderExtension: NSFileProviderExtension {
     // Data
     private var metadataCache = FileMetadataCache.shared
     private var fileManager = FileManager()
-    private var backgroundQueue = DispatchQueue.global(qos: .userInitiated)
     
     // MARK: -
     override init() {
@@ -246,16 +245,14 @@ class FileProviderExtension: NSFileProviderExtension {
             return
         }
         
-        // TODO: check if the file was already being uploaded int the queue and cancel it
+        // TODO: check if the file was already being uploaded in the queue and cancel it
         // Schedule upload in background
-        backgroundQueue.async {
-            self.uploadFile(localURL: url, item: fileProviderItem) { error in
-                if let error = error {
-                    DLog("itemChanged upload \(fileProviderItem.fullFilePath) error: \(error.localizedDescription)")
-                }
-                else {
-                    DLog("itemChanged uploaded \(fileProviderItem.fullFilePath)")
-                }
+        self.uploadFile(localURL: url, item: fileProviderItem) { error in
+            if let error = error {
+                DLog("itemChanged upload \(fileProviderItem.fullFilePath) error: \(error.localizedDescription)")
+            }
+            else {
+                DLog("itemChanged uploaded \(fileProviderItem.fullFilePath)")
             }
         }
     }
@@ -287,7 +284,6 @@ class FileProviderExtension: NSFileProviderExtension {
     }
     
     
-   
     // MARK: - Enumeration
     override func enumerator(for containerItemIdentifier: NSFileProviderItemIdentifier) throws -> NSFileProviderEnumerator {
         let enumerator: NSFileProviderEnumerator? = nil
@@ -378,29 +374,28 @@ class FileProviderExtension: NSFileProviderExtension {
             case .success:
                 
                 // Schedule create in background
-                backgroundQueue.async {
-                    let gliderClient = GliderClient.shared(peripheralIdentifier: blePeripheral.identifier)
-                    gliderClient.makeDirectory(path: fileProviderItem.fileTransferPath) { result in
-                        switch result {
-                        case .success(let date):
-                            DLog("createDirectory '\(fileProviderItem.fullFilePath)' result successful")
-                            if let date = date {
-                                fileProviderItem.lastUpdate = date
-                            }
-                            self.metadataCache.setFileProviderItem(item: fileProviderItem)
-                            
-                        case .failure(let error):
-                            DLog("createDirectory error: \(error)")
-                            
-                            if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
-                                DLog("createDirectory signal parent enumerator")
-                                NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
-                                    DLog("createDirectory parent enumerator signal finished")
-                                }
+                let gliderClient = GliderClient.shared(peripheralIdentifier: blePeripheral.identifier)
+                gliderClient.makeDirectory(path: fileProviderItem.fileTransferPath) { result in
+                    switch result {
+                    case .success(let date):
+                        DLog("createDirectory '\(fileProviderItem.fullFilePath)' result successful")
+                        if let date = date {
+                            fileProviderItem.lastUpdate = date
+                        }
+                        self.metadataCache.setFileProviderItem(item: fileProviderItem)
+                        
+                    case .failure(let error):
+                        DLog("createDirectory error: \(error)")
+                        
+                        if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                            DLog("createDirectory signal parent enumerator")
+                            NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                DLog("createDirectory parent enumerator signal finished")
                             }
                         }
                     }
                 }
+                
                 
                 // Return inmediately (before the directory is even created)
                 completionHandler(fileProviderItem, nil)
@@ -430,21 +425,18 @@ class FileProviderExtension: NSFileProviderExtension {
             // Note: .failure not checked to avoid irresoluble situations when in an inconsistent internal state (i.e. item exists in metadata but not locally)
             
             // Schedule delete in background
-            backgroundQueue.async {
-                let gliderClient = GliderClient.shared(peripheralIdentifier: peripheralIdentifier)
-                gliderClient.deleteFile(path: fileProviderItem.fileTransferPath) { result in
-                    switch result {
-                    case .success:
-                        DLog("deleteFile '\(fileProviderItem.fullFilePath)' result successful")
-                        
-                    case .failure(let error):
-                        DLog("deleteFile error: \(error)")
-                        
-                        if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
-                            DLog("createDirectory signal parent enumerator")
-                            NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
-                                DLog("createDirectory parent enumerator signal finished")
-                            }
+            let gliderClient = GliderClient.shared(peripheralIdentifier: peripheralIdentifier)
+            gliderClient.deleteFile(path: fileProviderItem.fileTransferPath) { result in
+                switch result {
+                case .success:
+                    DLog("deleteFile '\(fileProviderItem.fullFilePath)' result successful")
+                    
+                case .failure(let error):
+                    DLog("deleteFile error: \(error)")
+                    if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                        DLog("deleteFile signal parent enumerator")
+                        NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                            DLog("deleteFile parent enumerator signal finished")
                         }
                     }
                 }
@@ -503,17 +495,15 @@ class FileProviderExtension: NSFileProviderExtension {
             try data.write(to: localUrl, options: .atomic)
             
             // Schedule updload in background
-            backgroundQueue.async {
-                let gliderClient = GliderClient.shared(peripheralIdentifier: blePeripheral.identifier)
-                gliderClient.writeFile(path: fileProviderItem.fileTransferPath, data: data) { result in
-                    switch result {
-                    case .success:
-                        DLog("importDocument '\(fileProviderItem.fullFilePath)' successful. (\(data.count) bytes")
-                    case .failure(let error):
-                        DLog("importDocument error: \(error)")
-                        NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
-                            DLog("importDocument parent enumerator signal finished. Error?: \(error?.localizedDescription ?? "<nil>")")
-                        }
+            let gliderClient = GliderClient.shared(peripheralIdentifier: blePeripheral.identifier)
+            gliderClient.writeFile(path: fileProviderItem.fileTransferPath, data: data) { result in
+                switch result {
+                case .success:
+                    DLog("importDocument '\(fileProviderItem.fullFilePath)' successful. (\(data.count) bytes")
+                case .failure(let error):
+                    DLog("importDocument error: \(error)")
+                    NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                        DLog("importDocument parent enumerator signal finished. Error?: \(error?.localizedDescription ?? "<nil>")")
                     }
                 }
             }
@@ -565,42 +555,37 @@ class FileProviderExtension: NSFileProviderExtension {
                     // Note: .failure not checked to avoid irresoluble situations when in an inconsist internal state (i.e. item exists in metadata but not locally)
                     
                     // Schedule delete in background
-                    backgroundQueue.async {
-                        let gliderClient = GliderClient.shared(peripheralIdentifier: blePeripheral.identifier)
-                        gliderClient.makeDirectory(path: renamedItem.fileTransferPath) { result in
-                            switch result {
-                            case .success(_ /*let date*/):
-                                DLog("rename step 1: createDirectory '\(renamedItem.fullFilePath)' result successful")
-                                
-                                self.backgroundQueue.async {
-                                    gliderClient.deleteFile(path: fileProviderItem.fileTransferPath) { result in
-                                        switch result {
-                                        case .success:
-                                            DLog("rename step 2: deleteFile \(fileProviderItem.fullFilePath) result successful")
-                                            
-                                            
-                                        case .failure(let error):
-                                            DLog("rename step 2: deleteFile error: \(error)")
-                                            
-                                            if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
-                                                DLog("rename step 2 signal parent enumerator")
-                                                NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
-                                                    DLog("rename step 2 parent enumerator signal finished")
-                                                }
-                                            }
-                                            
+                    let gliderClient = GliderClient.shared(peripheralIdentifier: blePeripheral.identifier)
+                    gliderClient.makeDirectory(path: renamedItem.fileTransferPath) { result in
+                        switch result {
+                        case .success(_ /*let date*/):
+                            DLog("rename step 1: createDirectory '\(renamedItem.fullFilePath)' result successful")
+                            
+                            gliderClient.deleteFile(path: fileProviderItem.fileTransferPath) { result in
+                                switch result {
+                                case .success:
+                                    DLog("rename step 2: deleteFile \(fileProviderItem.fullFilePath) result successful")
+                                    
+                                    
+                                case .failure(let error):
+                                    DLog("rename step 2: deleteFile error: \(error)")
+                                    
+                                    if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                                        DLog("rename step 2 signal parent enumerator")
+                                        NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                            DLog("rename step 2 parent enumerator signal finished")
                                         }
                                     }
                                 }
-                                
-                            case .failure(let error):
-                                DLog("rename step 1: createDirectory error: \(error)")
-                                
-                                if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
-                                    DLog("rename step 1 signal parent enumerator")
-                                    NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
-                                        DLog("rename step 1 parent enumerator signal finished")
-                                    }
+                            }
+
+                        case .failure(let error):
+                            DLog("rename step 1: createDirectory error: \(error)")
+                            
+                            if let fileTransferError = error as? BlePeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                                DLog("rename step 1 signal parent enumerator")
+                                NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                    DLog("rename step 1 parent enumerator signal finished")
                                 }
                             }
                         }

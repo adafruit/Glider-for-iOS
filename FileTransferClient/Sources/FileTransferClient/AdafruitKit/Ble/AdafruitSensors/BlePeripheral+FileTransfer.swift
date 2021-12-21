@@ -12,7 +12,7 @@ import Combine
 // TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconnect events or/and maintain an internal state
 extension BlePeripheral {
     // Config
-    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && true
+    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && false
     
     // Constants
     public static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
@@ -481,12 +481,6 @@ extension BlePeripheral {
             
             processDataQueue(receivedData: receivedData)
             
-            /*
-            var remainingData: Data? = data
-            while remainingData != nil && remainingData!.count > 0 {
-                remainingData = decodeResponseChunk(data: remainingData!)
-            }*/
-                                
         case .failure(let error):
             DLog("receiveFileTransferData error: \(error)")
         }
@@ -657,7 +651,7 @@ extension BlePeripheral {
 
     private func decodeDeleteFile(data: Data) -> Int {
         guard let adafruitFileTransferDeleteStatus = adafruitFileTransferDeleteStatus else {
-            DLog("Error: delete invalid internal status. Invalidating all received data..."); return Int.max }
+            DLog("Warning: unexpected delete result received. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferDeleteStatus.completion
 
         guard data.count >= Self.deleteFileResponseHeaderSize else { return 0 }      // Header has not been fully received yet
@@ -677,7 +671,7 @@ extension BlePeripheral {
     }
     
     private func decodeMakeDirectory(data: Data) -> Int {
-        guard let adafruitFileTransferMakeDirectoryStatus = adafruitFileTransferMakeDirectoryStatus else { DLog("Error: makeDirectory invalid internal status. Invalidating all received data..."); return Int.max }
+        guard let adafruitFileTransferMakeDirectoryStatus = adafruitFileTransferMakeDirectoryStatus else { DLog("Warning: unexpected makeDirectory result received. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferMakeDirectoryStatus.completion
 
         guard data.count >= makeDirectoryResponseHeaderSize(protocolVersion: adafruitFileTransferVersion) else { return 0 }      // Header has not been fully received yet
@@ -704,7 +698,7 @@ extension BlePeripheral {
     
     private func decodeListDirectory(data: Data) -> Int {
         guard let adafruitFileTransferListDirectoryStatus = adafruitFileTransferListDirectoryStatus else {
-            DLog("Error: list invalid internal status. Invalidating all received data..."); return Int.max }
+            DLog("Warning: unexpected list result received. Invalidating all received data..."); return Int.max }
         let completion = adafruitFileTransferListDirectoryStatus.completion
         
         let headerSize = listDirectoryResponseHeaderSize(protocolVersion: adafruitFileTransferVersion)
@@ -772,31 +766,3 @@ extension BlePeripheral {
         return packetSize
     }
 }
-
-/*
-// MARK: - Codable extension for DirectoryEntry
-extension BlePeripheral.DirectoryEntry.EntryType: Encodable {
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case .directory:
-            try container.encodeNil(forKey: .directory)
-        case .file(let size):
-            try container.encode(size, forKey: .file)
-        }
-    }
-}
-
-extension BlePeripheral.DirectoryEntry.EntryType: Decodable {
-    public init(from decoder: Decoder) throws {
-        if let size = try? decoder.singleValueContainer().decode(Int.self) {
-            self = .file(size: size)
-        }
-        else {
-            self = .directory
-        }
-    }
-}
-
-extension BlePeripheral.DirectoryEntry: Codable { }
-*/
