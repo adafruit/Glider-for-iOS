@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreBluetooth
+import Combine
 
 // TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconnect events or/and maintain an internal state
 extension BlePeripheral {
@@ -121,13 +122,20 @@ extension BlePeripheral {
         case unknownCommand
         case invalidInternalState
         case statusFailed(code: Int)
+        case disconnected
         
         public var errorDescription: String? {
             switch self {
             case .invalidData: return "invalid data"
             case .unknownCommand: return "unknown command"
             case .invalidInternalState: return "invalid internal state"
-            case .statusFailed(let code): return "status error: \(code)"
+            case .statusFailed(let code):
+                if code == 5 {
+                    return "status error: \(code). Filesystem in read-only mode"
+                } else {
+                    return "status error: \(code)"
+                }
+            case .disconnected: return "disconnected"
             }
         }
     }
@@ -143,6 +151,7 @@ extension BlePeripheral {
         static var adafruitFileTransferListDirectoryStatus: FileTransferListDirectoryStatus?
         static var adafruitFileTransferMakeDirectoryStatus: FileTransferMakeDirectoryStatus?
         static var adafruitFileTransferMoveStatus: FileTransferMoveStatus?
+        static var adafruitFileTransferDisconnectionObserverCancellable: Cancellable?
     }
     
     private var adafruitFileTransferVersion: Int {
@@ -226,11 +235,22 @@ extension BlePeripheral {
         }
     }
     
+    private var adafruitFileTransferDisconnectionObserverCancellable: Cancellable? {
+        get {
+            return objc_getAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferDisconnectionObserverCancellable) as? Cancellable
+        }
+        set {
+            objc_setAssociatedObject(self, &CustomPropertiesKeys.adafruitFileTransferDisconnectionObserverCancellable, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+    
     // MARK: - Actions
     func adafruitFileTransferEnable(completion: ((Result<Void, Error>) -> Void)?) {
         
-        adafruitFileTransferDisable()       // Clear any previous data
+        // Clear any previous data
+        adafruitFileTransferDisable()
         
+        // Enable
         self.adafruitServiceEnable(serviceUuid: Self.kFileTransferServiceUUID, versionCharacteristicUUID: Self.kFileTransferVersionCharacteristicUUID, mainCharacteristicUuid: Self.kFileTransferDataCharacteristicUUID) { [weak self] result in
             guard let self = self else { return }
             
@@ -241,7 +261,15 @@ extension BlePeripheral {
                 self.adafruitFileTransferVersion = version
                 self.adafruitFileTransferDataCharacteristic = characteristic
                 
+                // Set notify
                 self.adafruitServiceSetNotifyResponse(characteristic: characteristic, responseHandler: self.receiveFileTransferData, completion: completion)
+                
+                // Detect disconnection to clear internal state
+                self.adafruitFileTransferDisconnectionObserverCancellable = NotificationCenter.default.publisher(for: .didDisconnectFromPeripheral)
+                    .filter {  ($0.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID) == self.identifier }
+                    .sink { [weak self] _ in
+                        self?.adafruitFileTransferDisable()
+                    }
                 
             case let .failure(error):
                 self.adafruitFileTransferDataCharacteristic = nil
@@ -255,16 +283,31 @@ extension BlePeripheral {
     }
     
     func adafruitFileTransferDisable() {
+        DLog("adafruitFileTransferDisable: \(self.debugName) ")
+        
         // Clear all internal data
         adafruitFileTransferVersion = CustomPropertiesKeys.adafruitFileTransferVersion
         adafruitFileTransferDataCharacteristic = nil
         adafruitFileTransferDataProcessingQueue = nil
+        adafruitFileTransferDisconnectionObserverCancellable = nil
         
+        // Clear all internal variables for commands, sending an error to the completion handler if it was still executing
+        adafruitFileTransferReadStatus?.completion?(.failure(FileTransferError.disconnected))
         adafruitFileTransferReadStatus = nil
+
+        adafruitFileTransferWriteStatus?.completion?(.failure(FileTransferError.disconnected))
         adafruitFileTransferWriteStatus = nil
+
+        adafruitFileTransferDeleteStatus?.completion?(.failure(FileTransferError.disconnected))
         adafruitFileTransferDeleteStatus = nil
+        
+        adafruitFileTransferListDirectoryStatus?.completion?(.failure(FileTransferError.disconnected))
         adafruitFileTransferListDirectoryStatus = nil
+        
+        adafruitFileTransferMakeDirectoryStatus?.completion?(.failure(FileTransferError.disconnected))
         adafruitFileTransferMakeDirectoryStatus = nil
+        
+        adafruitFileTransferMoveStatus?.completion?(.failure(FileTransferError.disconnected))
         adafruitFileTransferMoveStatus = nil
     }
     
@@ -406,6 +449,11 @@ extension BlePeripheral {
     }
     
     private func sendCommand(data: Data, completion: ((Result<Void, Error>) -> Void)?) {
+        guard self.state == .connected else {
+            completion?(.failure(FileTransferError.disconnected))
+            return
+        }
+        
         guard let adafruitFileTransferDataCharacteristic = adafruitFileTransferDataCharacteristic else {
             completion?(.failure(PeripheralAdafruitError.invalidCharacteristic))
             return
