@@ -52,7 +52,7 @@ class DataProcessingQueue {
     }
     
     func processQueue(receivedData: Data?, processingHandler: ((Data)->Int)) {
-        // Don't append more data, till the delegate has finished processing it
+        // Don't append more data until the delegate has finished processing it
         dataSemaphore.wait()
         
         // Append received data

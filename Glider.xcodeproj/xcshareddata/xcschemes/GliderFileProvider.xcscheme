@@ -59,7 +59,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
-      launchStyle = "0"
+      launchStyle = "1"
       askForAppToLaunch = "Yes"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -70,7 +70,7 @@
       <RemoteRunnable
          runnableDebuggingMode = "1"
          BundleIdentifier = "com.apple.DocumentsApp"
-         RemotePath = "/var/containers/Bundle/Application/290D8A99-E2D7-4DC4-9E37-400AAD3984B3/Files.app">
+         RemotePath = "/var/containers/Bundle/Application/E5C34E5D-20AB-4A94-8FCA-9C5E68D787E4/Files.app">
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference

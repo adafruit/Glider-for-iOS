@@ -10,7 +10,6 @@ import FileTransferClient
 
 class FileSystemViewModel: FileCommandsViewModel {
     
-    
     // MARK: - Lifecycle
     func setup(directory: String, fileTransferClient: FileTransferClient) {
         // Clean directory name

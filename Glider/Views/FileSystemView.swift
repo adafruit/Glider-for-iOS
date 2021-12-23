@@ -9,6 +9,8 @@ import SwiftUI
 import FileTransferClient
 
 struct FileSystemView: View {
+    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
+ 
     // Params
     @ObservedObject var model: FileSystemViewModel
     @Binding var path: String
@@ -16,6 +18,9 @@ struct FileSystemView: View {
     let isLoading: Bool
     
     var showOnlyDirectories = false
+    
+    @State private var isVisible = false
+    @State private var reloadFlag = false
     
     var body: some View {
         let isInteractionDisabled = model.isTransmiting || isLoading
@@ -67,27 +72,40 @@ struct FileSystemView: View {
             .listStyle(PlainListStyle())
             .padding(.vertical, 1)
             .padding(.bottom, 20)       // Add some margin because the status bar
-            
-            // Wait View
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
-                .scaleEffect(1.5, anchor: .center)
-                .if(!isInteractionDisabled) {
-                    $0.hidden()
-                }
-            
-            // Empty view
-            Text("No files found")
-                .foregroundColor(.white)
-                .if(showOnlyDirectories || model.isTransmiting || model.entries.count > 0) {
-                    $0.hidden()
-                }
+                        
+            VStack {
+                // Empty view
+                Text("No files found")
+                    .foregroundColor(.white)
+                    .if(showOnlyDirectories || model.isTransmiting || model.entries.count > 0) {
+                        $0.hidden()
+                    }
+                
+                // Wait View
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                    .scaleEffect(1.5, anchor: .center)
+                    .if(!isInteractionDisabled) {
+                        $0.hidden()
+                    }
+            }
         }
         .allowsHitTesting(!isInteractionDisabled)
         .onAppear {
             model.showOnlyDirectories = showOnlyDirectories
             model.setup(directory: path, fileTransferClient: fileTransferClient)
+            isVisible = true
         }
+        .onDisappear {
+            isVisible = false
+        }
+        // listDirectory again if the peripheral reconnected
+        .onReceive(NotificationCenter.default.publisher(for: .didReconnectToKnownPeripheral).filter {  ($0.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID) == fileTransferClient.blePeripheral?.identifier }) { _ in
+            if isVisible {
+                reloadFlag.toggle()
+            }
+        }
+        .id(reloadFlag)
     }
     
     private struct SwipeLeadingCompatibleModifier: ViewModifier {

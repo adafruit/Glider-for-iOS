@@ -229,7 +229,7 @@ public class BleManager: NSObject {
         if let blePeripheral = peripheralsFound[peripheralIdentifier] {
             centralManager?.cancelPeripheralConnection(blePeripheral.peripheral)
         } else {
-            DLog("simulate disconnection")
+            //DLog("simulate disconnection")
             // The blePeripheral is available on peripheralsFound, so simulate the disconnection
             NotificationCenter.default.post(name: .didDisconnectFromPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheralIdentifier])
         }
