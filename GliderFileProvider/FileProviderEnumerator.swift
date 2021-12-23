@@ -39,7 +39,7 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
     }*/
 
     func invalidate() {
-        DLog("FileProviderEnumerator for \(self.path) invalidate")
+        DLog("FileProviderEnumerator for '\(blePeripheral?.debugName ?? "")\(FileProviderItem.peripheralSeparator)\(self.path)' invalidate")
         // Perform invalidation of server connection if necessary
         //gliderClient.disconnect()
     }
@@ -58,12 +58,11 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
          - inform the observer that you are finished with this page
          */
         
-        
         DLog("Enumerate '\(blePeripheral?.debugName ?? "")\(FileProviderItem.peripheralSeparator)\(self.fullPath)' requested")
-        if let blePeripheral = blePeripheral {
+        if let blePeripheral = blePeripheral {      // Path in a specific peripheral
             enumeratePeripheralItems(blePeripheral: blePeripheral, for: observer, startingAt: page)
         }
-        else {
+        else if self.path == FileTransferPathUtils.rootDirectory {      // Show all Peripherals
             let peripherals = FileTransferConnectionManager.shared.peripherals
             let items = peripherals.map { FileProviderItem(blePeripheralIdentifier: $0.identifier) }
             
@@ -74,13 +73,17 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
             observer.finishEnumerating(upTo: nil)
             DLog("Enumerate '\(blePeripheral?.debugName ?? "")\(FileProviderItem.peripheralSeparator)\(self.fullPath)' finished. \(items.count) found")
         }
+        else {      // Invalid path (a path for an undefined peripheral)
+            DLog("Invalid path with no peripheral")
+            observer.finishEnumeratingWithError(NSFileProviderError(.serverUnreachable))
+        }
     }
     
     private func enumeratePeripheralItems(blePeripheral: BlePeripheral, for observer: NSFileProviderEnumerationObserver, startingAt page: NSFileProviderPage) {
         let gliderClient = GliderClient.shared(peripheralIdentifier: blePeripheral.identifier)
         gliderClient.listDirectory(path: self.path) { [weak self] result in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let entries):
                 if let entries = entries {

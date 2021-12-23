@@ -9,8 +9,8 @@ import SwiftUI
 import FileTransferClient
 
 struct FileExplorerView: View {
-    
     @EnvironmentObject private var connectionManager: FileTransferConnectionManager
+    
     @StateObject private var model = FileSystemViewModel()
     @State private var path = FileTransferPathUtils.rootDirectory
     @State private var isShowingPeripheralChooser = false
@@ -28,21 +28,9 @@ struct FileExplorerView: View {
                 VStack {
                     // Peripheral
                     VStack(alignment: .leading, spacing: 1) {
-                        //HStack(alignment: .bottom) {
-                            Text("Selected peripheral")
-                        /*
-                            Spacer()
-                            Text("Reconnecting...")
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 2)
-                                .background(Color.orange)
-                                .cornerRadius(8)
-                                .opacity(connectionManager.isSelectedPeripheralReconnecting ? 1 : 0)
-                                .animation(.default, value: connectionManager.isSelectedPeripheralReconnecting)
-                            
-                        }*/
-                        .foregroundColor(.white)
-                        .font(.caption2)
+                        Text("Selected peripheral")
+                            .foregroundColor(.white)
+                            .font(.caption2)
                         
                         Button(action: {
                             isShowingPeripheralChooser.toggle()
