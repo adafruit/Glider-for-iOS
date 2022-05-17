@@ -14,7 +14,7 @@ class FileCommandsViewModel: ObservableObject {
     @Published var entries = [BlePeripheral.DirectoryEntry]()
     @Published var path = ""
     
-    @Published var isTransmiting = false
+    @Published var isTransmitting = false
     @Published var transmissionProgress: TransmissionProgress?
     @Published var lastTransmit: TransmissionLog? = TransmissionLog(type: .write(size: 334, date: nil))
 
@@ -27,24 +27,23 @@ class FileCommandsViewModel: ObservableObject {
 
         isRootDirectory = FileTransferPathUtils.isRootDirectory(path: directory)
         entries.removeAll()
-        isTransmiting = true
+        isTransmitting = true
         
         fileTransferClient.listDirectory(path: directory) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.isTransmiting = false
+                self.isTransmitting = false
                 
                 switch result {
                 case .success(let entries):
                     if let entries = entries {
                         self.setEntries(entries)
-                        self.path = directory
                     }
                     else {
                         DLog("listDirectory: nonexistent directory")
-                        self.path = directory
                     }
+                    self.path = directory
                     self.lastTransmit = TransmissionLog(type: .listDirectory(numItems: entries?.count))
                    
                 case .failure(let error):
@@ -61,12 +60,12 @@ class FileCommandsViewModel: ObservableObject {
         // Make sure that the path ends with the separator
         //DLog("makeDirectory: \(path)")
         startCommand(description: "Creating \(path)")
-        isTransmiting = true
+        isTransmitting = true
         fileTransferClient.makeDirectory(path: path) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.isTransmiting = false
+                self.isTransmitting = false
                 
                 switch result {
                 case .success(_ /*let date*/):
@@ -135,12 +134,12 @@ class FileCommandsViewModel: ObservableObject {
     func delete(entry: BlePeripheral.DirectoryEntry, fileTransferClient: FileTransferClient) {
         let filename = path + entry.name
         startCommand(description: "Deleting \(filename)")
-        isTransmiting = true
+        isTransmitting = true
         fileTransferClient.deleteFile(path: filename) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.isTransmiting = false
+                self.isTransmitting = false
                 
                 switch result {
                 case .success:
@@ -160,7 +159,7 @@ class FileCommandsViewModel: ObservableObject {
     
     func readFile(filePath: String, fileTransferClient: FileTransferClient, completion: ((Result<Data, Error>) -> Void)? = nil) {
         startCommand(description: "Reading \(filePath)")
-        isTransmiting = true
+        isTransmitting = true
         
         fileTransferClient.readFile(path: filePath, progress: { [weak self] read, total in
             //DLog("reading progress: \( String(format: "%.1f%%", Float(read) * 100 / Float(total)) )")
@@ -173,7 +172,7 @@ class FileCommandsViewModel: ObservableObject {
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.isTransmiting = false
+                self.isTransmitting = false
                 
                 switch result {
                 case .success(let data):
@@ -194,7 +193,7 @@ class FileCommandsViewModel: ObservableObject {
     func writeFile(filename: String, data: Data, fileTransferClient: FileTransferClient, completion: ((Result<Date?, Error>) -> Void)? = nil) {
         startCommand(description: "Writing \(filename)")
         
-        isTransmiting = true
+        isTransmitting = true
         fileTransferClient.writeFile(path: filename, data: data, progress: { [weak self] written, total in
             //DLog("writing progress: \( String(format: "%.1f%%", Float(written) * 100 / Float(total)) )")
             guard let self = self else { return }
@@ -205,7 +204,7 @@ class FileCommandsViewModel: ObservableObject {
         }) { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
-                self.isTransmiting = false
+                self.isTransmitting = false
                 
                 switch result {
                 case .success(let date):
@@ -227,13 +226,13 @@ class FileCommandsViewModel: ObservableObject {
         guard let fileTransferClient = fileTransferClient else { return }
         startCommand(description: "Moving from \(fromPath) to \(toPath)")
         
-        isTransmiting = true
+        isTransmitting = true
         
         fileTransferClient.moveFile(fromPath: fromPath, toPath: toPath) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.isTransmiting = false
+                self.isTransmitting = false
 
                 switch result {
                 case .success:

@@ -46,7 +46,7 @@ struct StartupView: View {
                     case .bluetoothUnsupported:
                         return Alert(
                             title: Text("Error"),
-                            message: Text("This device doesn't support Bluetooth Low Energy which is needed to connect to Bluefruit devices"),
+                            message: Text("This device doesn't support Bluetooth Low Energy which is needed to connect to FileTransfer devices"),
                             dismissButton: .cancel(Text("Ok")) {
                                 model.setupBluetooth()
                             })

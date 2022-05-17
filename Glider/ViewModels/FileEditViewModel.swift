@@ -9,7 +9,7 @@ import Foundation
 import FileTransferClient
 
 class FileEditViewModel: FileCommandsViewModel {
-    @Published var data: Data? = nil                // Read data
+    //@Published var data: Data? = nil                // Read data
     @Published var text: String? = nil              // Read converted to text (ut8)
     
     // MARK: - Placeholders
@@ -62,7 +62,7 @@ class FileEditViewModel: FileCommandsViewModel {
     }
     
     private func setData(_ data: Data) {
-        self.data = data
+        //self.data = data
         self.text = String(data: data, encoding: .utf8)
     }
     

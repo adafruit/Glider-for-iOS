@@ -24,7 +24,7 @@ struct FileEditView: View {
     
     var body: some View {
         let isLoading = connectionManager.isSelectedPeripheralReconnecting
-        let isInteractionDisabled = model.isTransmiting || isLoading
+        let isInteractionDisabled = model.isTransmitting || isLoading
         let filePath = path + filename
         
         VStack(spacing: 0) {
@@ -48,7 +48,7 @@ struct FileEditView: View {
                 
                 // Wait View
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                    .progressViewStyle(CircularProgressViewStyle(tint: Color.gray))
                     .scaleEffect(1.5, anchor: .center)
                     .if(!isInteractionDisabled) {
                         $0.hidden()
@@ -64,9 +64,9 @@ struct FileEditView: View {
                 .padding()
                 .background(Color.gray)
                 .shadow(radius: 16)
-                .if(isInteractionDisabled || !(model.data?.isEmpty ?? true) || !editedContents.isEmpty) {
-                 $0.hidden()
-                 }
+                .if(isInteractionDisabled || !(model.text?.isEmpty ?? true) || !editedContents.isEmpty) {
+                    $0.hidden()
+                }
                 .padding(24)
             }
             

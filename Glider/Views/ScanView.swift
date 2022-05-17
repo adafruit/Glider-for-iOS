@@ -44,8 +44,8 @@ struct ScanView: View {
                         
                         // When connecting, discovering, disconnecting, etc...
                         VStack {
-                            Text("Status: ").bold()
-                            Text(detailText)
+                            Text("Status:").bold()
+                            Text(statusDetailText)
                         }
                         .multilineTextAlignment(.center)
                         .opacity(isScanning ? 0 : 1)
@@ -131,11 +131,11 @@ struct ScanView: View {
                     animationCurrentFactor = 0.9
                 }
                 else {
-                DispatchQueue.main.async {
-                    withAnimation(.linear(duration: WaveOpacityModifier.waveAnimationDuration).delay(0.5).repeatForever(autoreverses: false)) {
-                        animationCurrentFactor = 1
+                    DispatchQueue.main.async {
+                        withAnimation(.linear(duration: WaveOpacityModifier.waveAnimationDuration).delay(0.5).repeatForever(autoreverses: false)) {
+                            animationCurrentFactor = 1
+                        }
                     }
-                }
                 }
             }
         }
@@ -157,7 +157,7 @@ struct ScanView: View {
         }
     }
 
-    private var detailText: String {
+    private var statusDetailText: String {
         let text: String
         switch model.connectionStatus {
         case .scanning:

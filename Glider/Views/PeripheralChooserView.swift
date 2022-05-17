@@ -14,11 +14,11 @@ struct PeripheralChooserView: View {
   
     // Data
     enum ActiveAlert: Identifiable {
-        case confirmUnpair(blePeripheral: BlePeripheral)
+        case confirmDisconnect(blePeripheral: BlePeripheral)
         
         var id: Int {
             switch self {
-            case .confirmUnpair: return 1
+            case .confirmDisconnect: return 1
             }
         }
     }
@@ -72,7 +72,7 @@ struct PeripheralChooserView: View {
                                 Spacer()
                                 
                                 Button(action: {
-                                    activeAlert = .confirmUnpair(blePeripheral: peripheral)
+                                    activeAlert = .confirmDisconnect(blePeripheral: peripheral)
                                 }, label: {
                                     Image(systemName: "xmark.circle")
                                 })
@@ -95,7 +95,7 @@ struct PeripheralChooserView: View {
             content
                 .alert(item: $activeAlert, content:  { alert in
                     switch alert {
-                    case .confirmUnpair(let blePeripheral):
+                    case .confirmDisconnect(let blePeripheral):
                         return Alert(
                             title: Text("Confirm disconnect \(blePeripheral.name ?? "")"),
                             message: nil,

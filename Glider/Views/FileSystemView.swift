@@ -23,7 +23,7 @@ struct FileSystemView: View {
     @State private var reloadFlag = false
     
     var body: some View {
-        let isInteractionDisabled = model.isTransmiting || isLoading
+        let isInteractionDisabled = model.isTransmitting || isLoading
         
         ZStack {
             List {
@@ -77,7 +77,7 @@ struct FileSystemView: View {
                 // Empty view
                 Text("No files found")
                     .foregroundColor(.white)
-                    .if(showOnlyDirectories || model.isTransmiting || model.entries.count > 0) {
+                    .if(showOnlyDirectories || model.isTransmitting || model.entries.count > 0) {
                         $0.hidden()
                     }
                 

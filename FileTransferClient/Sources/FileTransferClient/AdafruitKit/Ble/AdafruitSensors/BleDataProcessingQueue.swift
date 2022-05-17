@@ -11,7 +11,7 @@ class DataProcessingQueue {
     private var data = Data()
     private var dataSemaphore = DispatchSemaphore(value: 1)
     
-    private var uuid: UUID
+    private let uuid: UUID
     
     init(uuid: UUID) {
         self.uuid = uuid
@@ -51,15 +51,13 @@ class DataProcessingQueue {
         dataSemaphore.signal()        // Force signal if it was waiting
     }
     
-    func processQueue(receivedData: Data?, processingHandler: ((Data)->Int)) {
+    func processQueue(receivedData: Data, processingHandler: ((Data)->Int)) {        
         // Don't append more data until the delegate has finished processing it
         dataSemaphore.wait()
         
         // Append received data
-        if let receivedData = receivedData {
-            data.append(receivedData)
-            //DLog("Data received. Queue size: \(data.count) bytes")
-        }
+        data.append(receivedData)
+        //DLog("Data received. Queue size: \(data.count) bytes")
         
         // Process chunks
         processQueuedChunks(processingHandler: processingHandler)
@@ -86,10 +84,9 @@ class DataProcessingQueue {
         if  isStillUnprocessedDataInQueue {
             //DLog("Unprocessed data still in queue (\(data.count) bytes). Try to process next packet")
             processQueuedChunks(processingHandler: processingHandler)
-        }
+        }/*
         else if data.isEmpty {
-            //DLog("Data queue empty")
-        }
+            DLog("Data queue empty")
+        }*/
     }
-    
 }

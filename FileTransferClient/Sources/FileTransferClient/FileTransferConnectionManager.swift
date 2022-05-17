@@ -40,7 +40,7 @@ public class FileTransferConnectionManager: ObservableObject {
             updateSelectedPeripheral()
         }
     }
-    private var recoveryPeripheralIdentifier: UUID? // (UUID, Timer)?      // Data for a peripheral that was disconnected. There is a timer
+    private var recoveryPeripheralIdentifier: UUID?     // Peripheral that was recently disconnected and that we are trying to reconnect. There is a timer
 
     // Data - Ble status
     private let bleSupportSemaphore = DispatchSemaphore(value: 0)
@@ -286,7 +286,7 @@ public class FileTransferConnectionManager: ObservableObject {
                     //DLog("Reconnected to peripheral successfully")
                     self.fileTransferClients[peripheral.identifier] = client
 
-                    if peripheral.identifier == self.selectedPeripheral?.identifier {       // If it is the selectedPeripheral, then the reconnection finished successfuly
+                    if peripheral.identifier == self.selectedPeripheral?.identifier {       // If it is the selectedPeripheral, then the reconnection finished successfully
                         self.isSelectedPeripheralReconnecting = false
                     }
 

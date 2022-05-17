@@ -12,7 +12,7 @@ import Combine
 // TODO: rethink sensors architecture. Extensions are too limiting for complex sensors that need to hook to connect/disconnect events or/and maintain an internal state
 extension BlePeripheral {
     // Config
-    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && false
+    private static let kDebugMessagesEnabled = AppEnvironment.isDebug && true
     
     // Constants
     public static let kFileTransferServiceUUID = CBUUID(string: "FEBB")
@@ -266,7 +266,7 @@ extension BlePeripheral {
                 
                 // Detect disconnection to clear internal state
                 self.adafruitFileTransferDisconnectionObserverCancellable = NotificationCenter.default.publisher(for: .didDisconnectFromPeripheral)
-                    .filter {  ($0.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID) == self.identifier }
+                    .filter { ($0.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID) == self.identifier }
                     .sink { [weak self] _ in
                         self?.adafruitFileTransferDisable()
                     }
@@ -486,7 +486,7 @@ extension BlePeripheral {
         }
     }
     
-    private func processDataQueue(receivedData: Data?) {
+    private func processDataQueue(receivedData: Data) {
         guard let adafruitFileTransferDataProcessingQueue = adafruitFileTransferDataProcessingQueue else { return }
         
         adafruitFileTransferDataProcessingQueue.processQueue(receivedData: receivedData) { remainingData in
@@ -554,7 +554,7 @@ extension BlePeripheral {
         let completion = adafruitFileTransferWriteStatus.completion
         
         guard data.count >= writeFileResponseHeaderSize(protocolVersion: adafruitFileTransferVersion) else { return 0 }     // Header has not been fully received yet
-        
+
         var decodingOffset = 1
         let status = data[decodingOffset]
         let isStatusOk = status == 0x01
@@ -611,11 +611,12 @@ extension BlePeripheral {
         let isStatusOk = status == 0x01
         
         let offset: UInt32 = data.scanValue(start: 4, length: 4)
-        let totalLenght: UInt32 = data.scanValue(start: 8, length: 4)
+        let totalLength: UInt32 = data.scanValue(start: 8, length: 4)
         let chunkSize: UInt32 = data.scanValue(start: 12, length: 4)
         
+        if Self.kDebugMessagesEnabled { DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLength)") }
+
         guard isStatusOk else {
-            if Self.kDebugMessagesEnabled { DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)") }
             self.adafruitFileTransferReadStatus = nil
             completion?(.failure(FileTransferError.statusFailed(code: Int(status))))
             return Int.max      // invalidate all received data on error
@@ -624,13 +625,12 @@ extension BlePeripheral {
         let packetSize = Self.readFileResponseHeaderSize + Int(chunkSize)
         guard data.count >= packetSize else { return 0 }        // The first chunk is still no available wait for it
 
-        if Self.kDebugMessagesEnabled { DLog("read \(isStatusOk ? "ok":"error") at offset \(offset) chunkSize: \(chunkSize) totalLength: \(totalLenght)") }
         let chunkData = data.subdata(in: Self.readFileResponseHeaderSize..<packetSize)
         self.adafruitFileTransferReadStatus!.data.append(chunkData)
         
-        adafruitFileTransferReadStatus.progress?(Int(offset + chunkSize), Int(totalLenght))
+        adafruitFileTransferReadStatus.progress?(Int(offset + chunkSize), Int(totalLength))
 
-        if offset + chunkSize < totalLenght {
+        if offset + chunkSize < totalLength {
             let mtu = self.maximumWriteValueLength(for: .withoutResponse)
             let maxChunkLength = mtu - Self.readFileResponseHeaderSize
             readFileChunk(offset: offset + chunkSize, chunkSize: UInt32(maxChunkLength)) { result in
