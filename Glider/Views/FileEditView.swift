@@ -30,6 +30,7 @@ struct FileEditView: View {
         VStack(spacing: 0) {
             ZStack {
                 TextEditor(text: $editedContents)
+                    .autocapitalization(UITextAutocapitalizationType.none)
                     .if(isInteractionDisabled) {
                         $0.colorMultiply(.gray)
                     }
