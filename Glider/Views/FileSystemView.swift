@@ -6,72 +6,80 @@
 //
 
 import SwiftUI
-import FileTransferClient
 
 struct FileSystemView: View {
-    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
- 
-    // Params
+    @EnvironmentObject private var connectionManager: ConnectionManager
+
+     // Params
     @ObservedObject var model: FileSystemViewModel
+
+    var fileTransferClient: FileTransferClient
     @Binding var path: String
-    let fileTransferClient: FileTransferClient
     let isLoading: Bool
     
     var showOnlyDirectories = false
-    
-    @State private var isVisible = false
-    @State private var reloadFlag = false
     
     var body: some View {
         let isInteractionDisabled = model.isTransmitting || isLoading
         
         ZStack {
-            List {
-                if !model.isRootDirectory {
-                    Button(action: {
-                        let newPath = FileTransferPathUtils.upPath(from: model.path)
-                        let _ = DLog("Up directory: \(newPath)")
-                        $path.wrappedValue = newPath
-                        model.listDirectory(directory: newPath, fileTransferClient: fileTransferClient)
-                        
-                    }, label: {
-                        ItemView(systemImageName: "arrow.up.doc", name: "..", size: nil)
-                            .foregroundColor(.white)
-                    })
-                        .listRowBackground(Color.clear)
-                }
-                
-                ForEach(model.entries, id:\.name) { entry in
-                                            
-                    HStack {
-                        switch entry.type {
-                        case .file(let size):
-                            FileView(fileTransferClient: fileTransferClient, path: path, name: entry.name, size: size)
+            let isListEmpty = model.isRootDirectory && model.entries.isEmpty
+            
+            if !isListEmpty {       // Fix for iOS 16: Make the list dissapear because empty lists have white background
+                List {
+                    if !model.isRootDirectory {
+                        Button(action: {
+                            let newPath = FileTransferPathUtils.upPath(from: model.path)
+                            $path.wrappedValue = newPath
+                            DispatchQueue.main.async {
+                                //let _ = DLog("Up directory: \(newPath)")
+                                model.listDirectory(directory: newPath, fileTransferClient: fileTransferClient)
+                            }
                             
-                        case .directory:
-                            Button(action: {
-                                //let _ = DLog("Directory: '\(entry.name)'")
-                                let path = model.path + entry.name + "/"
-                                $path.wrappedValue = path
-                                model.listDirectory(directory: path, fileTransferClient: fileTransferClient)
-                            }, label: {
-                                ItemView(systemImageName: "folder", name: entry.name, size: nil)
-                            })
-                        }
+                        }, label: {
+                            ItemView(systemImageName: "arrow.up.doc", name: "..", size: nil)
+                                .foregroundColor(.white)
+                        })
+                        .listRowBackground(Color.clear)
                     }
-                    .foregroundColor(entry.isHidden ? .gray : .white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .modifier(SwipeLeadingCompatibleModifier(model: model, path: path, entry: entry, fileTransferClient: fileTransferClient))
+                    
+                    ForEach(model.entries, id:\.name) { entry in
+                        
+                        HStack {
+                            switch entry.type {
+                            case .file(let size):
+                                FileView(fileTransferClient: fileTransferClient, path: path, name: entry.name, size: size)
+                                
+                            case .directory:
+                                Button(action: {
+                                    //let _ = DLog("Directory: '\(entry.name)'")
+                                    let path = model.path + entry.name + "/"
+                                    $path.wrappedValue = path
+                                    DispatchQueue.main.async {
+                                        model.listDirectory(directory: path, fileTransferClient: fileTransferClient)
+                                        
+                                    }
+                                }, label: {
+                                    ItemView(systemImageName: "folder", name: entry.name, size: nil)
+                                })
+                            }
+                        }
+                        .foregroundColor(entry.isHidden ? .gray : .white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .modifier(SwipeLeadingCompatibleModifier(model: model, path: path, entry: entry, fileTransferClient: fileTransferClient, isLoading: isLoading))
+                    }
+                    .onDelete { offsets in      // Note: this will only be executed on iOS14, because for iOS15 SwipeLeadingCompatibleModifier will take precedence
+                        model.delete(at: offsets, fileTransferClient: fileTransferClient)
+                    }
+                    .listRowBackground(Color.clear)
+                    
                 }
-                .onDelete { offsets in      // Note: this will only be executed on iOS14, because for iOS15 SwipeLeadingCompatibleModifier will take precedence
-                    model.delete(at: offsets, fileTransferClient: fileTransferClient)
-                }
-                .listRowBackground(Color.clear)
+                .modifier(ListHiddenScrollBackgroundModifier())
                 
+                .listStyle(PlainListStyle())
+                .padding(.vertical, 1)
+                .padding(.bottom, 20)       // Add some margin because the status bar
             }
-            .listStyle(PlainListStyle())
-            .padding(.vertical, 1)
-            .padding(.bottom, 20)       // Add some margin because the status bar
                         
             VStack {
                 // Empty view
@@ -94,25 +102,38 @@ struct FileSystemView: View {
         .onAppear {
             model.showOnlyDirectories = showOnlyDirectories
             model.setup(directory: path, fileTransferClient: fileTransferClient)
-            isVisible = true
-        }
-        .onDisappear {
-            isVisible = false
         }
         // listDirectory again if the peripheral reconnected
-        .onReceive(NotificationCenter.default.publisher(for: .didReconnectToKnownPeripheral).filter {  ($0.userInfo?[BleManager.NotificationUserInfoKey.uuid.rawValue] as? UUID) == fileTransferClient.blePeripheral?.identifier }) { _ in
-            if isVisible {
-                reloadFlag.toggle()
+        .onChange(of: connectionManager.isReconnectingToBondedPeripherals) { isReconnectingToBondedPeripherals in
+            if isReconnectingToBondedPeripherals == false {     // When reconnected
+                model.listDirectory(directory: model.path, fileTransferClient: fileTransferClient)
             }
         }
-        .id(reloadFlag)
+    }
+    
+    
+    private struct ListHiddenScrollBackgroundModifier: ViewModifier {
+
+        @ViewBuilder
+        func body(content: Content) -> some View {
+            if #available(iOS 16.0, *) {
+                content
+                    .scrollContentBackground(.hidden)
+            } else {
+                content
+            }
+        }
     }
     
     private struct SwipeLeadingCompatibleModifier: ViewModifier {
+        @EnvironmentObject private var connectionManager: ConnectionManager
+        
         @ObservedObject var model: FileSystemViewModel
         let path: String
-        let entry: BlePeripheral.DirectoryEntry
+        let entry: DirectoryEntry
         let fileTransferClient: FileTransferClient
+        let isLoading: Bool
+        
         @State private var isShowingMoveView = false
         @State private var isShowingRenameView = false
 
@@ -128,12 +149,15 @@ struct FileSystemView: View {
                         }
                     }
                     .swipeActions(edge: .leading) {
-                        Button {
-                            isShowingMoveView.toggle()
-                        } label: {
-                            Label("Move", systemImage: "rectangle.2.swap")
+                        
+                        if !(fileTransferClient.peripheral is WifiFileTransferPeripheral) {
+                            Button {
+                                isShowingMoveView.toggle()
+                            } label: {
+                                Label("Move", systemImage: "rectangle.2.swap")
+                            }
+                            .tint(.indigo)
                         }
-                        .tint(.indigo)
                       
                         
                         Button {
@@ -150,7 +174,7 @@ struct FileSystemView: View {
                             model.listDirectory(directory: path, fileTransferClient: fileTransferClient)
                         }
                     }) {
-                        FileMoveView(fromPath: path + entry.name, fileTransferClient: fileTransferClient)
+                        FileMoveView(fromPath: path + entry.name, fileTransferClient: fileTransferClient, isLoading: isLoading)
                     }
                     .alert(isPresented: $isShowingRenameView, TextFieldAlert(title: "Rename", message: "Enter new name for '\(entry.name)'") { fileName in
                         if let fileName = fileName, fileName != entry.name {
@@ -183,7 +207,7 @@ struct FileSystemView: View {
                     })
                 
                 Button(action: {
-                    let _ = DLog("File: \(name)")
+                    //let _ = DLog("File: \(name)")
                     showFileEditor = true
                 }, label: {
                     ItemView(systemImageName: "doc", name: name, size: size)
@@ -216,7 +240,16 @@ struct FileSystemView: View {
 
 struct FileSystemView_Previews: PreviewProvider {
     static var previews: some View {
-        FileSystemView(model: FileSystemViewModel(), path: .constant(FileTransferPathUtils.rootDirectory), fileTransferClient: FileTransferClient(), isLoading: false)
-            .defaultGradientBackground()
+        
+        let fileTransferClient = FileTransferClient(fileTransferPeripheral: WifiFileTransferPeripheral(wifiPeripheral: WifiPeripheral(name: "test", address: "127.0.0.1", port: 80), onGetPasswordForHostName: nil))
+        
+        
+        FileSystemView(
+            model: FileSystemViewModel(),
+            fileTransferClient: fileTransferClient,
+            path: .constant(FileTransferPathUtils.rootDirectory),
+            isLoading: false
+        )
+        .defaultGradientBackground()
     }
 }

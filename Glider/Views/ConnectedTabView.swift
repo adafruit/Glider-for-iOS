@@ -6,20 +6,69 @@
 //
 
 import SwiftUI
-import FileTransferClient
 
 struct ConnectedTabView: View {
+
+    // State
     enum Tabs: Int {
-        case connected = 0
-        case log = 1
-        case debug = 2
+        case peripherals = 0
+        case fileExplorer = 1
+        case log = 2
+    }
+    @State private var selectedTabIndex: Int = Tabs.peripherals.rawValue
+
+    // Data
+    private let connectionManager: ConnectionManager
+    private let savedBondedBlePeripherals: SavedBondedBlePeripherals
+    private let savedSettingsWifiPeripherals: SavedSettingsWifiPeripherals
+
+     // MARK: - Lifecycle
+    init(connectionManager: ConnectionManager,
+         savedBondedBlePeripherals: SavedBondedBlePeripherals,
+         savedSettingsWifiPeripherals: SavedSettingsWifiPeripherals
+    ) {
+        self.connectionManager = connectionManager
+        self.savedBondedBlePeripherals = savedBondedBlePeripherals
+        self.savedSettingsWifiPeripherals = savedSettingsWifiPeripherals
+        
+        // UI
+        setupUIAppearance()
+    }
+
+    // MARK: - View
+    var body: some View {
+        
+        // TabView
+        TabView(selection: $selectedTabIndex) {
+            PeripheralsView(connectionManager: connectionManager, savedSettingsWifiPeripherals: savedSettingsWifiPeripherals)
+                .navigationBarColor(backgroundColor: UIColor(named: "background_default"), titleColor: .white)
+                .tabItem {
+                    Label("Peripherals", systemImage: "link")
+                }
+                .tag(Tabs.peripherals.rawValue)
+                .environmentObject(savedBondedBlePeripherals)
+            
+            
+            FileExplorerView()
+                .navigationBarColor(backgroundColor: UIColor(named: "background_default"), titleColor: .white)
+                .tabItem {
+                    Label("Explorer", systemImage: "folder")
+                }
+                .tag(Tabs.fileExplorer.rawValue)
+        
+            
+            LogView()
+                .navigationBarColor(backgroundColor: UIColor(named: "background_default"), titleColor: .white)
+                .tabItem {
+                    Label("Log", systemImage: "terminal")
+                }
+                .tag(Tabs.log.rawValue)
+        }
+        .accentColor(Color("accent_main"))
     }
     
-    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
-    @State private var selectedTabIndex: Int = Tabs.connected.rawValue
-    
-     // MARK: - Lifecycle
-    init() {
+    // MARK: - UI Appearance
+    private func setupUIAppearance() {/*
         let navigationBarLargeAppearance = UINavigationBarAppearance()
         navigationBarLargeAppearance.configureWithTransparentBackground()
         
@@ -28,68 +77,39 @@ struct ConnectedTabView: View {
         
         let navigationBarDefaultAppearance = UINavigationBarAppearance()
         navigationBarDefaultAppearance.configureWithOpaqueBackground()
-        navigationBarDefaultAppearance.backgroundColor = UIColor(Color("tab_background")) // UIColor(Color("background_gradient_start"))
+        navigationBarDefaultAppearance.backgroundColor = UIColor(Color("tab_background"))
         navigationBarDefaultAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarDefaultAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
         UINavigationBar.appearance().standardAppearance = navigationBarDefaultAppearance
         UINavigationBar.appearance().compactAppearance = navigationBarDefaultAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navigationBarLargeAppearance
-        
-        #if swift(>=5.5)
-        if #available(iOS 15.0, *) {
-            UINavigationBar.appearance().compactScrollEdgeAppearance = navigationBarDefaultAppearance
-        }
-        #endif
-
-        //
-        /*
-        UITabBar.appearance().unselectedItemTintColor = UIColor(Color.gray)
-        UITabBar.appearance().barTintColor = UIColor(Color("tab_background"))
-        */
+        UINavigationBar.appearance().compactScrollEdgeAppearance = navigationBarDefaultAppearance*/
         
         let tabbarAppearance = UITabBarAppearance()
         tabbarAppearance.configureWithOpaqueBackground()
         tabbarAppearance.backgroundColor = UIColor(named: "maintab_background")
         UITabBar.appearance().standardAppearance = tabbarAppearance
-        #if swift(>=5.5)
-        if #available(iOS 15.0, *) {
-            UITabBar.appearance().scrollEdgeAppearance = tabbarAppearance
-        }
-        #endif
-    }
-    
-    // MARK: - View
-    var body: some View {
-        
-        // TabView
-        TabView(selection: $selectedTabIndex) {
-            InfoView()
-                .tabItem {
-                    Label("Info", systemImage: "link")
-                }
-                .tag(Tabs.connected.rawValue)
-            
-            
-            FileExplorerView()
-                .tabItem {
-                    Label("Explorer", systemImage: "folder")// "folder.badge.gearshape")
-                }
-                .tag(Tabs.debug.rawValue)
-            
-            LogView()
-                .tabItem {
-                    Label("Log", systemImage: "terminal")
-                }
-                .tag(Tabs.connected.rawValue)
-        }
-        .accentColor(Color("accent_main"))
+        UITabBar.appearance().scrollEdgeAppearance = tabbarAppearance
     }
 }
 
+
+// MARK: - Previews
 struct ConnectedView_Previews: PreviewProvider {
     static var previews: some View {
-        ConnectedTabView()
-            .environmentObject(FileTransferConnectionManager.shared)
+        
+        let connectionManager = ConnectionManager(
+            bleManager: BleManagerFake(), blePeripheralScanner: BlePeripheralScannerFake(),
+            wifiPeripheralScanner: BonjourScannerFake(),
+            onBlePeripheralBonded: nil,
+            onWifiPeripheralGetPasswordForHostName: nil
+        )
+        
+        ConnectedTabView(
+            connectionManager: connectionManager,
+            savedBondedBlePeripherals: SavedBondedBlePeripherals(),
+            savedSettingsWifiPeripherals: SavedSettingsWifiPeripherals()
+        )
     }
 }

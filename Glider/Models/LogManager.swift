@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import FileTransferClient
 import Combine
 
 class LogManager: ObservableObject {
@@ -135,13 +134,8 @@ class LogManager: ObservableObject {
         }
         
         // Make sure that we are publishing changes from the main thread
-        if Thread.isMainThread {
+        DispatchQueue.main.async {
             appendHandler()
-        }
-        else {
-            DispatchQueue.main.async {
-                appendHandler()
-            }
         }
         //DLog(message)
     }

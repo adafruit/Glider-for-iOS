@@ -6,21 +6,21 @@
 //
 
 import SwiftUI
-import FileTransferClient
 
 struct FileMoveView: View {
-    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
+    //@EnvironmentObject private var connectionManager: ConnectionManager
     @Environment(\.presentationMode) private var presentationMode
     @Environment(\.safeAreaInsets) private var safeAreaInsets
  
     @StateObject private var model = FileSystemViewModel()
     let fromPath: String?
     let fileTransferClient: FileTransferClient?
+    let isLoading: Bool
     
     @State private var path = FileTransferPathUtils.rootDirectory
     
     var body: some View {
-        let isLoading = connectionManager.isSelectedPeripheralReconnecting
+        //let isLoading = connectionManager.isReconnectingToBondedPeripherals
         let mainColor = Color.white.opacity(0.7)
         
         NavigationView {
@@ -67,7 +67,7 @@ struct FileMoveView: View {
                 if let fileTransferClient = fileTransferClient {
                     
                     ZStack {
-                        FileSystemView(model: model, path: $path, fileTransferClient: fileTransferClient, isLoading: isLoading, showOnlyDirectories: true)
+                        FileSystemView(model: model, fileTransferClient: fileTransferClient, path: $path, isLoading: isLoading, showOnlyDirectories: true)
                         // Bottom status bar
                         FileCommandsStatusBarView(model: model, backgroundColor: mainColor)
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
@@ -134,7 +134,7 @@ struct FileMoveView: View {
 
 struct FileMoveView_Previews: PreviewProvider {
     static var previews: some View {
-        FileMoveView(fromPath: FileTransferPathUtils.rootDirectory, fileTransferClient: nil)
-            .environmentObject(FileTransferConnectionManager.shared)
+        FileMoveView(fromPath: FileTransferPathUtils.rootDirectory, fileTransferClient: nil, isLoading: false)
+           // .environmentObject(FileTransferConnectionManager.shared)
     }
 }

@@ -11,10 +11,11 @@ import SwiftUI
 struct GliderApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) var scenePhase
+    private let appContainer = AppContainerImpl.shared
     
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(appContainer: appContainer)
                 // Manage logging persistence
                 .onChange(of: scenePhase) { scenePhase in
                     switch scenePhase {
@@ -30,4 +31,6 @@ struct GliderApp: App {
                 }
         }
     }
+    
 }
+

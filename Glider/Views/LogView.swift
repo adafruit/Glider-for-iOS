@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import FileTransferClient
 
 struct LogView: View {
     private let dateFormatter: DateFormatter
@@ -58,7 +57,7 @@ struct LogView: View {
             }
             .foregroundColor(.white)
             .defaultGradientBackground()
-            .navigationBarTitle(showFileProviderLog ? "FileProvider Log" : "App Log", displayMode: .large)
+            .navigationBarTitle(showFileProviderLog ? "FileProvider Log" : "App Log", displayMode: .inline)
             .toolbar {
                 HStack {
                     // Export
