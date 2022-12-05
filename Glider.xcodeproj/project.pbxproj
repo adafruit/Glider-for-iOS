@@ -285,6 +285,7 @@
 		A9AD163428D8592E0050727A /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				A9AD167F28D862B80050727A /* Result+SimpleCheck.swift */,
 				A9AD163E28D8592E0050727A /* FileTransferPathUtils.swift */,
 				A9AD163528D8592E0050727A /* Data+LittleEndianTypes.swift */,
 				A9AD163628D8592E0050727A /* String+DeletingPrefix.swift */,
@@ -353,7 +354,6 @@
 				A9AD167C28D862B80050727A /* KeyboardUtils.swift */,
 				A9AD167D28D862B80050727A /* UIColor+LightAndDark.swift */,
 				A9AD167E28D862B80050727A /* FileProviderUtils.swift */,
-				A9AD167F28D862B80050727A /* Result+SimpleCheck.swift */,
 				A9AD168D28D877C60050727A /* Application+KeyWindow.swift */,
 			);
 			path = Utils;

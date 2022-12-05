@@ -14,9 +14,12 @@ protocol AppContainer {
     var connectionManager: ConnectionManager { get }
     var savedBondedBlePeripherals: SavedBondedBlePeripherals { get }
     var savedSettingsWifiPeripherals: SavedSettingsWifiPeripherals { get }
+    
+    var userDefaults: UserDefaults { get set }      // Can be replaced if data saved needs to be shared
 }
 
 class AppContainerImpl: AppContainer {
+    
     // Singleton
     public static let shared = AppContainerImpl()
     
@@ -27,6 +30,12 @@ class AppContainerImpl: AppContainer {
     var savedBondedBlePeripherals: SavedBondedBlePeripherals
     var savedSettingsWifiPeripherals: SavedSettingsWifiPeripherals
    
+    var userDefaults: UserDefaults = UserDefaults(suiteName: Config.sharedUserDefaultsSuitName)! {
+        didSet {
+            savedBondedBlePeripherals.userDefaults = userDefaults
+        }
+    }
+    
     init() {
         bleManager = BleManagerImpl()
         blePeripheralScanner = BlePeripheralScannerImpl(bleManager: bleManager)
@@ -34,7 +43,7 @@ class AppContainerImpl: AppContainer {
         wifiPeripheralScanner = BonjourScannerImpl(serviceType: "_circuitpython._tcp", serviceDomain: "local.")
         
         savedSettingsWifiPeripherals = SavedSettingsWifiPeripherals()
-        savedBondedBlePeripherals = SavedBondedBlePeripherals()
+        savedBondedBlePeripherals = SavedBondedBlePeripherals(userDefaults: userDefaults)
         
         connectionManager = ConnectionManager(
             bleManager: bleManager,

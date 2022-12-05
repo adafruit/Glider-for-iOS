@@ -12,9 +12,8 @@ class SavedBondedBlePeripherals: ObservableObject {
     private static let dataKey = "data"
  
     // Parameters
-    public var userDefaults = UserDefaults.standard        // Can be replaced if data saved needs to be shared
+    var userDefaults: UserDefaults        // Can be replaced if data saved needs to be shared
 
-    
     struct PeripheralData: Codable {
         var name: String?
         let uuid: UUID
@@ -27,7 +26,8 @@ class SavedBondedBlePeripherals: ObservableObject {
     // Internal data
     private var peripheralsDataLock = NSLock()
     
-    init() {
+    init(userDefaults: UserDefaults = UserDefaults.standard) {
+        self.userDefaults = userDefaults
         self.peripheralsData = getPeripheralsData()
     }
     
@@ -65,7 +65,7 @@ class SavedBondedBlePeripherals: ObservableObject {
     }
 
     private func getPeripheralsData() -> [PeripheralData] {
-        guard let data = UserDefaults.standard.object(forKey: Self.dataKey) as? Data,
+        guard let data = userDefaults.object(forKey: Self.dataKey) as? Data,
               let result = try? JSONDecoder().decode([PeripheralData].self, from: data) else {
             return []
         }
