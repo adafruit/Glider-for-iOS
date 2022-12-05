@@ -6,7 +6,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.adafruit.Glider</string>
+		<string>group.2X94RM7457.com.adafruit.Glider</string>
 	</array>
 	<key>com.apple.security.device.bluetooth</key>
 	<true/>
