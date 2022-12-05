@@ -185,14 +185,14 @@ private struct PeripheralsBody: View {
                     case .networkError(let error):
                         return Alert(
                             title: Text("Network Error"),
-                            message: Text("\(error.localizedDescription)"),
-                            dismissButton: .cancel())
+                            message: Text("\(error.localizedDescription)"))//,
+                            //dismissButton: .cancel())
                         
                     case .connectionError(let error):
                         return Alert(
                             title: Text("Connection Error"),
-                            message: Text("\(error.localizedDescription)"),
-                            dismissButton: .cancel())
+                            message: Text("\(error.localizedDescription)"))//,
+                            //dismissButton: .cancel())
     
                     case .disconnect(let address):
                         return Alert(

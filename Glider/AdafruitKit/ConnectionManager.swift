@@ -22,8 +22,9 @@ class ConnectionManager: ObservableObject {
     @Published var isReconnectingToBondedPeripherals = false
     @Published var peripheralAddressesBeingSetup = Set<String>()
 
+    var bleScanningLastErrorPublisher: Published<Error?>.Publisher
     @Published var lastReconnectionError: Error?
-    
+
     // Data
     private let bleManager: BleManager
     private let scanner: Scanner
@@ -64,6 +65,8 @@ class ConnectionManager: ObservableObject {
         self.scanner = Scanner(blePeripheralScanner: blePeripheralScanner, wifiPeripheralScanner: wifiPeripheralScanner)
         self.onBlePeripheralBonded = onBlePeripheralBonded
         self.onWifiPeripheralGetPasswordForHostName = onWifiPeripheralGetPasswordForHostName
+        
+        bleScanningLastErrorPublisher = scanner.bleLastErrorPublisher
         
         scanner.$scanningState
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)

@@ -76,18 +76,28 @@ class PeripheralsViewModel: ObservableObject {
         
         // Intercept connectionManager.lastConnectionError to show it as an alert
         connectionManager.$lastReconnectionError
-            .sink {  [weak self] lastReconnectionError in
-                guard let lastReconnectionError = lastReconnectionError else { return }
-                guard let self = self else { return }
-                
-                if self.activeAlert == nil {
-                    self.activeAlert = .connectionError(error: lastReconnectionError)
-                }
-                else {
-                    DLog("Connection error alert, but alert already being displayed. Skip...")
-                }
+            .receive(on: RunLoop.main)
+            .sink {  lastReconnectionError in
+                self.showAlertConnectionError(lastReconnectionError)
             }
             .store(in: &disposables)
+        
+        // Intercept connectionManager.bleScanningLastError to show it as an alert
+        connectionManager.bleScanningLastErrorPublisher
+            .receive(on: RunLoop.main)
+            .sink { error in
+                self.showAlertConnectionError(error)
+            }
+            .store(in: &disposables)
+    }
+    
+    private func showAlertConnectionError(_ error: Error?) {
+        guard let error = error else { return }
+        guard self.activeAlert == nil else {
+            DLog("Connection error alert, but alert already being displayed. Skip...")
+            return
+        }
+        self.activeAlert = .connectionError(error: error)
     }
     
     func onAppear() {

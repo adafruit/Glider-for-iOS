@@ -19,7 +19,7 @@ class Scanner: ObservableObject {
     enum ScanningState {
         case idle
         case scanning(peripherals: [Peripheral])
-        case scanningError(error: Error)
+        //case scanningError(error: Error)
         
         var isScanning: Bool {
             switch self {
@@ -30,16 +30,16 @@ class Scanner: ObservableObject {
     }
     
     @Published var scanningState: ScanningState = .idle
+    var bleLastErrorPublisher: Published<Error?>.Publisher
     
     init(blePeripheralScanner: any BlePeripheralScanner, wifiPeripheralScanner: any BonjourScanner) {
         self.blePeripheralScanner = blePeripheralScanner
         self.wifiPeripheralScanner = wifiPeripheralScanner
-    }
-    
-    func start() {
-        // Start Wifi Scan
-        wifiPeripheralScanner.start()
         
+        // Map errors
+        bleLastErrorPublisher = blePeripheralScanner.bleLastErrorPublisher
+        
+        // Map wifi peripherals
         wifiPeripheralScanner.knownWifiPeripheralsPublisher
             //.receive(on: RunLoop.main)
             .sink { wifiPeripherals in
@@ -48,10 +48,8 @@ class Scanner: ObservableObject {
             }
             .store(in: &disposables)
 
-        
-        // Start Bluetooth Scan
-        blePeripheralScanner.start()
-        
+
+        // Map BLE peripherals
         blePeripheralScanner.blePeripheralsPublisher
             //.receive(on: RunLoop.main)
             .sink { blePeripherals in
@@ -62,10 +60,15 @@ class Scanner: ObservableObject {
                 self.updateScanningState()
             }
             .store(in: &disposables)
-        
-        // TODO: map scanning errors to state
     }
     
+    func start() {
+        // Start Wifi Scan
+        wifiPeripheralScanner.start()
+        
+        // Start Bluetooth Scan
+        blePeripheralScanner.start()
+    }
     
     func stop() {
         blePeripheralScanner.stop()

@@ -19,6 +19,9 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
     @Published private(set) var blePeripherals = [BlePeripheral]()
     var blePeripheralsPublisher: Published<[BlePeripheral]>.Publisher { $blePeripherals }
 
+    @Published private(set) var bleLastError: Error? = nil
+    var bleLastErrorPublisher: Published<Error?>.Publisher { $bleLastError }
+
     // Params
     var scanningServicesFilter: [CBUUID]? = nil
     
@@ -106,6 +109,11 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
         NotificationCenter.default.post(name: .didStopScanning, object: nil)
     }
     
+    func clearBleLastException() {
+        bleLastError = nil
+    }
+
+    
     private func onBleStateChanged(state: CBManagerState) {
         if state == .poweredOn {
             if self.isScanningWaitingToStart {
@@ -159,13 +167,15 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
     
     private func onPeripheralDidFailToConnect(peripheral: CBPeripheral, error: Error?) {
         peripheralsFound[peripheral.identifier]?.reset()
+        bleLastError = error
     }
     
     private func onPeripheralDidDisconnect(peripheral: CBPeripheral, error: Error?) {
         // Remove from peripheral list (after sending notification so the receiving objects can query about the peripheral before being removed)
-        self.peripheralsFoundLock.lock()
-        self.peripheralsFound.removeValue(forKey: peripheral.identifier)
-        self.peripheralsFoundLock.unlock()
+        peripheralsFoundLock.lock()
+        peripheralsFound.removeValue(forKey: peripheral.identifier)
+        peripheralsFoundLock.unlock()
+        bleLastError = error
     }
 }
 
