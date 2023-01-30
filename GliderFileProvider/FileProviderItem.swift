@@ -2,44 +2,239 @@
 //  FileProviderItem.swift
 //  GliderFileProvider
 //
-//  Created by Antonio García on 30/1/23.
+//  Created by Antonio García on 26/6/21.
 //
 
 import FileProvider
 import UniformTypeIdentifiers
 
-class FileProviderItem: NSObject, NSFileProviderItem {
+final class FileProviderItem: NSObject, NSFileProviderItem {
+    static let peripheralSeparator: Character = "$"
+    static let pathSeparator = "/"
+  
+    enum PeripheralType: Codable, Equatable {
+        case rootContainer       // i.e. rootContainer
+        case wifi(address: String, name: String?)
+        case ble(address: String, name: String?)
+        case bleBondedData(address: String, name: String?)
+    }
 
-    // TODO: implement an initializer to create an item from your extension's backing model
-    // TODO: implement the accessors to return the values from your extension's backing model
+    let peripheralType: PeripheralType
+    private(set) var path: String                   // Always includes a trailing separator
+    private(set) var entry: DirectoryEntry?         // nil for peripheral root routes (i.e: 37464$/)
+    var lastUpdate: Date                            // Used to keep track of which files has been modified locally
+    var creation: Date
     
-    private let identifier: NSFileProviderItemIdentifier
     
-    init(identifier: NSFileProviderItemIdentifier) {
-        self.identifier = identifier
+    var peripheralRoute: String {
+        switch peripheralType {
+        case .rootContainer:
+            DLog("Error: peripheralRoute not available for .none"); return ""
+        case let .wifi(address, _),
+            let .ble(address, _),
+            let .bleBondedData(address, _):
+            return "\(address)\(Self.peripheralSeparator)"
+        }
     }
     
+    var isDirectory: Bool {
+        return entry?.isDirectory ?? true      // true for the peripherals root (entry is nil for the peripheral sroot)
+    }
+
+    /**
+            Full path including the peripheral route
+     */
+    var fullFilePath: String {
+        if let entry = entry {
+            return peripheralRoute + path + entry.name
+        }
+        else {
+            return peripheralRoute + path
+        }
+    }
+    
+    /**
+            Path used for FileTransferClient commands (excluding the peripheral route)
+     */
+    var fileTransferPath: String {
+        if let entry = entry {
+            return path + entry.name
+        }
+        else {
+            return path
+        }
+    }
+    
+    init(peripheralType: PeripheralType) {
+        self.peripheralType = peripheralType
+        self.path = FileTransferPathUtils.rootDirectory
+        self.entry = nil
+        
+        self.creation = Date()
+        self.lastUpdate = self.creation
+    }
+    
+    convenience init(peripheralType: PeripheralType, path: String, entry: DirectoryEntry) {
+        self.init(peripheralType: peripheralType)
+        
+        let pathEndingWithSeparator = FileTransferPathUtils.pathWithTrailingSeparator(path: path)
+        self.path = pathEndingWithSeparator
+        self.entry = entry
+    }
+    
+    // MARK: - Mandatory properties
     var itemIdentifier: NSFileProviderItemIdentifier {
-        return identifier
+        return itemIdentifier(fullPath: fullFilePath)
     }
     
     var parentItemIdentifier: NSFileProviderItemIdentifier {
-        return .rootContainer
-    }
-    
-    var capabilities: NSFileProviderItemCapabilities {
-        return [.allowsReading, .allowsWriting, .allowsRenaming, .allowsReparenting, .allowsTrashing, .allowsDeleting]
-    }
-    
-    var itemVersion: NSFileProviderItemVersion {
-        NSFileProviderItemVersion(contentVersion: "a content version".data(using: .utf8)!, metadataVersion: "a metadata version".data(using: .utf8)!)
+        let result: NSFileProviderItemIdentifier
+        
+        if isRootContainer(fullPath: fullFilePath) {
+            result = .rootContainer   // Parent of .rootContainer is .rootContainer
+        }
+        else if FileTransferPathUtils.isRootDirectory(path: path) && entry == nil {
+            result = .rootContainer     // Parent of peripheral root is .rootContainer
+        }
+        else {
+            let parentPath = FileTransferPathUtils.parentPath(from: path)
+            let fullPath = peripheralRoute + parentPath
+            result = itemIdentifier(fullPath: fullPath)
+        }
+        
+        //DLog("parent for: '\(self.fullFilePath)' -> '\(result.rawValue)'")
+        return result
     }
     
     var filename: String {
-        return identifier.rawValue
+        let result: String
+        if let entry = entry {
+            result = entry.name
+        }
+        else {
+            switch peripheralType {
+            case .rootContainer:
+                result = "Peripherals"
+            case let .wifi(address, name),
+                let .ble(address, name),
+                let .bleBondedData(address, name):
+                result = name ?? address
+            }
+        }
+
+        
+        //DLog("filename for: '\(self.fullFilePath)' -> \(result)")
+        return result
+    }
+
+    var capabilities: NSFileProviderItemCapabilities {
+        if let entry = entry {
+            if entry.isDirectory {
+                return [.allowsContentEnumerating, .allowsAddingSubItems, .allowsRenaming, .allowsDeleting]
+            }
+            else {
+                return [.allowsReading, .allowsWriting, .allowsDeleting]
+            }
+        }
+        else {
+            switch peripheralType {
+            case .rootContainer:     // Root
+                return [.allowsContentEnumerating]
+            default:                //  Peripheral root
+                return [.allowsContentEnumerating, .allowsAddingSubItems]
+            }
+        }
+        
+        //return .allowsAll
+        //return [.allowsReading, .allowsWriting, .allowsRenaming, .allowsReparenting, .allowsTrashing, .allowsDeleting]
+
     }
     
     var contentType: UTType {
-        return identifier == NSFileProviderItemIdentifier.rootContainer ? .folder : .plainText
+        // Types defined here: https://developer.apple.com/documentation/uniformtypeidentifiers/system_declared_uniform_type_identifiers
+        
+        if let entry = entry {
+            if entry.isDirectory {
+                return .folder
+            }
+            else {
+                let fileExtension = URL(fileURLWithPath: entry.name).pathExtension
+                return UTType(filenameExtension: fileExtension) ?? .item
+            }
+        }
+        else if case .rootContainer = peripheralType { // Root
+            return .folder
+        }
+        else { // Peripheral root
+            return .folder
+        }
+    }
+    
+    var documentSize: NSNumber? {
+        if let entry = entry {
+            guard case let .file(size) = entry.type else { return nil }
+            return size as NSNumber
+        }
+        else {  // Peripheral root or Root
+            return nil
+        }
+    }
+    
+    // MARK: - Optional properties
+    var contentModificationDate: Date? {
+        //  Note: the Bluetooth File protocol doesn't return the modification date, so we are using the last sync date as the modification date
+        return lastUpdate
+    }
+    
+    var isMostRecentVersionDownloaded: Bool {
+        do {
+            let attr = try FileManager.default.attributesOfItem(atPath: self.fullFilePath)
+            let localModificationDate = attr[FileAttributeKey.modificationDate] as? Date
+            return localModificationDate == self.lastUpdate
+        } catch {
+            return false
+        }
+    }
+    
+    var creationDate: Date? {
+        return creation
+    }
+    
+    /*
+    var childItemCount: NSNumber? {
+        DLog("childItemCount for: \(fullPath)")
+        return 0
+    }*/
+    
+    
+    // MARK: - Utils
+    /*
+    var peripheralName: String? {
+        guard let blePeripheralIdentifier = blePeripheralIdentifier else { return nil }
+        return FileTransferConnectionManager.shared.peripheral(fromIdentifier: blePeripheralIdentifier)?.debugName
+    }*/
+    
+    private func isRootContainer(fullPath: String) -> Bool {
+        return peripheralIdentifier(fullPath: fullPath) == nil
+    }
+    
+    private func peripheralIdentifier(fullPath: String) -> String? {
+        guard let peripheralSeparatorIndex = fullPath.firstIndex(of: Self.peripheralSeparator) else {
+            DLog("Error: unknown peripheralIdentifier: \(fullPath)")
+            return nil
+        }
+        let peripheralIdentifier = fullPath.prefix(upTo: peripheralSeparatorIndex)
+        return peripheralIdentifier.isEmpty ? nil : String(peripheralIdentifier)
+    }
+    
+    private func itemIdentifier(fullPath: String) -> NSFileProviderItemIdentifier {
+        if isRootContainer(fullPath: fullPath) {
+            return .rootContainer
+        }
+        else {
+            return NSFileProviderItemIdentifier(fullPath)
+        }
     }
 }
+
+extension FileProviderItem: Codable {}

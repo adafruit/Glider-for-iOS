@@ -14,7 +14,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         setupAppearances()
         
         // Setup ConnectionManager userDefaults
-        //ConnectionManager.shared.userDefaults = UserDefaults(suiteName: "group.com.adafruit.Glider")!
+        //ConnectionManager.shared.userDefaults = UserDefaults(suiteName: "group.2X94RM7457.com.adafruit.Glider")!
+        
+        /* Debug delete all domains*/
+        NSFileProviderManager.getDomainsWithCompletionHandler() { (domains, error) in
+            domains.forEach { domain in
+                NSFileProviderManager.remove(domain) { error in
+                    
+                }
+            }
+        }
+        
         
         return true
     }

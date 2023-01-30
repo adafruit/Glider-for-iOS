@@ -16,6 +16,56 @@
 		A92161EE2988401200FF2474 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A92161EC2988401200FF2474 /* MainInterface.storyboard */; };
 		A92161F22988401200FF2474 /* GliderFileProviderUI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A92161E82988401200FF2474 /* GliderFileProviderUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A92161F52988401200FF2474 /* GliderFileProvider.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A92161D72988401200FF2474 /* GliderFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A92161FE2988416400FF2474 /* Logger+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161FD2988416400FF2474 /* Logger+Utils.swift */; };
+		A92161FF298841AB00FF2474 /* Logger+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161FD2988416400FF2474 /* Logger+Utils.swift */; };
+		A9216200298841BA00FF2474 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163C28D8592E0050727A /* AppEnvironment.swift */; };
+		A92162022988446100FF2474 /* GliderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92162012988446100FF2474 /* GliderClient.swift */; };
+		A92162032988448100FF2474 /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163A28D8592E0050727A /* LogHelper.swift */; };
+		A9216204298844EF00FF2474 /* FileTransferPathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163E28D8592E0050727A /* FileTransferPathUtils.swift */; };
+		A9216205298845CE00FF2474 /* String+DeletingPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163628D8592E0050727A /* String+DeletingPrefix.swift */; };
+		A9216206298845E100FF2474 /* DirectoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E628D987D10056177D /* DirectoryEntry.swift */; };
+		A921620A298847A300FF2474 /* ScanEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9216208298847A300FF2474 /* ScanEnumerator.swift */; };
+		A921620B298847A300FF2474 /* ItemEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9216209298847A300FF2474 /* ItemEnumerator.swift */; };
+		A921620C298847B800FF2474 /* PeripheralsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169128D8A1610050727A /* PeripheralsViewModel.swift */; };
+		A921620D298847C900FF2474 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165A28D85F2A0050727A /* ConnectionManager.swift */; };
+		A921620E298847F000FF2474 /* CommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163928D8592E0050727A /* CommandQueue.swift */; };
+		A921620F298847F000FF2474 /* BonjourScannerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DA28D8ED330056177D /* BonjourScannerFake.swift */; };
+		A9216210298847F000FF2474 /* Data+LittleEndianTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163528D8592E0050727A /* Data+LittleEndianTypes.swift */; };
+		A9216211298847F000FF2474 /* WifiPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169728D8A6EA0050727A /* WifiPeripheral.swift */; };
+		A9216212298847F000FF2474 /* Int+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163828D8592E0050727A /* Int+Bytes.swift */; };
+		A9216213298847F000FF2474 /* Result+SimpleCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167F28D862B80050727A /* Result+SimpleCheck.swift */; };
+		A9216214298847F000FF2474 /* BleManagerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B94128EF3E3A0039FE2F /* BleManagerFake.swift */; };
+		A9216215298847F000FF2474 /* BlePeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6128EB996C008A81FD /* BlePeripheral.swift */; };
+		A9216216298847F000FF2474 /* FileTransferJsonDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F328DA04B50056177D /* FileTransferJsonDeserializer.swift */; };
+		A9216217298847F000FF2474 /* BleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B93D28EF24490039FE2F /* BleManager.swift */; };
+		A9216218298847F000FF2474 /* FileTransferNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5B28EB10E3008A81FD /* FileTransferNetwork.swift */; };
+		A9216219298847F000FF2474 /* BonjourScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D528D8E21C0056177D /* BonjourScanner.swift */; };
+		A921621A298847F000FF2474 /* BonjourScannerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DC28D8ED430056177D /* BonjourScannerImpl.swift */; };
+		A921621B298847F000FF2474 /* BleManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B93F28EF3BAD0039FE2F /* BleManagerImpl.swift */; };
+		A921621C298847F000FF2474 /* SavedSettingsWifiPeripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F528DA10250056177D /* SavedSettingsWifiPeripherals.swift */; };
+		A921621D298847F000FF2474 /* BonjourResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D428D8E21C0056177D /* BonjourResolver.swift */; };
+		A921621E298847F000FF2474 /* BlePeripheralScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5D28EB98A4008A81FD /* BlePeripheralScanner.swift */; };
+		A921621F298847F000FF2474 /* Data+ScanValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163D28D8592E0050727A /* Data+ScanValue.swift */; };
+		A9216220298847F000FF2474 /* FileTransferWebApiVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F028DA040F0056177D /* FileTransferWebApiVersion.swift */; };
+		A9216221298847F000FF2474 /* SavedBondedBlePeripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */; };
+		A9216222298847F000FF2474 /* FileTransferNetworkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5928EAD506008A81FD /* FileTransferNetworkRouter.swift */; };
+		A9216223298847F000FF2474 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169328D8A5A10050727A /* Peripheral.swift */; };
+		A9216224298847F000FF2474 /* HostNameResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D228D8E21C0056177D /* HostNameResolver.swift */; };
+		A9216225298847F000FF2474 /* HexUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163728D8592E0050727A /* HexUtils.swift */; };
+		A9216226298847F000FF2474 /* Types+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163B28D8592E0050727A /* Types+Data.swift */; };
+		A9216227298847F000FF2474 /* BlePeripheralScannerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6328EC2FF0008A81FD /* BlePeripheralScannerFake.swift */; };
+		A9216228298847F000FF2474 /* NWEndpoint+bonjourName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D328D8E21C0056177D /* NWEndpoint+bonjourName.swift */; };
+		A9216229298847F000FF2474 /* BleAdvertisement+ManufacturerAdafruit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6928EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift */; };
+		A921622A298847F000FF2474 /* BlePeripheralScannerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6528EC3036008A81FD /* BlePeripheralScannerImpl.swift */; };
+		A921622B298847F000FF2474 /* BleAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6728EC69D2008A81FD /* BleAdvertisement.swift */; };
+		A921622C2988480C00FF2474 /* WifiFileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E228D985E90056177D /* WifiFileTransferPeripheral.swift */; };
+		A921622D2988480C00FF2474 /* FileTransferClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E828D98B060056177D /* FileTransferClient.swift */; };
+		A921622E2988480C00FF2474 /* BleFileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6B28EC6AB8008A81FD /* BleFileTransferPeripheral.swift */; };
+		A921622F2988480C00FF2474 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */; };
+		A92162302988480C00FF2474 /* FileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E428D9861F0056177D /* FileTransferPeripheral.swift */; };
+		A92162312988480C00FF2474 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DF28D914990056177D /* Scanner.swift */; };
+		A92162332988482300FF2474 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = A92162322988482300FF2474 /* SwiftyJSON */; };
+		A9216235298848AF00FF2474 /* FileMetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9216234298848AF00FF2474 /* FileMetadataCache.swift */; };
 		A940C70228EC78BB0017B277 /* SavedBondedBlePeripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */; };
 		A940C70428EC91460017B277 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */; };
 		A96EE38E28CFC64800D21360 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A96EE38D28CFC64800D21360 /* Assets.xcassets */; };
@@ -32,6 +82,8 @@
 		A985BC6828EC69D2008A81FD /* BleAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6728EC69D2008A81FD /* BleAdvertisement.swift */; };
 		A985BC6A28EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6928EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift */; };
 		A985BC6C28EC6AB8008A81FD /* BleFileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6B28EC6AB8008A81FD /* BleFileTransferPeripheral.swift */; };
+		A98A1DF729916D66007102A8 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165328D85A3B0050727A /* AppContainer.swift */; };
+		A98A1DF829916D74007102A8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161B28D8580E0050727A /* Config.swift */; };
 		A98CE9F628E2F17800795BC7 /* FileExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F728DA2A070056177D /* FileExplorerView.swift */; };
 		A9AD162128D858460050727A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161B28D8580E0050727A /* Config.swift */; };
 		A9AD162228D8584C0050727A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161D28D8580E0050727A /* AppDelegate.swift */; };
@@ -143,6 +195,11 @@
 		A92161EA2988401200FF2474 /* DocumentActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActionViewController.swift; sourceTree = "<group>"; };
 		A92161ED2988401200FF2474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		A92161EF2988401200FF2474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A92161FD2988416400FF2474 /* Logger+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+Utils.swift"; sourceTree = "<group>"; };
+		A92162012988446100FF2474 /* GliderClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderClient.swift; sourceTree = "<group>"; };
+		A9216208298847A300FF2474 /* ScanEnumerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanEnumerator.swift; sourceTree = "<group>"; };
+		A9216209298847A300FF2474 /* ItemEnumerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemEnumerator.swift; sourceTree = "<group>"; };
+		A9216234298848AF00FF2474 /* FileMetadataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileMetadataCache.swift; sourceTree = "<group>"; };
 		A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedBondedBlePeripherals.swift; sourceTree = "<group>"; };
 		A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleDataProcessingQueue.swift; sourceTree = "<group>"; };
 		A96EE38628CFC64700D21360 /* Glider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glider.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -232,6 +289,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A92162332988482300FF2474 /* SwiftyJSON in Frameworks */,
 				A92161DA2988401200FF2474 /* UniformTypeIdentifiers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,9 +323,12 @@
 		A92161DB2988401200FF2474 /* GliderFileProvider */ = {
 			isa = PBXGroup;
 			children = (
+				A9216207298847A300FF2474 /* Enumerators */,
 				A92161DC2988401200FF2474 /* FileProviderExtension.swift */,
 				A92161DE2988401200FF2474 /* FileProviderItem.swift */,
 				A92161E02988401200FF2474 /* FileProviderEnumerator.swift */,
+				A9216234298848AF00FF2474 /* FileMetadataCache.swift */,
+				A92162012988446100FF2474 /* GliderClient.swift */,
 				A92161E22988401200FF2474 /* Info.plist */,
 				A92161E32988401200FF2474 /* GliderFileProvider.entitlements */,
 			);
@@ -282,6 +343,15 @@
 				A92161EF2988401200FF2474 /* Info.plist */,
 			);
 			path = GliderFileProviderUI;
+			sourceTree = "<group>";
+		};
+		A9216207298847A300FF2474 /* Enumerators */ = {
+			isa = PBXGroup;
+			children = (
+				A9216208298847A300FF2474 /* ScanEnumerator.swift */,
+				A9216209298847A300FF2474 /* ItemEnumerator.swift */,
+			);
+			path = Enumerators;
 			sourceTree = "<group>";
 		};
 		A96EE37D28CFC64700D21360 = {
@@ -386,6 +456,7 @@
 		A9AD163428D8592E0050727A /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				A92161FD2988416400FF2474 /* Logger+Utils.swift */,
 				A9AD167F28D862B80050727A /* Result+SimpleCheck.swift */,
 				A9AD163E28D8592E0050727A /* FileTransferPathUtils.swift */,
 				A9AD163528D8592E0050727A /* Data+LittleEndianTypes.swift */,
@@ -562,6 +633,9 @@
 			dependencies = (
 			);
 			name = GliderFileProvider;
+			packageProductDependencies = (
+				A92162322988482300FF2474 /* SwiftyJSON */,
+			);
 			productName = GliderFileProvider;
 			productReference = A92161D72988401200FF2474 /* GliderFileProvider.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -682,9 +756,59 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9216219298847F000FF2474 /* BonjourScanner.swift in Sources */,
+				A92162302988480C00FF2474 /* FileTransferPeripheral.swift in Sources */,
+				A921620C298847B800FF2474 /* PeripheralsViewModel.swift in Sources */,
+				A9216200298841BA00FF2474 /* AppEnvironment.swift in Sources */,
+				A9216220298847F000FF2474 /* FileTransferWebApiVersion.swift in Sources */,
+				A9216211298847F000FF2474 /* WifiPeripheral.swift in Sources */,
+				A9216221298847F000FF2474 /* SavedBondedBlePeripherals.swift in Sources */,
+				A921620A298847A300FF2474 /* ScanEnumerator.swift in Sources */,
+				A92162312988480C00FF2474 /* Scanner.swift in Sources */,
+				A921620F298847F000FF2474 /* BonjourScannerFake.swift in Sources */,
+				A9216216298847F000FF2474 /* FileTransferJsonDeserializer.swift in Sources */,
+				A921621D298847F000FF2474 /* BonjourResolver.swift in Sources */,
+				A921621A298847F000FF2474 /* BonjourScannerImpl.swift in Sources */,
+				A98A1DF729916D66007102A8 /* AppContainer.swift in Sources */,
+				A921620D298847C900FF2474 /* ConnectionManager.swift in Sources */,
+				A9216204298844EF00FF2474 /* FileTransferPathUtils.swift in Sources */,
+				A9216218298847F000FF2474 /* FileTransferNetwork.swift in Sources */,
+				A9216214298847F000FF2474 /* BleManagerFake.swift in Sources */,
+				A9216206298845E100FF2474 /* DirectoryEntry.swift in Sources */,
+				A9216229298847F000FF2474 /* BleAdvertisement+ManufacturerAdafruit.swift in Sources */,
+				A92162022988446100FF2474 /* GliderClient.swift in Sources */,
+				A9216227298847F000FF2474 /* BlePeripheralScannerFake.swift in Sources */,
 				A92161DD2988401200FF2474 /* FileProviderExtension.swift in Sources */,
+				A9216228298847F000FF2474 /* NWEndpoint+bonjourName.swift in Sources */,
+				A92162032988448100FF2474 /* LogHelper.swift in Sources */,
+				A921622F2988480C00FF2474 /* BleDataProcessingQueue.swift in Sources */,
+				A9216235298848AF00FF2474 /* FileMetadataCache.swift in Sources */,
+				A9216223298847F000FF2474 /* Peripheral.swift in Sources */,
+				A92161FF298841AB00FF2474 /* Logger+Utils.swift in Sources */,
+				A9216210298847F000FF2474 /* Data+LittleEndianTypes.swift in Sources */,
+				A921620B298847A300FF2474 /* ItemEnumerator.swift in Sources */,
+				A9216226298847F000FF2474 /* Types+Data.swift in Sources */,
+				A921622E2988480C00FF2474 /* BleFileTransferPeripheral.swift in Sources */,
+				A921622D2988480C00FF2474 /* FileTransferClient.swift in Sources */,
+				A921622B298847F000FF2474 /* BleAdvertisement.swift in Sources */,
+				A9216215298847F000FF2474 /* BlePeripheral.swift in Sources */,
+				A921621C298847F000FF2474 /* SavedSettingsWifiPeripherals.swift in Sources */,
+				A921621F298847F000FF2474 /* Data+ScanValue.swift in Sources */,
+				A98A1DF829916D74007102A8 /* Config.swift in Sources */,
+				A9216222298847F000FF2474 /* FileTransferNetworkRouter.swift in Sources */,
+				A921621E298847F000FF2474 /* BlePeripheralScanner.swift in Sources */,
+				A921622A298847F000FF2474 /* BlePeripheralScannerImpl.swift in Sources */,
+				A9216217298847F000FF2474 /* BleManager.swift in Sources */,
+				A921622C2988480C00FF2474 /* WifiFileTransferPeripheral.swift in Sources */,
+				A9216205298845CE00FF2474 /* String+DeletingPrefix.swift in Sources */,
+				A9216212298847F000FF2474 /* Int+Bytes.swift in Sources */,
 				A92161DF2988401200FF2474 /* FileProviderItem.swift in Sources */,
+				A9216213298847F000FF2474 /* Result+SimpleCheck.swift in Sources */,
+				A921620E298847F000FF2474 /* CommandQueue.swift in Sources */,
 				A92161E12988401200FF2474 /* FileProviderEnumerator.swift in Sources */,
+				A9216225298847F000FF2474 /* HexUtils.swift in Sources */,
+				A9216224298847F000FF2474 /* HostNameResolver.swift in Sources */,
+				A921621B298847F000FF2474 /* BleManagerImpl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,6 +847,7 @@
 				A9D5310C28DA60A80056177D /* FileMoveView.swift in Sources */,
 				A9D5310728DA2D970056177D /* FileEditView.swift in Sources */,
 				A985BC6C28EC6AB8008A81FD /* BleFileTransferPeripheral.swift in Sources */,
+				A92161FE2988416400FF2474 /* Logger+Utils.swift in Sources */,
 				A9D5310A28DA60750056177D /* FileSystemView.swift in Sources */,
 				A9AD169828D8A6EA0050727A /* WifiPeripheral.swift in Sources */,
 				A9AD166428D862070050727A /* ConnectedTabView.swift in Sources */,
@@ -827,7 +952,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -857,7 +982,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -881,7 +1006,7 @@
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GliderFileProvider;
+				INFOPLIST_KEY_CFBundleDisplayName = "File Glider";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -889,7 +1014,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -912,7 +1037,7 @@
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GliderFileProvider;
+				INFOPLIST_KEY_CFBundleDisplayName = "File Glider";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -920,7 +1045,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1200,6 +1325,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A92162322988482300FF2474 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9D530ED28DA03D70056177D /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
 		A9D530EE28DA03D70056177D /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A9D530ED28DA03D70056177D /* XCRemoteSwiftPackageReference "SwiftyJSON" */;

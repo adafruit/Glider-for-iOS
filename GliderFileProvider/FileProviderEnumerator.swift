@@ -4,7 +4,7 @@
 //
 //  Created by Antonio García on 30/1/23.
 //
-
+/*
 import FileProvider
 
 class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
@@ -55,3 +55,4 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
         completionHandler(anchor)
     }
 }
+*/
