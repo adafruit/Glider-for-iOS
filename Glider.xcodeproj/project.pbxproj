@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		A911751E28FE3D7B00F86706 /* NavigationBarColorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A911751D28FE3D7B00F86706 /* NavigationBarColorModifier.swift */; };
+		A92161DA2988401200FF2474 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A92161D92988401200FF2474 /* UniformTypeIdentifiers.framework */; };
+		A92161DD2988401200FF2474 /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161DC2988401200FF2474 /* FileProviderExtension.swift */; };
+		A92161DF2988401200FF2474 /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161DE2988401200FF2474 /* FileProviderItem.swift */; };
+		A92161E12988401200FF2474 /* FileProviderEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161E02988401200FF2474 /* FileProviderEnumerator.swift */; };
+		A92161EB2988401200FF2474 /* DocumentActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161EA2988401200FF2474 /* DocumentActionViewController.swift */; };
+		A92161EE2988401200FF2474 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A92161EC2988401200FF2474 /* MainInterface.storyboard */; };
+		A92161F22988401200FF2474 /* GliderFileProviderUI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A92161E82988401200FF2474 /* GliderFileProviderUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A92161F52988401200FF2474 /* GliderFileProvider.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A92161D72988401200FF2474 /* GliderFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A940C70228EC78BB0017B277 /* SavedBondedBlePeripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */; };
 		A940C70428EC91460017B277 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */; };
 		A96EE38E28CFC64800D21360 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A96EE38D28CFC64800D21360 /* Assets.xcassets */; };
@@ -90,8 +98,51 @@
 		A9D5310C28DA60A80056177D /* FileMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D5310B28DA60A80056177D /* FileMoveView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A92161F02988401200FF2474 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A96EE37E28CFC64700D21360 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A92161E72988401200FF2474;
+			remoteInfo = GliderFileProviderUI;
+		};
+		A92161F32988401200FF2474 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A96EE37E28CFC64700D21360 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A92161D62988401200FF2474;
+			remoteInfo = GliderFileProvider;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A92161FC2988401300FF2474 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A92161F52988401200FF2474 /* GliderFileProvider.appex in Embed Foundation Extensions */,
+				A92161F22988401200FF2474 /* GliderFileProviderUI.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		A911751D28FE3D7B00F86706 /* NavigationBarColorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarColorModifier.swift; sourceTree = "<group>"; };
+		A92161D72988401200FF2474 /* GliderFileProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A92161D92988401200FF2474 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		A92161DC2988401200FF2474 /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
+		A92161DE2988401200FF2474 /* FileProviderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderItem.swift; sourceTree = "<group>"; };
+		A92161E02988401200FF2474 /* FileProviderEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderEnumerator.swift; sourceTree = "<group>"; };
+		A92161E22988401200FF2474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A92161E32988401200FF2474 /* GliderFileProvider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GliderFileProvider.entitlements; sourceTree = "<group>"; };
+		A92161E82988401200FF2474 /* GliderFileProviderUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProviderUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A92161EA2988401200FF2474 /* DocumentActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActionViewController.swift; sourceTree = "<group>"; };
+		A92161ED2988401200FF2474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		A92161EF2988401200FF2474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedBondedBlePeripherals.swift; sourceTree = "<group>"; };
 		A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleDataProcessingQueue.swift; sourceTree = "<group>"; };
 		A96EE38628CFC64700D21360 /* Glider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glider.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,6 +228,21 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A92161D42988401200FF2474 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A92161DA2988401200FF2474 /* UniformTypeIdentifiers.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A92161E52988401200FF2474 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A96EE38328CFC64700D21360 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -188,10 +254,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A92161D82988401200FF2474 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A92161D92988401200FF2474 /* UniformTypeIdentifiers.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A92161DB2988401200FF2474 /* GliderFileProvider */ = {
+			isa = PBXGroup;
+			children = (
+				A92161DC2988401200FF2474 /* FileProviderExtension.swift */,
+				A92161DE2988401200FF2474 /* FileProviderItem.swift */,
+				A92161E02988401200FF2474 /* FileProviderEnumerator.swift */,
+				A92161E22988401200FF2474 /* Info.plist */,
+				A92161E32988401200FF2474 /* GliderFileProvider.entitlements */,
+			);
+			path = GliderFileProvider;
+			sourceTree = "<group>";
+		};
+		A92161E92988401200FF2474 /* GliderFileProviderUI */ = {
+			isa = PBXGroup;
+			children = (
+				A92161EA2988401200FF2474 /* DocumentActionViewController.swift */,
+				A92161EC2988401200FF2474 /* MainInterface.storyboard */,
+				A92161EF2988401200FF2474 /* Info.plist */,
+			);
+			path = GliderFileProviderUI;
+			sourceTree = "<group>";
+		};
 		A96EE37D28CFC64700D21360 = {
 			isa = PBXGroup;
 			children = (
 				A96EE38828CFC64700D21360 /* Glider */,
+				A92161DB2988401200FF2474 /* GliderFileProvider */,
+				A92161E92988401200FF2474 /* GliderFileProviderUI */,
+				A92161D82988401200FF2474 /* Frameworks */,
 				A96EE38728CFC64700D21360 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -200,6 +299,8 @@
 			isa = PBXGroup;
 			children = (
 				A96EE38628CFC64700D21360 /* Glider.app */,
+				A92161D72988401200FF2474 /* GliderFileProvider.appex */,
+				A92161E82988401200FF2474 /* GliderFileProviderUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -448,6 +549,40 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A92161D62988401200FF2474 /* GliderFileProvider */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A92161F92988401300FF2474 /* Build configuration list for PBXNativeTarget "GliderFileProvider" */;
+			buildPhases = (
+				A92161D32988401200FF2474 /* Sources */,
+				A92161D42988401200FF2474 /* Frameworks */,
+				A92161D52988401200FF2474 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GliderFileProvider;
+			productName = GliderFileProvider;
+			productReference = A92161D72988401200FF2474 /* GliderFileProvider.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		A92161E72988401200FF2474 /* GliderFileProviderUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A92161F62988401300FF2474 /* Build configuration list for PBXNativeTarget "GliderFileProviderUI" */;
+			buildPhases = (
+				A92161E42988401200FF2474 /* Sources */,
+				A92161E52988401200FF2474 /* Frameworks */,
+				A92161E62988401200FF2474 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GliderFileProviderUI;
+			productName = GliderFileProviderUI;
+			productReference = A92161E82988401200FF2474 /* GliderFileProviderUI.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		A96EE38528CFC64700D21360 /* Glider */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A96EE39528CFC64800D21360 /* Build configuration list for PBXNativeTarget "Glider" */;
@@ -455,10 +590,13 @@
 				A96EE38228CFC64700D21360 /* Sources */,
 				A96EE38328CFC64700D21360 /* Frameworks */,
 				A96EE38428CFC64700D21360 /* Resources */,
+				A92161FC2988401300FF2474 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A92161F12988401200FF2474 /* PBXTargetDependency */,
+				A92161F42988401200FF2474 /* PBXTargetDependency */,
 			);
 			name = Glider;
 			packageProductDependencies = (
@@ -475,9 +613,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1400;
+				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
+					A92161D62988401200FF2474 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					A92161E72988401200FF2474 = {
+						CreatedOnToolsVersion = 14.2;
+					};
 					A96EE38528CFC64700D21360 = {
 						CreatedOnToolsVersion = 14.0;
 					};
@@ -500,11 +644,28 @@
 			projectRoot = "";
 			targets = (
 				A96EE38528CFC64700D21360 /* Glider */,
+				A92161D62988401200FF2474 /* GliderFileProvider */,
+				A92161E72988401200FF2474 /* GliderFileProviderUI */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A92161D52988401200FF2474 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A92161E62988401200FF2474 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A92161EE2988401200FF2474 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A96EE38428CFC64700D21360 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -517,6 +678,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A92161D32988401200FF2474 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A92161DD2988401200FF2474 /* FileProviderExtension.swift in Sources */,
+				A92161DF2988401200FF2474 /* FileProviderItem.swift in Sources */,
+				A92161E12988401200FF2474 /* FileProviderEnumerator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A92161E42988401200FF2474 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A92161EB2988401200FF2474 /* DocumentActionViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A96EE38228CFC64700D21360 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -604,7 +783,155 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		A92161F12988401200FF2474 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A92161E72988401200FF2474 /* GliderFileProviderUI */;
+			targetProxy = A92161F02988401200FF2474 /* PBXContainerItemProxy */;
+		};
+		A92161F42988401200FF2474 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A92161D62988401200FF2474 /* GliderFileProvider */;
+			targetProxy = A92161F32988401200FF2474 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A92161EC2988401200FF2474 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A92161ED2988401200FF2474 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		A92161F72988401300FF2474 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GliderFileProviderUI;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A92161F82988401300FF2474 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GliderFileProviderUI;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A92161FA2988401300FF2474 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GliderFileProvider/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GliderFileProvider;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A92161FB2988401300FF2474 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GliderFileProvider/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GliderFileProvider;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		A96EE39328CFC64800D21360 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -719,6 +1046,7 @@
 		A96EE39628CFC64800D21360 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
@@ -770,6 +1098,7 @@
 		A96EE39728CFC64800D21360 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
@@ -821,6 +1150,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A92161F62988401300FF2474 /* Build configuration list for PBXNativeTarget "GliderFileProviderUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A92161F72988401300FF2474 /* Debug */,
+				A92161F82988401300FF2474 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A92161F92988401300FF2474 /* Build configuration list for PBXNativeTarget "GliderFileProvider" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A92161FA2988401300FF2474 /* Debug */,
+				A92161FB2988401300FF2474 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A96EE38128CFC64700D21360 /* Build configuration list for PBXProject "Glider" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
