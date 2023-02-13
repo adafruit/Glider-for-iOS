@@ -20,7 +20,7 @@ class ItemEnumerator: NSObject, NSFileProviderEnumerator
     private let path: String
     
     init(enumeratedItem: FileProviderItem, metadataCache: FileMetadataCache, connectionManager: ConnectionManager) {
-        logger.info("init")
+        logger.info("init \(enumeratedItem.fullFilePath)")
         
         self.metadataCache = metadataCache
         self.enumeratedItem = enumeratedItem
@@ -84,6 +84,6 @@ class ItemEnumerator: NSObject, NSFileProviderEnumerator
     }
     
     func invalidate() {
-        logger.info("invalidate")
+        logger.info("invalidate \(self.enumeratedItem.fullFilePath)")
     }
 }

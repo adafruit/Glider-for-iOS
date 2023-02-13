@@ -138,13 +138,12 @@ class FileProviderExtension: NSFileProviderExtension {
             return
         }
 
-        /*
         let isFileOnDisk = fileManager.fileExists(atPath: url.path)
         if !isFileOnDisk {
             // If no file on disk, donwload from peripheral
-            DLog("File \(fileProviderItem.fullFilePath) does not exists locally. Get from peripheral")
-            let gliderClient = GliderClient.shared(peripheralIdentifier: peripheralIdentifier)
-            gliderClient.readFile(path: fileProviderItem.fileTransferPath) { [weak self]  result in
+            logger.info("File \(fileProviderItem.fullFilePath) does not exists locally. Get from peripheral")
+            let gliderClient = GliderClient.shared(peripheralType: fileProviderItem.peripheralType)
+            gliderClient.readFile(path: fileProviderItem.fileTransferPath, connectionManager: appContainer.connectionManager) { [weak self]  result in
                 guard let self = self else { return }
                 
                 switch result {
@@ -154,16 +153,16 @@ class FileProviderExtension: NSFileProviderExtension {
                         try self.writeReceivedFileLocally(url: url, fileProviderItem: fileProviderItem, receivedData: data)
                         
                         // Finished sync
-                        DLog("syncFile \(fileProviderItem.fullFilePath) success")
+                        self.logger.info("syncFile \(fileProviderItem.fullFilePath) success")
                         completionHandler(nil)
                     }
                     catch(let error) {
-                        DLog("syncFile \(fileProviderItem.fullFilePath) write to disk error: \(error)")
+                        self.logger.error("syncFile \(fileProviderItem.fullFilePath) write to disk error: \(error)")
                         completionHandler(error)
                     }
                     
                 case .failure(let error):
-                    DLog("syncFile \(fileProviderItem.fullFilePath) error: \(error)")
+                    self.logger.error("syncFile \(fileProviderItem.fullFilePath) error: \(error)")
                     completionHandler(NSFileProviderError(.serverUnreachable))
                 }
             }
@@ -184,7 +183,7 @@ class FileProviderExtension: NSFileProviderExtension {
                     switch result {
                     case .success(let isRemoteFileChanged):
                         if isRemoteFileChanged {
-                            DLog("File \(fileProviderItem.fullFilePath) has remote changes. Get from peripheral")
+                            self.logger.info("File \(fileProviderItem.fullFilePath) has remote changes. Get from peripheral")
                         }
                         completionHandler(nil)
                         
@@ -194,10 +193,8 @@ class FileProviderExtension: NSFileProviderExtension {
                 }
             }
         }
-        */
         
-        logger.error("TODO")
-        completionHandler(NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        //completionHandler(NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
     }
     
     
@@ -351,5 +348,134 @@ class FileProviderExtension: NSFileProviderExtension {
         let modificationDate = self.fileModificationDate(url: url)
         fileProviderItem.lastUpdate = modificationDate ?? Date()
         self.metadataCache.setFileProviderItem(item: fileProviderItem)
+    }
+    
+    private func checkIfRemoteFileChangedAndDownload(url: URL, fileProviderItem: FileProviderItem, completion: @escaping((Result<Bool, Error>) -> Void) ) {
+        // WARNING: major perfomance impact!!
+        // TODO: this should only check the remote modification file, but the CircuitPython File Protocol used doesn't support it yet, so we have to download the whole file to check if it has changed
+        
+        do {
+            let localData = try Data(contentsOf: url)
+            
+            // Retrieve remote file and compare with local data
+            let gliderClient = GliderClient.shared(peripheralType: fileProviderItem.peripheralType)
+            gliderClient.readFile(path: fileProviderItem.fileTransferPath, connectionManager: appContainer.connectionManager) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let data):
+                    let isRemoFileChanged = data != localData
+                    
+                    if isRemoFileChanged {
+                        do {
+                            try self.writeReceivedFileLocally(url: url, fileProviderItem: fileProviderItem, receivedData: data)
+                            completion(.success(true))
+                        }
+                        catch(let error) {
+                            self.logger.error("isRemoteFileChanged \(fileProviderItem.fullFilePath) error: \(error)")
+                            completion(.failure(NSFileProviderError(.serverUnreachable)))
+                        }
+                    }
+                    else {
+                        completion(.success(false))
+                    }
+                    
+                case .failure(let error):
+                    self.logger.error("isRemoteFileChanged \(fileProviderItem.fullFilePath) error: \(error)")
+                    completion(.failure(error))
+                }
+            }
+        }
+        catch {
+            completion(.failure(NSFileProviderError(.noSuchItem)))
+        }
+    }
+    
+    private func createDirectoryLocally(fileProviderItem: FileProviderItem, completion: (Result<Void, Error>)->Void) {
+        // Update metadata
+        self.metadataCache.setFileProviderItem(item: fileProviderItem)
+        
+        guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else {
+            self.logger.error("Error obtaining local url for createDirectory: \(fileProviderItem.fullFilePath)")
+            completion(.failure(GliderClient.GliderError.invalidInternalState))
+            return
+        }
+        
+        guard !fileManager.fileExists(atPath: localUrl.path) else {
+            completion(.success(()))
+            return
+        }
+        
+        do {
+            try fileManager.createDirectory(at: localUrl, withIntermediateDirectories: true, attributes: [:])
+            completion(.success(()))
+        } catch(let error) {
+            self.metadataCache.deleteFileProviderItem(identifier: fileProviderItem.itemIdentifier)     // Undo creation
+            self.logger.error("Error creating local directory: \(fileProviderItem.fullFilePath). Error: \(error.localizedDescription)")
+            completion(.failure(error))
+        }
+    }
+    
+    private func deleteItemLocally(itemIdentifier: NSFileProviderItemIdentifier, completion: (Result<Void, Error>)->Void) {
+        guard let localUrl = self.urlForItem(withPersistentIdentifier: itemIdentifier) else {
+            self.logger.error("Error obtaining local url for deleteItem: \(itemIdentifier.rawValue)")
+            completion(.failure(GliderClient.GliderError.invalidInternalState))
+            return
+        }
+        
+        // Update metadata (before real delete)
+        self.metadataCache.deleteFileProviderItem(identifier: itemIdentifier)
+        
+        // Delete local directory
+        try? fileManager.removeItem(at: localUrl)
+        completion(.success(()))
+        
+        /* Note: commented to always return delete successful in case we are in an inconsistent state
+         let isLocalItemDeleted: Bool
+         do {
+         try fileManager.removeItem(atPath: fileProviderItem.fullPath)
+         isLocalItemDeleted = true
+         } catch(let error) {
+         DLog("Error deleting local item: \(fileProviderItem.fullPath). Error: \(error.localizedDescription)")
+         isLocalItemDeleted = false
+         completionHandler(error)
+         }
+         */
+    }
+    
+    private func uploadFile(localURL url: URL, item fileProviderItem: FileProviderItem, completionHandler: @escaping ((_ error: Error?) -> Void)) {
+        do {
+            let localData = try Data(contentsOf: url)
+            
+            let gliderClient = GliderClient.shared(peripheralType: fileProviderItem.peripheralType)
+            gliderClient.writeFile(path: fileProviderItem.fileTransferPath, data: localData, connectionManager: appContainer.connectionManager) { result in
+                switch result {
+                case .success:
+                    // Save sync date
+                    let localModificationDate = self.fileModificationDate(url: url)
+                    fileProviderItem.lastUpdate = localModificationDate ?? Date()
+                    self.metadataCache.setFileProviderItem(item: fileProviderItem)
+                    
+                    // Finished
+                    completionHandler(nil)
+                    
+                case .failure:
+                    completionHandler(NSFileProviderError(.serverUnreachable))
+                }
+            }
+        }
+        catch(let error) {
+            self.logger.error("syncFile \(fileProviderItem.fullFilePath) load from disk error: \(error)")
+            completionHandler(NSFileProviderError(.noSuchItem))
+        }
+    }
+    
+    private func hasLocalChanges(url: URL) -> Bool {
+        guard let identifier = persistentIdentifierForItem(at: url) else { return false }
+        guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else { return false }
+        
+        let localModificationDate = self.fileModificationDate(url: url)
+        let localFileHasChanges = (localModificationDate ?? Date.distantPast) > fileProviderItem.lastUpdate
+        return localFileHasChanges
     }
 }

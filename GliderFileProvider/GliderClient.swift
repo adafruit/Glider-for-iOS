@@ -52,25 +52,27 @@ class GliderClient {
         self.peripheralType = peripheralType
     }
     
-    /*
+   
     // MARK: - Read
-    func readFile(path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+    func readFile(path: String, connectionManager: ConnectionManager, progress: FileTransferProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
         
-        let operation = GliderReadFileOperation(identifier: identifier, path: path, progress: progress, completion: completion)
+        let operation = GliderReadFileOperation(peripheralType: peripheralType, path: path, connectionManager: connectionManager, progress: progress, completion: completion)
         DLog("GliderClient: add read operation \(path)")
         operationsQueue.addOperation(operation)
     }
     
-    private class GliderReadFileOperation: Operation {
-        private let identifier: UUID
-        
+    private class GliderReadFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
+    
         private let path: String
-        private let progress: FileTransferClient.ProgressHandler?
+        private let connectionManager: ConnectionManager
+        private let progress: FileTransferProgressHandler?
         private let completion: ((Result<Data, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, progress: FileTransferProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
+            self.connectionManager = connectionManager
             self.progress = progress
             self.completion = completion
             super.init()
@@ -81,7 +83,7 @@ class GliderClient {
             
             //DLog("GliderClient: read start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
 
                 switch result {
@@ -104,24 +106,26 @@ class GliderClient {
     }
     
     // MARK: - Write
-    func writeFile(path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
-        let operation = GliderWriteFileOperation(identifier: identifier, path: path, data: data, progress: progress, completion: completion)
+    func writeFile(path: String, data: Data, connectionManager: ConnectionManager, progress: FileTransferProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+        let operation = GliderWriteFileOperation(peripheralType: peripheralType, path: path, data: data, connectionManager: connectionManager, progress: progress, completion: completion)
         DLog("GliderClient: add write operation \(path)")
         operationsQueue.addOperation(operation)
     }
     
-    private class GliderWriteFileOperation: Operation {
-        private let identifier: UUID
-        
+    private class GliderWriteFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
+    
         private let path: String
         private let data: Data
-        private let progress: FileTransferClient.ProgressHandler?
+        private let connectionManager: ConnectionManager
+        private let progress: FileTransferProgressHandler?
         private let completion: ((Result<Void, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, data: Data, connectionManager: ConnectionManager, progress: FileTransferProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
             self.data = data
+            self.connectionManager = connectionManager
             self.progress = progress
             self.completion = completion
             super.init()
@@ -132,7 +136,7 @@ class GliderClient {
             
             //DLog("GliderClient: write start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
                 switch result {
                 case .success(let client):
@@ -161,21 +165,23 @@ class GliderClient {
     }
     
     // MARK: - Delete
-    func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?) {
-        let operation = GliderDeleteFileOperation(identifier: identifier, path: path, completion: completion)
+    func deleteFile(path: String, connectionManager: ConnectionManager, completion: ((Result<Void, Error>) -> Void)?) {
+        let operation = GliderDeleteFileOperation(peripheralType: peripheralType, path: path, connectionManager: connectionManager, completion: completion)
         DLog("GliderClient: add delete operation \(path)")
         operationsQueue.addOperation(operation)
     }
 
-    private class GliderDeleteFileOperation: Operation {
-        private let identifier: UUID
-        
+    private class GliderDeleteFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
+    
         private let path: String
+        private let connectionManager: ConnectionManager
         private let completion: ((Result<Void, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, completion: ((Result<Void, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, completion: ((Result<Void, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
+            self.connectionManager = connectionManager
             self.completion = completion
             super.init()
         }
@@ -185,7 +191,7 @@ class GliderClient {
             
             //DLog("GliderClient: delete start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
                 //DLog("GliderClient: delete prepared: \(result.isSuccess)")
                 switch result {
@@ -206,23 +212,26 @@ class GliderClient {
             syncSemaphore.wait()        // Operation main() should return when completed
         }
     }
-    
+     
+     
     // MARK: - Make Directory
-    func makeDirectory(path: String, completion: ((Result<Date?, Error>) -> Void)?) {
-        let operation = GliderMakeDirectoryFileOperation(identifier: identifier, path: path, completion: completion)
+    func makeDirectory(path: String, connectionManager: ConnectionManager, completion: ((Result<Date?, Error>) -> Void)?) {
+        let operation = GliderMakeDirectoryFileOperation(peripheralType: peripheralType, path: path, connectionManager: connectionManager, completion: completion)
         DLog("GliderClient: add make directory operation \(path)")
         operationsQueue.addOperation(operation)
     }
 
-    private class GliderMakeDirectoryFileOperation: Operation {
-        private let identifier: UUID
+    private class GliderMakeDirectoryFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
         
         private let path: String
+        private let connectionManager: ConnectionManager
         private let completion: ((Result<Date?, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, completion: ((Result<Date?, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, completion: ((Result<Date?, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
+            self.connectionManager = connectionManager
             self.completion = completion
             super.init()
         }
@@ -232,7 +241,7 @@ class GliderClient {
                         
             //DLog("GliderClient: make directory start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
                 //DLog("GliderClient: make directory prepared: \(result.isSuccess)")
                 switch result {
@@ -254,7 +263,7 @@ class GliderClient {
         }
     }
     
-    */
+    
     // MARK: - List Directory
     func listDirectory(path: String, connectionManager: ConnectionManager, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
         let operation = GliderListDirectoryFileOperation(peripheralType: peripheralType, path: path, connectionManager: connectionManager, completion: completion)
@@ -262,6 +271,51 @@ class GliderClient {
         operationsQueue.addOperation(operation)
     }
     
+    private class GliderListDirectoryFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
+        
+        private let path: String
+        private let connectionManager: ConnectionManager
+        private let completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?
+        
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
+            self.path = path
+            self.connectionManager = connectionManager
+            self.completion = completion
+            super.init()
+        }
+        
+        override func main() {
+            guard !isCancelled else { completion?(.failure(GliderError.cancelled)); return }
+            
+            //DLog("GliderClient: list directory start")
+            let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
+                guard let self = self else { syncSemaphore.signal(); return }
+                //DLog("GliderClient: list directory prepared: \(result.isSuccess)")
+                switch result {
+                case .success(let client):
+                    guard !self.isCancelled else { self.completion?(.failure(GliderError.cancelled)); syncSemaphore.signal(); return }
+                    
+                    client.listDirectory(path: self.path) { [weak self] result in
+                        //DLog("GliderClient: list directory finished: \(result.isSuccess)")
+                        self?.completion?(result)
+                        syncSemaphore.signal()
+                    }
+                case .failure(let error):
+                    self.completion?(.failure(error))
+                    syncSemaphore.signal()
+                }
+            }
+            
+            syncSemaphore.wait()        // Operation main() should return when completed
+        }
+    }
+
+    
+ 
+    // MARK: - Base GliderOperation
     private class GliderOperation: Operation {
         // Config
         private static let kMaxTimeToWaitForBleSupport: TimeInterval = 5.0
@@ -407,54 +461,5 @@ class GliderClient {
                 DLog("Wait for connection check time-out")
             }
         }
-
     }
-    
-    private class GliderListDirectoryFileOperation: GliderOperation {
-        private let peripheralType: FileProviderItem.PeripheralType
-        
-        private let path: String
-        private let connectionManager: ConnectionManager
-        private let completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?
-        
-        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
-            self.peripheralType = peripheralType
-            self.path = path
-            self.connectionManager = connectionManager
-            self.completion = completion
-            super.init()
-        }
-        
-        override func main() {
-            guard !isCancelled else { completion?(.failure(GliderError.cancelled)); return }
-            
-            //DLog("GliderClient: list directory start")
-            let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
-                guard let self = self else { syncSemaphore.signal(); return }
-                //DLog("GliderClient: list directory prepared: \(result.isSuccess)")
-                switch result {
-                case .success(let client):
-                    guard !self.isCancelled else { self.completion?(.failure(GliderError.cancelled)); syncSemaphore.signal(); return }
-                    
-                    client.listDirectory(path: self.path) { [weak self] result in
-                        //DLog("GliderClient: list directory finished: \(result.isSuccess)")
-                        self?.completion?(result)
-                        syncSemaphore.signal()
-                    }
-                case .failure(let error):
-                    self.completion?(.failure(error))
-                    syncSemaphore.signal()
-                }
-            }
-            
-            syncSemaphore.wait()        // Operation main() should return when completed
-        }
-    }
-
-    
- 
-    
-    
-    
 }
