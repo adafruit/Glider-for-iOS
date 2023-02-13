@@ -220,19 +220,16 @@ class FileProviderExtension: NSFileProviderExtension {
             return
         }
         
-        /*
         // TODO: check if the file was already being uploaded in the queue and cancel it
         // Schedule upload in background
         self.uploadFile(localURL: url, item: fileProviderItem) { error in
             if let error = error {
-                DLog("itemChanged upload \(fileProviderItem.fullFilePath) error: \(error.localizedDescription)")
+                self.logger.error("itemChanged upload \(fileProviderItem.fullFilePath) error: \(error.localizedDescription)")
             }
             else {
-                DLog("itemChanged uploaded \(fileProviderItem.fullFilePath)")
+                self.logger.info("itemChanged uploaded \(fileProviderItem.fullFilePath)")
             }
-        }*/
-        
-        logger.error("TODO")
+        }
     }
     
     override func stopProvidingItem(at url: URL) {
@@ -240,7 +237,7 @@ class FileProviderExtension: NSFileProviderExtension {
         
         // Called after the last claim to the file has been released. At this point, it is safe for the file provider to remove the content file.
         // Care should be taken that the corresponding placeholder file stays behind after the content file has been deleted.
-        /*
+        
         // TODO: look up whether the file has local changes
         let fileHasLocalChanges = hasLocalChanges(url: url)
         
@@ -256,11 +253,9 @@ class FileProviderExtension: NSFileProviderExtension {
             // write out a placeholder to facilitate future property lookups
             self.providePlaceholder(at: url, completionHandler: { error in
                 // TODO: handle any error, do any necessary cleanup
-                logger.error("error providing placeholder for deleted file: \(url.absoluteString). Error: \(error?.localizedDescription ?? "nil")")
+                self.logger.error("error providing placeholder for deleted file: \(url.absoluteString). Error: \(error?.localizedDescription ?? "nil")")
             })
-        }*/
-        
-        logger.error("TODO")
+        }
     }
     
     // MARK: - Enumeration
@@ -319,6 +314,65 @@ class FileProviderExtension: NSFileProviderExtension {
         }
         
         return progress
+    }
+    
+    
+    // MARK: - Actions
+    
+    /* implement the actions for items here
+     each of the actions follows the same pattern:
+     - make a note of the change in the local model
+     - schedule a server request as a background task to inform the server of the change
+     - call the completion block with the modified item in its post-modification state
+     */
+    
+    override func createDirectory(withName directoryName: String, inParentItemIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
+        logger.info("createDirectory: '\(directoryName)' at \(parentItemIdentifier.rawValue)")
+
+        guard let parentFileProviderItem = try? item(for: parentItemIdentifier) as? FileProviderItem else {
+            completionHandler(nil, NSFileProviderError(.noSuchItem))
+            return
+        }
+
+        // Create fileProviderItem
+        let fileProviderItem = FileProviderItem(peripheralType: parentFileProviderItem.peripheralType, path: parentFileProviderItem.fileTransferPath, entry: DirectoryEntry(name: directoryName, type: DirectoryEntry.EntryType.directory, modificationDate: Date()))
+        
+        createDirectoryLocally(fileProviderItem: fileProviderItem) { result in
+            switch result {
+            case .success:
+                
+                // Schedule create in background
+                let gliderClient = GliderClient.shared(peripheralType: fileProviderItem.peripheralType)
+                gliderClient.makeDirectory(path: fileProviderItem.fileTransferPath, connectionManager: appContainer.connectionManager) { result in
+                    switch result {
+                    case .success(let date):
+                        self.logger.info("createDirectory '\(fileProviderItem.fullFilePath)' result successful")
+                        if let date = date {
+                            fileProviderItem.lastUpdate = date
+                        }
+                        self.metadataCache.setFileProviderItem(item: fileProviderItem)
+                        
+                    case .failure(let error):
+                        self.logger.error("createDirectory error: \(error)")
+                        
+                        if let fileTransferError = error as? BleFileTransferPeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                            self.logger.info("createDirectory signal parent enumerator")
+                            NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                self.logger.info("createDirectory parent enumerator signal finished")
+                            }
+                        }
+                    }
+                }
+                
+                
+                // Return inmediately (before the directory is even created)
+                completionHandler(fileProviderItem, nil)
+                
+            case .failure(let error):
+                DLog("Error creating local directory: \(fileProviderItem.fullFilePath). Error: \(error.localizedDescription)")
+                completionHandler(nil, error)
+            }
+        }
     }
     
     // MARK: - Utils
