@@ -81,7 +81,12 @@ struct LogView: View {
                     
                     // Clear log
                     Button(action: {
-                        LogManager.shared.clear()
+                        if showFileProviderLog {
+                            logManagerFileProvider.clear()
+                        }
+                        else {
+                            logManager.clear()
+                        }
                     }, label: {
                         Image(systemName: "trash")
                     })

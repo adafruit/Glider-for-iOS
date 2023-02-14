@@ -11,32 +11,33 @@ import os.log
 class FileProviderExtension: NSFileProviderExtension {
 
     // Data
-    private let logger = Logger.createLogger(category: "FileProviderExtension")
+    //private let logger = Logger.createLogger(category: "FileProviderExtension")
     private var metadataCache = FileMetadataCache.shared
     private var fileManager = FileManager()
      
     private let appContainer = AppContainerImpl.shared
- 
     
     override init() {
-        DLog("init")
+        DLog("FileProviderExtension init")
+        LogManager.shared.load()
 
         super.init()
     }
     
     deinit {
-        DLog("deinit")
+        DLog("FileProviderExtension deinit")
+        LogManager.shared.save()
     }
 
     // MARK: - Mandatory methods
     override func item(for identifier: NSFileProviderItemIdentifier) throws -> NSFileProviderItem {
         guard let item = metadataCache.fileProviderItem(for: identifier) else {
-            logger.error("Error: undefined item for identifier: \(identifier.rawValue)")
+            DLog("Error: undefined item for identifier: \(identifier.rawValue)")
             throw GliderClient.GliderError.undefinedFileProviderItem(identifier: identifier.rawValue)
         }
         //DLog("item: \(identifier.rawValue) -> \(item.itemIdentifier.rawValue)")
         if AppEnvironment.isDebug, identifier != item.itemIdentifier {
-            logger.error("Error: item(for:) wrong result")
+            DLog("Error: item(for:) wrong result")
         }
         return item
     }
@@ -45,7 +46,7 @@ class FileProviderExtension: NSFileProviderExtension {
         
         // resolve the given identifier to a file on disk
         guard let item = try? item(for: identifier) as? FileProviderItem else {
-            logger.error("urlForItem: \(identifier.rawValue) -> nil")
+            DLog("urlForItem: \(identifier.rawValue) -> nil")
             return nil
         }
 
@@ -77,7 +78,7 @@ class FileProviderExtension: NSFileProviderExtension {
         DLog("providePlaceholder at: \(url.absoluteString)")
         
         guard let identifier = persistentIdentifierForItem(at: url) else {
-            logger.error("providePlaceholder error .noSuchItem")
+            DLog("providePlaceholder error .noSuchItem")
             completionHandler(NSFileProviderError(.noSuchItem))
             return
         }
@@ -92,7 +93,7 @@ class FileProviderExtension: NSFileProviderExtension {
             try NSFileProviderManager.writePlaceholder(at: placeholderURL, withMetadata: fileProviderItem)
             completionHandler(nil)
         } catch let error {
-            logger.error("providePlaceholder error: \(error)")
+            DLog("providePlaceholder error: \(error)")
             completionHandler(error)
         }
     }
@@ -127,13 +128,13 @@ class FileProviderExtension: NSFileProviderExtension {
          */
 
         guard let identifier = persistentIdentifierForItem(at: url) else {
-            logger.error("startProvidingItem. Unknown identifier")
+            DLog("startProvidingItem. Unknown identifier")
             completionHandler(NSFileProviderError(.noSuchItem))
             return
         }
 
         guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else {
-            logger.error("startProvidingItem. Unknown fileProviderItem")
+            DLog("startProvidingItem. Unknown fileProviderItem")
             completionHandler(NSFileProviderError(.noSuchItem))
             return
         }
@@ -157,12 +158,12 @@ class FileProviderExtension: NSFileProviderExtension {
                         completionHandler(nil)
                     }
                     catch(let error) {
-                        self.logger.error("syncFile \(fileProviderItem.fullFilePath) write to disk error: \(error)")
+                        DLog("syncFile \(fileProviderItem.fullFilePath) write to disk error: \(error)")
                         completionHandler(error)
                     }
                     
                 case .failure(let error):
-                    self.logger.error("syncFile \(fileProviderItem.fullFilePath) error: \(error)")
+                    DLog("syncFile \(fileProviderItem.fullFilePath) error: \(error)")
                     completionHandler(NSFileProviderError(.serverUnreachable))
                 }
             }
@@ -211,12 +212,12 @@ class FileProviderExtension: NSFileProviderExtension {
          */
         
         guard let identifier = persistentIdentifierForItem(at: url) else {
-            logger.error("itemChanged. Unknown identifier")
+            DLog("itemChanged. Unknown identifier")
             return
         }
         
         guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else {
-            logger.error("itemChanged. Unknown fileProviderItem")
+            DLog("itemChanged. Unknown fileProviderItem")
             return
         }
         
@@ -224,7 +225,7 @@ class FileProviderExtension: NSFileProviderExtension {
         // Schedule upload in background
         self.uploadFile(localURL: url, item: fileProviderItem) { error in
             if let error = error {
-                self.logger.error("itemChanged upload \(fileProviderItem.fullFilePath) error: \(error.localizedDescription)")
+                DLog("itemChanged upload \(fileProviderItem.fullFilePath) error: \(error.localizedDescription)")
             }
             else {
                 DLog("itemChanged uploaded \(fileProviderItem.fullFilePath)")
@@ -247,13 +248,13 @@ class FileProviderExtension: NSFileProviderExtension {
                 _ = try FileManager.default.removeItem(at: url)
             } catch(let error) {
                 // Handle error
-                logger.error("error deleting local file: \(url.absoluteString). Error: \(error.localizedDescription)")
+                DLog("error deleting local file: \(url.absoluteString). Error: \(error.localizedDescription)")
             }
             
             // write out a placeholder to facilitate future property lookups
             self.providePlaceholder(at: url, completionHandler: { error in
                 // TODO: handle any error, do any necessary cleanup
-                self.logger.error("error providing placeholder for deleted file: \(url.absoluteString). Error: \(error?.localizedDescription ?? "nil")")
+                DLog("error providing placeholder for deleted file: \(url.absoluteString). Error: \(error?.localizedDescription ?? "nil")")
             })
         }
     }
@@ -353,7 +354,7 @@ class FileProviderExtension: NSFileProviderExtension {
                         self.metadataCache.setFileProviderItem(item: fileProviderItem)
                         
                     case .failure(let error):
-                        self.logger.error("createDirectory error: \(error)")
+                        DLog("createDirectory error: \(error)")
                         
                         if let fileTransferError = error as? BleFileTransferPeripheral.FileTransferError, case .statusFailed = fileTransferError {
                             DLog("createDirectory signal parent enumerator")
@@ -393,7 +394,7 @@ class FileProviderExtension: NSFileProviderExtension {
                     DLog("deleteFile '\(fileProviderItem.fullFilePath)' result successful")
                     
                 case .failure(let error):
-                    self.logger.error("deleteFile error: \(error)")
+                    DLog("deleteFile error: \(error)")
                     if let fileTransferError = error as? BleFileTransferPeripheral.FileTransferError, case .statusFailed = fileTransferError {
                         DLog("deleteFile signal parent enumerator")
                         NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
@@ -417,7 +418,7 @@ class FileProviderExtension: NSFileProviderExtension {
             return
         }
         
-        guard fileURL.startAccessingSecurityScopedResource() else { logger.error("Error accessing security scoped resource for: \(fileURL.absoluteString)"); return }
+        guard fileURL.startAccessingSecurityScopedResource() else { DLog("Error accessing security scoped resource for: \(fileURL.absoluteString)"); return }
         
         do {
             let fileAttributes = try fileURL.resourceValues(forKeys:[.nameKey, .creationDateKey, .contentModificationDateKey])
@@ -445,7 +446,7 @@ class FileProviderExtension: NSFileProviderExtension {
             }
             self.metadataCache.setFileProviderItem(item: fileProviderItem)     // Set before  urlForItem
             
-            guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else { logger.error("Error obtaining local url for imported document \(fileURL.absoluteString)"); return }
+            guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else { DLog("Error obtaining local url for imported document \(fileURL.absoluteString)"); return }
             
             // Write data locally
             createLocalIntermediateDirectoriesIfNeeded(url: localUrl)
@@ -458,7 +459,7 @@ class FileProviderExtension: NSFileProviderExtension {
                 case .success:
                     DLog("importDocument '\(fileProviderItem.fullFilePath)' successful. (\(data.count) bytes")
                 case .failure(let error):
-                    self.logger.error("importDocument error: \(error)")
+                    DLog("importDocument error: \(error)")
                     NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
                         DLog("importDocument parent enumerator signal finished. Error?: \(error?.localizedDescription ?? "<nil>")")
                     }
@@ -480,12 +481,12 @@ class FileProviderExtension: NSFileProviderExtension {
         DLog("renameItem: \(itemIdentifier.rawValue) toName: \(itemName)")
 
         guard let fileProviderItem = try? item(for: itemIdentifier) as? FileProviderItem else {
-            logger.error("renameItem. Unknown fileProviderItem")
+            DLog("renameItem. Unknown fileProviderItem")
             completionHandler(nil, NSFileProviderError(.noSuchItem))
             return
         }
         guard let entry = fileProviderItem.entry else {
-            logger.error("renameItem. Unknown entry")
+            DLog("renameItem. Unknown entry")
             completionHandler(nil, NSFileProviderError(.noSuchItem))
             return
         }
@@ -522,7 +523,7 @@ class FileProviderExtension: NSFileProviderExtension {
                                     
                                     
                                 case .failure(let error):
-                                    self.logger.error("rename step 2: deleteFile error: \(error)")
+                                    DLog("rename step 2: deleteFile error: \(error)")
                                     
                                     if let fileTransferError = error as? BleFileTransferPeripheral.FileTransferError, case .statusFailed = fileTransferError {
                                         DLog("rename step 2 signal parent enumerator")
@@ -534,7 +535,7 @@ class FileProviderExtension: NSFileProviderExtension {
                             }
 
                         case .failure(let error):
-                            self.logger.error("rename step 1: createDirectory error: \(error)")
+                            DLog("rename step 1: createDirectory error: \(error)")
                             
                             if let fileTransferError = error as? BleFileTransferPeripheral.FileTransferError, case .statusFailed = fileTransferError {
                                 DLog("rename step 1 signal parent enumerator")
@@ -550,7 +551,7 @@ class FileProviderExtension: NSFileProviderExtension {
                 }
                 
             case .failure(let error):
-                logger.error("Error creating local directory: \(fileProviderItem.fullFilePath). Error: \(error.localizedDescription)")
+                DLog("Error creating local directory: \(fileProviderItem.fullFilePath). Error: \(error.localizedDescription)")
                 completionHandler(nil, error)
             }
         }
@@ -636,7 +637,7 @@ class FileProviderExtension: NSFileProviderExtension {
                             completion(.success(true))
                         }
                         catch(let error) {
-                            self.logger.error("isRemoteFileChanged \(fileProviderItem.fullFilePath) error: \(error)")
+                            DLog("isRemoteFileChanged \(fileProviderItem.fullFilePath) error: \(error)")
                             completion(.failure(NSFileProviderError(.serverUnreachable)))
                         }
                     }
@@ -645,7 +646,7 @@ class FileProviderExtension: NSFileProviderExtension {
                     }
                     
                 case .failure(let error):
-                    self.logger.error("isRemoteFileChanged \(fileProviderItem.fullFilePath) error: \(error)")
+                    DLog("isRemoteFileChanged \(fileProviderItem.fullFilePath) error: \(error)")
                     completion(.failure(error))
                 }
             }
@@ -660,7 +661,7 @@ class FileProviderExtension: NSFileProviderExtension {
         self.metadataCache.setFileProviderItem(item: fileProviderItem)
         
         guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else {
-            self.logger.error("Error obtaining local url for createDirectory: \(fileProviderItem.fullFilePath)")
+            DLog("Error obtaining local url for createDirectory: \(fileProviderItem.fullFilePath)")
             completion(.failure(GliderClient.GliderError.invalidInternalState))
             return
         }
@@ -675,14 +676,14 @@ class FileProviderExtension: NSFileProviderExtension {
             completion(.success(()))
         } catch(let error) {
             self.metadataCache.deleteFileProviderItem(identifier: fileProviderItem.itemIdentifier)     // Undo creation
-            self.logger.error("Error creating local directory: \(fileProviderItem.fullFilePath). Error: \(error.localizedDescription)")
+            DLog("Error creating local directory: \(fileProviderItem.fullFilePath). Error: \(error.localizedDescription)")
             completion(.failure(error))
         }
     }
     
     private func deleteItemLocally(itemIdentifier: NSFileProviderItemIdentifier, completion: (Result<Void, Error>)->Void) {
         guard let localUrl = self.urlForItem(withPersistentIdentifier: itemIdentifier) else {
-            self.logger.error("Error obtaining local url for deleteItem: \(itemIdentifier.rawValue)")
+            DLog("Error obtaining local url for deleteItem: \(itemIdentifier.rawValue)")
             completion(.failure(GliderClient.GliderError.invalidInternalState))
             return
         }
@@ -694,7 +695,7 @@ class FileProviderExtension: NSFileProviderExtension {
         do {
             try fileManager.removeItem(at: localUrl)
         } catch(let error) {
-            logger.error("Error deleting local item: \(localUrl). Error: \(error.localizedDescription)")
+            DLog("Error deleting local item: \(localUrl). Error: \(error.localizedDescription)")
             //completionHandler(error)  Note: commented to always return delete successful in case we are in an inconsistent state
         }
         completion(.success(()))
@@ -737,7 +738,7 @@ class FileProviderExtension: NSFileProviderExtension {
             }
         }
         catch(let error) {
-            self.logger.error("syncFile \(fileProviderItem.fullFilePath) load from disk error: \(error)")
+            DLog("syncFile \(fileProviderItem.fullFilePath) load from disk error: \(error)")
             completionHandler(NSFileProviderError(.noSuchItem))
         }
     }
