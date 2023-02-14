@@ -16,16 +16,20 @@ class PeripheralsViewModel: ObservableObject {
    
     enum ActiveAlert: Identifiable {
         case networkError(error: Error)
-        case connectionError(error: Error)
+        case bleBondedReconnectionError(error: Error)
+        case bleScanningError(error: Error)
+        case wifiDiscoveryError(error: Error)
         case disconnect(address: String)
         case deleteBondingInformation(address: String)
         
         var id: Int {
             switch self {
             case .networkError: return 1
-            case .connectionError: return 2
-            case .disconnect: return 3
-            case .deleteBondingInformation: return 4
+            case .bleBondedReconnectionError: return 2
+            case .bleScanningError: return 3
+            case .wifiDiscoveryError: return 4
+            case .disconnect: return 5
+            case .deleteBondingInformation: return 6
             }
         }
     }
@@ -74,38 +78,40 @@ class PeripheralsViewModel: ObservableObject {
             .store(in: &disposables)
         
         
-        // Intercept connectionManager.lastConnectionError to show it as an alert
+        // Intercept connectionManager.lastReconnectionError to show it as an alert
         connectionManager.$lastReconnectionError
             .receive(on: RunLoop.main)
+            .compactMap{$0}     // discard nil values
             .sink {  lastReconnectionError in
-                self.showAlertConnectionError(lastReconnectionError)
+                self.showAlert(.bleBondedReconnectionError(error: lastReconnectionError))
             }
             .store(in: &disposables)
         
         // Intercept connectionManager.bleScanningLastError to show it as an alert
         connectionManager.bleScanningLastErrorPublisher
             .receive(on: RunLoop.main)
+            .compactMap{$0}     // discard nil values
             .sink { error in
-                self.showAlertConnectionError(error)
+                self.showAlert(.bleScanningError(error: error))
             }
             .store(in: &disposables)
         
         // Intercept connectionManager.bonjourLastErrorPublisher to show it as an alert
         connectionManager.bonjourLastErrorPublisher
             .receive(on: RunLoop.main)
+            .compactMap{$0}      // discard nil values
             .sink { error in
-                self.showAlertConnectionError(error)
+                self.showAlert(.wifiDiscoveryError(error: error))
             }
             .store(in: &disposables)
     }
     
-    private func showAlertConnectionError(_ error: Error?) {
-        guard let error = error else { return }
+    private func showAlert(_ alert: ActiveAlert) {
         guard self.activeAlert == nil else {
             DLog("Connection error alert, but alert already being displayed. Skip...")
             return
         }
-        self.activeAlert = .connectionError(error: error)
+        self.activeAlert = alert
     }
     
     func onAppear() {

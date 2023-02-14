@@ -42,6 +42,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         */
         
         
+        // UIDocumentBrowserViewController buttons color
+        UINavigationBar.appearance(whenContainedInInstancesOf: [UIDocumentBrowserViewController.self]).tintColor = UIColor.blue
+        
         // List background
         UITableView.appearance().backgroundColor = UIColor.clear
         UITableView.appearance().separatorStyle = .none

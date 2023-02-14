@@ -172,12 +172,21 @@ private struct PeripheralsBody: View {
                             message: Text("\(error.localizedDescription)"))//,
                             //dismissButton: .cancel())
                         
-                    case .connectionError(let error):
+                    case .bleBondedReconnectionError(let error):
                         return Alert(
-                            title: Text("Connection Error"),
-                            message: Text("\(error.localizedDescription)"))//,
-                            //dismissButton: .cancel())
+                            title: Text("Bonded Peripheral Connection Error"),
+                            message: Text("\(error.localizedDescription)"))
     
+                    case .bleScanningError(let error):
+                        return Alert(
+                            title: Text("Bluetooth Scanning Error"),
+                            message: Text("\(error.localizedDescription)"))
+                        
+                    case .wifiDiscoveryError(let error):
+                        return Alert(
+                            title: Text("Wifi Discovery Error"),
+                            message: Text("\(error.localizedDescription)"))
+                        
                     case .disconnect(let address):
                         return Alert(
                             title: Text("Disconnect"),

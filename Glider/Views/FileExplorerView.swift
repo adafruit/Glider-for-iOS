@@ -115,8 +115,11 @@ private struct FileExplorerBody: View {
                             
                         }, onMakeFile: { filename in
                             let path = model.path + filename
-                            model.makeFile(filename: path, fileTransferClient: fileTransferClient)
+                            model.makeFile(filename: path, data: Data(), fileTransferClient: fileTransferClient)
                             
+                        }, onUploadFile: { filename, data in
+                            let path = model.path + filename
+                            model.makeFile(filename: path, data: data, fileTransferClient: fileTransferClient)
                         })
                     }
                 }
@@ -151,12 +154,15 @@ private struct FileExplorerBody: View {
         let isLoading: Bool
         let onMakeDirectory: ((_ directoryName: String)->Void)
         let onMakeFile: ((_ fileName: String)->Void)
+        let onUploadFile: ((_ fileName: String, _ data: Data)->Void)
 
         @State private var showNewDirectoryDialog = false
         @State private var showNewFileDialog = false
-        
+        @State private var showUploadFileDialog = false
+
         var body: some View {
             HStack {
+                // New directory button
                 Button(action: {
                     showNewDirectoryDialog.toggle()
                     
@@ -173,7 +179,7 @@ private struct FileExplorerBody: View {
                     }
                 })
                 
-                
+                // New file button
                 Button(action: {
                     showNewFileDialog.toggle()
                     
@@ -181,14 +187,29 @@ private struct FileExplorerBody: View {
                     Image(systemName: "doc.badge.plus")
                         .padding(.horizontal, 2)
                 })
-                    .layoutPriority(1)
-                    .buttonStyle(PrimaryButtonStyle(height: 36, foregroundColor: mainColor))
-                    .disabled(isLoading)
-                    .alert(isPresented: $showNewFileDialog, TextFieldAlert(title: "New File", message: "Enter name for the new file") { fileName in
-                        if  let fileName = fileName {
-                            onMakeFile(fileName)
-                        }
-                    })
+                .layoutPriority(1)
+                .buttonStyle(PrimaryButtonStyle(height: 36, foregroundColor: mainColor))
+                .disabled(isLoading)
+                .alert(isPresented: $showNewFileDialog, TextFieldAlert(title: "New File", message: "Enter name for the new file") { fileName in
+                    if  let fileName = fileName {
+                        onMakeFile(fileName)
+                    }
+                })
+                
+                // Upload file button
+                Button(action: {
+                    showUploadFileDialog.toggle()
+                    
+                }, label: {
+                    Image(systemName: "arrow.up")
+                        .padding(.horizontal, 2)
+                })
+                .layoutPriority(1)
+                .buttonStyle(PrimaryButtonStyle(height: 36, foregroundColor: mainColor))
+                .disabled(isLoading)
+                .sheet(isPresented: $showUploadFileDialog) { DocumentPicker(onUploadFile: onUploadFile)
+                }
+                
             }
         }
     }

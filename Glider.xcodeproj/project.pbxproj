@@ -84,6 +84,7 @@
 		A985BC6C28EC6AB8008A81FD /* BleFileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6B28EC6AB8008A81FD /* BleFileTransferPeripheral.swift */; };
 		A98A1DF729916D66007102A8 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165328D85A3B0050727A /* AppContainer.swift */; };
 		A98A1DF829916D74007102A8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161B28D8580E0050727A /* Config.swift */; };
+		A98A1DFC299B0D34007102A8 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A1DFB299B0D34007102A8 /* DocumentPicker.swift */; };
 		A98CE9F628E2F17800795BC7 /* FileExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F728DA2A070056177D /* FileExplorerView.swift */; };
 		A9AD162128D858460050727A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161B28D8580E0050727A /* Config.swift */; };
 		A9AD162228D8584C0050727A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161D28D8580E0050727A /* AppDelegate.swift */; };
@@ -218,6 +219,7 @@
 		A985BC6728EC69D2008A81FD /* BleAdvertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleAdvertisement.swift; sourceTree = "<group>"; };
 		A985BC6928EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BleAdvertisement+ManufacturerAdafruit.swift"; sourceTree = "<group>"; };
 		A985BC6B28EC6AB8008A81FD /* BleFileTransferPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleFileTransferPeripheral.swift; sourceTree = "<group>"; };
+		A98A1DFB299B0D34007102A8 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 		A9AD161B28D8580E0050727A /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		A9AD161C28D8580E0050727A /* GliderApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderApp.swift; sourceTree = "<group>"; };
 		A9AD161D28D8580E0050727A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -436,6 +438,7 @@
 			children = (
 				A9AD162528D858D40050727A /* LogManager.swift */,
 				A9D5310128DA2AE70056177D /* TransmissionStatus.swift */,
+				A98A1DFB299B0D34007102A8 /* DocumentPicker.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -852,6 +855,7 @@
 				A9AD169828D8A6EA0050727A /* WifiPeripheral.swift in Sources */,
 				A9AD166428D862070050727A /* ConnectedTabView.swift in Sources */,
 				A9AD164928D8592E0050727A /* String+DeletingPrefix.swift in Sources */,
+				A98A1DFC299B0D34007102A8 /* DocumentPicker.swift in Sources */,
 				A9AD164F28D8592E0050727A /* AppEnvironment.swift in Sources */,
 				A985BC6828EC69D2008A81FD /* BleAdvertisement.swift in Sources */,
 				A940C70228EC78BB0017B277 /* SavedBondedBlePeripherals.swift in Sources */,
@@ -940,7 +944,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
@@ -970,7 +974,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
@@ -1002,7 +1006,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
@@ -1035,7 +1039,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2X94RM7457;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GliderFileProvider/Info.plist;
@@ -1183,7 +1187,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
@@ -1235,7 +1239,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;

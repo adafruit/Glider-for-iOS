@@ -88,8 +88,8 @@ class FileCommandsViewModel: ObservableObject {
         }
     }
     
-    func makeFile(filename: String, fileTransferClient: FileTransferClient) {
-        writeFile(filename: filename, data: Data(), fileTransferClient: fileTransferClient) { result in
+    func makeFile(filename: String, data: Data, fileTransferClient: FileTransferClient) {
+        writeFile(filename: filename, data: data, fileTransferClient: fileTransferClient) { result in
             if case .success = result {
                 self.listDirectory(directory: self.path, fileTransferClient: fileTransferClient)      // Force list again directory
             }
