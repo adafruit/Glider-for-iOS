@@ -37,23 +37,7 @@ struct PeripheralsView: View {
                 connectionManager.disconnectFileTransferClient(address: address)
             },
             onSelectBondedPeripheral: { uuid in
-                
-                connectionManager.reconnectToBondedBlePeripherals(knownUuids: [uuid]) /*{ isConnected in
-                    
-                    let address = uuid.uuidString
-                    if isConnected {
-                        if let fileTransferClient = connectionManager.fileTransferClient(address: address) {
-                            connectionManager.setSelectedPeripheral(peripheral: fileTransferClient.peripheral)
-                        }
-                    }
-                    else {
-                        DLog("Cannot connect to bonded peripheral: \(address)")
-                        let name = bondedBlePeripheralsDataWithState.first {
-                            $0.uuid == uuid
-                        }?.name ?? address
-                        model.activeAlert = .bondedConnectionError(name: name)
-                    }
-                }*/
+                connectionManager.reconnectToBondedBlePeripherals(knownUuids: [uuid], completion: nil)
             },
             onDeleteBondedPeripheral: { address in
                 connectionManager.disconnectFileTransferClient(address: address)

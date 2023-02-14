@@ -56,7 +56,7 @@ class BleManagerImpl: NSObject, BleManager {
     func retrieveConnectedPeripherals(withServices serviceUUIDs: [CBUUID]) -> [CBPeripheral] {
         return centralManager.retrieveConnectedPeripherals(withServices: serviceUUIDs)
     }
-
+   
 }
 
 // MARK: - CBCentralManagerDelegate
@@ -108,9 +108,8 @@ extension BleManagerImpl: CBCentralManagerDelegate {
         DLog("didDisconnectPeripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
         
         bleDidDisconnectPublisher.send((peripheral, error))
-   
+
         // Notify
         NotificationCenter.default.post(name: .didDisconnectFromPeripheral, object: nil, userInfo: [NotificationUserInfoKey.uuid.rawValue: peripheral.identifier])
-    
     }
 }

@@ -12,11 +12,20 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     static let peripheralSeparator: Character = "$"
     static let pathSeparator = "/"
   
-    enum PeripheralType: Codable, Equatable {
+    enum PeripheralType: Codable, Equatable, Hashable {
         case rootContainer       // i.e. rootContainer
         case wifi(address: String, name: String?)
         case ble(address: String, name: String?)
         case bleBondedData(address: String, name: String?)
+        
+        var address: String {
+            switch self {
+            case .rootContainer: return ""
+            case let .wifi(address, _): return address
+            case let .ble(address, _): return address
+            case let .bleBondedData(address, _): return address
+            }
+        }
     }
 
     let peripheralType: PeripheralType
@@ -29,7 +38,7 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     var peripheralRoute: String {
         switch peripheralType {
         case .rootContainer:
-            DLog("Error: peripheralRoute not available for .none"); return ""
+            return "\(Self.peripheralSeparator)\(Self.peripheralSeparator)"    // Nothing before the peripheralSeparator
         case let .wifi(address, _),
             let .ble(address, _),
             let .bleBondedData(address, _):

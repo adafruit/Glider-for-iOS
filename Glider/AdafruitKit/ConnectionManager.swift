@@ -26,7 +26,7 @@ class ConnectionManager: ObservableObject {
     @Published var lastReconnectionError: Error?
 
     // Data
-    private let bleManager: BleManager
+    let bleManager: BleManager
     private let scanner: Scanner
     private let onWifiPeripheralGetPasswordForHostName: ((_ name: String, _ hostName: String) -> String?)?
     private let onBlePeripheralBonded: ((_ name: String, _ uuid: UUID) -> Void)?
@@ -43,6 +43,7 @@ class ConnectionManager: ObservableObject {
     private var userSelectedTransferClient: FileTransferClient? = nil
 
     public enum ConnectionError: Error {
+        case unknownPeripheralAddress
         case undefinedPeripheralType
         case cannotConnectToBondedPeripheral
     }
@@ -96,6 +97,15 @@ class ConnectionManager: ObservableObject {
         disposables.removeAll()
     }
     
+    func connect(knownAddress: String, completion: @escaping ((Result<FileTransferClient, Error>) -> Void)) {
+        guard let peripheral = peripherals.first (where: { $0.address == knownAddress }) else {
+            completion(.failure(ConnectionError.unknownPeripheralAddress))
+            return
+        }
+        
+        connect(peripheral: peripheral, completion: completion)
+    }
+    
     private func connect(peripheral: Peripheral, completion: @escaping ((Result<FileTransferClient, Error>) -> Void)) {
         var fileTransferPeripheral: FileTransferPeripheral?
         switch peripheral {
@@ -142,7 +152,7 @@ class ConnectionManager: ObservableObject {
         }
     }
     
-    func reconnectToBondedBlePeripherals(knownUuids identifiers: [UUID], timeout: TimeInterval? = nil) {
+    func reconnectToBondedBlePeripherals(knownUuids identifiers: [UUID], timeout: TimeInterval? = nil, completion: ( (_ connectedBlePeripherals: [FileTransferClient]) -> Void)?) {
         let knownPeripherals = bleManager.retrievePeripherals(withIdentifiers: identifiers)
         
         guard !knownPeripherals.isEmpty else { DLog("knownPeripherals isEmpty"); return }
@@ -161,6 +171,8 @@ class ConnectionManager: ObservableObject {
                 DLog("Cannot connect to bonded peripheral")
                 self.lastReconnectionError = ConnectionError.cannotConnectToBondedPeripheral
             }
+            completion?(readyBleFileTransferClients)
+
         }
     }
     

@@ -77,6 +77,7 @@ class FileProviderExtension: NSFileProviderExtension {
         logger.info("providePlaceholder at: \(url.absoluteString)")
         
         guard let identifier = persistentIdentifierForItem(at: url) else {
+            logger.error("providePlaceholder error .noSuchItem")
             completionHandler(NSFileProviderError(.noSuchItem))
             return
         }
@@ -124,13 +125,13 @@ class FileProviderExtension: NSFileProviderExtension {
          }
          }
          */
-        
+
         guard let identifier = persistentIdentifierForItem(at: url) else {
             logger.error("startProvidingItem. Unknown identifier")
             completionHandler(NSFileProviderError(.noSuchItem))
             return
         }
-        
+
         guard let fileProviderItem = try? item(for: identifier) as? FileProviderItem else {
             logger.error("startProvidingItem. Unknown fileProviderItem")
             completionHandler(NSFileProviderError(.noSuchItem))
@@ -271,7 +272,7 @@ class FileProviderExtension: NSFileProviderExtension {
         if containerItemIdentifier == NSFileProviderItemIdentifier.rootContainer {
             // instantiate an enumerator for the container root
             logger.info("enumerator for rootContainer")
-            return ScanEnumerator(connectionManager: appContainer.connectionManager, savedBondedBlePeripherals: appContainer.savedBondedBlePeripherals, savedSettingsWifiPeripherals: appContainer.savedSettingsWifiPeripherals)
+            return ScanEnumerator(metadataCache: metadataCache, connectionManager: appContainer.connectionManager, savedBondedBlePeripherals: appContainer.savedBondedBlePeripherals, savedSettingsWifiPeripherals: appContainer.savedSettingsWifiPeripherals)
             
         } else if containerItemIdentifier == NSFileProviderItemIdentifier.workingSet {
             // TODO: instantiate an enumerator for the working set
@@ -282,20 +283,18 @@ class FileProviderExtension: NSFileProviderExtension {
             // determine if the item is a directory or a file
             // - for a directory, instantiate an enumerator of its subitems
             // - for a file, instantiate an enumerator that observes changes to the file
-            /*
+            
             if let item = try item(for: containerItemIdentifier) as? FileProviderItem {
-                let blePeripheral = FileTransferConnectionManager.shared.selectedPeripheral
                 
                 if item.isDirectory {
                     logger.info("enumerator for directory: \(containerItemIdentifier.rawValue)")
-                    let path = item.path + (item.entry == nil ? "" : item.entry!.name + FileTransferPathUtils.pathSeparator)
-                    return FileProviderEnumerator(metadataCache: metadataCache, blePeripheral: blePeripheral, path: path, filename: nil )
+                    return ItemEnumerator(enumeratedItem: item, metadataCache: metadataCache, connectionManager: appContainer.connectionManager)
                 }
                 else {
                     logger.info("enumerator for file: \(containerItemIdentifier.rawValue)")
-                    return FileProviderEnumerator(metadataCache: metadataCache, blePeripheral: blePeripheral, path: item.path, filename: item.filename )
+                    //return FileProviderEnumerator(metadataCache: metadataCache, blePeripheral: blePeripheral, path: item.path, filename: item.filename )
                 }
-            }*/
+            }
         }
         guard let enumerator = enumerator else {
             DLog("TODO: enumerator")
