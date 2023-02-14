@@ -9,7 +9,7 @@ import FileProvider
 import os.log
 
 class ScanEnumerator: NSObject, NSFileProviderEnumerator {
-    private static let kSecondsToWaitForScan: TimeInterval = 2.0
+    private static let kSecondsToWaitForScan: TimeInterval = 3.0
     
     private let logger = Logger.createLogger(category: "ScanEnumerator")
     private var metadataCache: FileMetadataCache
@@ -99,7 +99,7 @@ class ScanEnumerator: NSObject, NSFileProviderEnumerator {
         
         let peripherals = connectionManager.peripherals
         let bondedPeripherals = savedBondedBlePeripherals.peripheralsData
-        let peripheralAddressesBeingSetup = model.peripheralAddressesBeingSetup
+        //let peripheralAddressesBeingSetup = model.peripheralAddressesBeingSetup
         
         let wifiPeripherals: [WifiPeripheral] = peripherals.compactMap{$0 as? WifiPeripheral}         // Wifi peripherals
                 
