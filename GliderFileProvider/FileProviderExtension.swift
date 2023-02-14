@@ -363,8 +363,7 @@ class FileProviderExtension: NSFileProviderExtension {
                         }
                     }
                 }
-                
-                
+                                
                 // Return inmediately (before the directory is even created)
                 completionHandler(fileProviderItem, nil)
                 
@@ -373,6 +372,217 @@ class FileProviderExtension: NSFileProviderExtension {
                 completionHandler(nil, error)
             }
         }
+    }
+    
+    override func deleteItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (Error?) -> Void) {
+        
+        guard let fileProviderItem = try? item(for: itemIdentifier) as? FileProviderItem else {
+            DLog("deleteItem. Unknown fileProviderItem")
+            completionHandler(NSFileProviderError(.noSuchItem))
+            return
+        }
+        
+        deleteItemLocally(itemIdentifier: itemIdentifier) { result in
+            // Note: .failure not checked to avoid irresoluble situations when in an inconsistent internal state (i.e. item exists in metadata but not locally)
+            
+            // Schedule delete in background
+            let gliderClient = GliderClient.shared(peripheralType: fileProviderItem.peripheralType)
+            gliderClient.deleteFile(path: fileProviderItem.fileTransferPath, connectionManager: appContainer.connectionManager) { result in
+                switch result {
+                case .success:
+                    self.logger.info("deleteFile '\(fileProviderItem.fullFilePath)' result successful")
+                    
+                case .failure(let error):
+                    self.logger.error("deleteFile error: \(error)")
+                    if let fileTransferError = error as? BleFileTransferPeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                        self.logger.info("deleteFile signal parent enumerator")
+                        NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                            self.logger.info("deleteFile parent enumerator signal finished")
+                        }
+                    }
+                }
+            }
+            
+            // Return inmediately (before the file is deleted)
+            completionHandler(nil)
+        }
+    }
+    
+    override func importDocument(at fileURL: URL, toParentItemIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
+        
+        logger.info("importDocument at: \(fileURL.absoluteString) to parent: \(parentItemIdentifier.rawValue)")
+
+        guard let parentFileProviderItem = try? item(for: parentItemIdentifier) as? FileProviderItem else {
+            completionHandler(nil, NSFileProviderError(.noSuchItem))
+            return
+        }
+        
+        guard fileURL.startAccessingSecurityScopedResource() else { logger.error("Error accessing security scoped resource for: \(fileURL.absoluteString)"); return }
+        
+        do {
+            let fileAttributes = try fileURL.resourceValues(forKeys:[.nameKey, .creationDateKey, .contentModificationDateKey])
+            let data = try Data(contentsOf: fileURL)
+            let completeFilename = fileAttributes.name ?? "imported"            // Default name for unknown imported documents
+            let fileExtension = URL(fileURLWithPath: completeFilename).pathExtension
+            let fileName = (completeFilename as NSString).deletingPathExtension
+            
+            // Check if the filename already exists and change it to prevent overwrite
+            var disambiguationIndex = 1
+            var disambiguationFilename = completeFilename
+            while self.metadataCache.fileProviderItem(for: NSFileProviderItemIdentifier(parentFileProviderItem.fullFilePath + disambiguationFilename)) != nil {
+                
+                disambiguationIndex += 1
+                disambiguationFilename = "\(fileName) \(disambiguationIndex).\(fileExtension)"
+            }
+            
+            // Create fileProviderItem
+            let fileProviderItem = FileProviderItem(peripheralType: parentFileProviderItem.peripheralType, path: parentFileProviderItem.fileTransferPath, entry: DirectoryEntry(name: disambiguationFilename, type: .file(size: data.count), modificationDate: Date()))
+            if let creationDate = fileAttributes.creationDate {
+                fileProviderItem.creation = creationDate
+            }
+            if let lastUpdate = fileAttributes.contentModificationDate {
+                fileProviderItem.lastUpdate = lastUpdate
+            }
+            self.metadataCache.setFileProviderItem(item: fileProviderItem)     // Set before  urlForItem
+            
+            guard let localUrl = self.urlForItem(withPersistentIdentifier: fileProviderItem.itemIdentifier) else { logger.error("Error obtaining local url for imported document \(fileURL.absoluteString)"); return }
+            
+            // Write data locally
+            createLocalIntermediateDirectoriesIfNeeded(url: localUrl)
+            try data.write(to: localUrl, options: .atomic)
+            
+            // Schedule updload in background
+            let gliderClient = GliderClient.shared(peripheralType: fileProviderItem.peripheralType)
+            gliderClient.writeFile(path: fileProviderItem.fileTransferPath, data: data, connectionManager: appContainer.connectionManager) { result in
+                switch result {
+                case .success:
+                    self.logger.info("importDocument '\(fileProviderItem.fullFilePath)' successful. (\(data.count) bytes")
+                case .failure(let error):
+                    self.logger.error("importDocument error: \(error)")
+                    NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                        self.logger.info("importDocument parent enumerator signal finished. Error?: \(error?.localizedDescription ?? "<nil>")")
+                    }
+                }
+            }
+            
+            completionHandler(fileProviderItem, nil)
+        } catch (let error) {
+            DLog("Error importing data from fileURL: \(fileURL.absoluteString). Error: \(error.localizedDescription)")
+            completionHandler(nil, error)
+        }
+        
+        fileURL.stopAccessingSecurityScopedResource()
+    }
+    
+    
+    override func renameItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, toName itemName: String, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
+        
+        logger.info("renameItem: \(itemIdentifier.rawValue) toName: \(itemName)")
+
+        guard let fileProviderItem = try? item(for: itemIdentifier) as? FileProviderItem else {
+            logger.error("renameItem. Unknown fileProviderItem")
+            completionHandler(nil, NSFileProviderError(.noSuchItem))
+            return
+        }
+        guard let entry = fileProviderItem.entry else {
+            logger.error("renameItem. Unknown entry")
+            completionHandler(nil, NSFileProviderError(.noSuchItem))
+            return
+        }
+        
+        // Only renaming directories is supported at the moment
+        guard fileProviderItem.isDirectory else {
+            completionHandler(nil, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError))
+            return
+        }
+        
+        // Rename fileproviderItem
+        let renamedEntry = DirectoryEntry(name: itemName, type: entry.type, modificationDate: Date())
+        let renamedItem = FileProviderItem(peripheralType: fileProviderItem.peripheralType, path: fileProviderItem.path, entry: renamedEntry)
+        renamedItem.creation = fileProviderItem.creation        // Maintain creation date
+        
+        createDirectoryLocally(fileProviderItem: renamedItem) { result in
+            switch result {
+            case .success:
+                
+                deleteItemLocally(itemIdentifier: itemIdentifier) { result in
+                    // Note: .failure not checked to avoid irresoluble situations when in an inconsist internal state (i.e. item exists in metadata but not locally)
+                    
+                    // Schedule delete in background
+                    let gliderClient = GliderClient.shared(peripheralType: fileProviderItem.peripheralType)
+                    gliderClient.makeDirectory(path: renamedItem.fileTransferPath, connectionManager: appContainer.connectionManager) { result in
+                        switch result {
+                        case .success(_ /*let date*/):
+                            self.logger.info("rename step 1: createDirectory '\(renamedItem.fullFilePath)' result successful")
+                            
+                            gliderClient.deleteFile(path: fileProviderItem.fileTransferPath, connectionManager: self.appContainer.connectionManager) { result in
+                                switch result {
+                                case .success:
+                                    self.logger.info("rename step 2: deleteFile \(fileProviderItem.fullFilePath) result successful")
+                                    
+                                    
+                                case .failure(let error):
+                                    self.logger.error("rename step 2: deleteFile error: \(error)")
+                                    
+                                    if let fileTransferError = error as? BleFileTransferPeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                                        self.logger.info("rename step 2 signal parent enumerator")
+                                        NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                            self.logger.info("rename step 2 parent enumerator signal finished")
+                                        }
+                                    }
+                                }
+                            }
+
+                        case .failure(let error):
+                            self.logger.error("rename step 1: createDirectory error: \(error)")
+                            
+                            if let fileTransferError = error as? BleFileTransferPeripheral.FileTransferError, case .statusFailed = fileTransferError {
+                                self.logger.info("rename step 1 signal parent enumerator")
+                                NSFileProviderManager.default.signalEnumerator(for: fileProviderItem.parentItemIdentifier) { error in
+                                    self.logger.info("rename step 1 parent enumerator signal finished")
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Return inmediately (before the file is deleted)
+                    completionHandler(renamedItem, nil)
+                }
+                
+            case .failure(let error):
+                logger.error("Error creating local directory: \(fileProviderItem.fullFilePath). Error: \(error.localizedDescription)")
+                completionHandler(nil, error)
+            }
+        }
+    }
+    
+    override func reparentItem(withIdentifier itemIdentifier: NSFileProviderItemIdentifier, toParentItemWithIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, newName: String?, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
+        logger.info("reparentItem: \(itemIdentifier.rawValue) toParent: \(parentItemIdentifier.rawValue) with newName: \(newName ?? "<nil>")")
+        
+        completionHandler(nil, NSFileProviderError(.noSuchItem))
+    }
+    
+    override func setLastUsedDate(_ lastUsedDate: Date?, forItemIdentifier itemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
+        
+        logger.info("setLastUsedDate: \(itemIdentifier.rawValue) to \(String(describing: lastUsedDate))")
+        guard let fileProviderItem = try? item(for: itemIdentifier) as? FileProviderItem else {
+            completionHandler(nil, NSFileProviderError(.noSuchItem))
+            return
+        }
+        /*
+        // Save sync date
+        fileProviderItem.lastUpdate = lastUsedDate ?? fileProviderItem.creation     // If no lastUsedDate is provided, we set the creation date
+        self.metadataCache.setFileProviderItem(item: fileProviderItem)
+        */
+        // Upload lastUpdate to the peripheral
+        // TODO: there is no API available on the FileTransfer protocol to do it
+        
+        /*
+         NSFileProviderManager.default.signalEnumerator(for: itemIdentifier) { error in
+         DLog("signalFileProviderChanges for \(itemIdentifier.rawValue) completed. Error?: \(String(describing: error))")
+         }*/
+        
+        completionHandler(fileProviderItem, nil)
     }
     
     // MARK: - Utils
@@ -481,9 +691,17 @@ class FileProviderExtension: NSFileProviderExtension {
         self.metadataCache.deleteFileProviderItem(identifier: itemIdentifier)
         
         // Delete local directory
+        do {
+            try fileManager.removeItem(at: localUrl)
+        } catch(let error) {
+            logger.error("Error deleting local item: \(localUrl). Error: \(error.localizedDescription)")
+            //completionHandler(error)  Note: commented to always return delete successful in case we are in an inconsistent state
+        }
+        completion(.success(()))
+        /*
         try? fileManager.removeItem(at: localUrl)
         completion(.success(()))
-        
+        */
         /* Note: commented to always return delete successful in case we are in an inconsistent state
          let isLocalItemDeleted: Bool
          do {
