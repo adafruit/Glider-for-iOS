@@ -89,6 +89,14 @@ class PeripheralsViewModel: ObservableObject {
                 self.showAlertConnectionError(error)
             }
             .store(in: &disposables)
+        
+        // Intercept connectionManager.bonjourLastErrorPublisher to show it as an alert
+        connectionManager.bonjourLastErrorPublisher
+            .receive(on: RunLoop.main)
+            .sink { error in
+                self.showAlertConnectionError(error)
+            }
+            .store(in: &disposables)
     }
     
     private func showAlertConnectionError(_ error: Error?) {

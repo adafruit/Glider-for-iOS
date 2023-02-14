@@ -17,6 +17,9 @@ class BonjourScannerImpl: BonjourScanner {
     @Published private(set) var knownWifiPeripherals = [WifiPeripheral]()
     var knownWifiPeripheralsPublisher: Published<[WifiPeripheral]>.Publisher { $knownWifiPeripherals }
 
+    @Published private(set) var bonjourLastError: Error? = nil
+    var bonjourLastErrorPublisher: Published<Error?>.Publisher { $bonjourLastError }
+    
     // Data
     private var bonjourResolvers = [BonjourResolver]()
     
@@ -95,6 +98,10 @@ class BonjourScannerImpl: BonjourScanner {
         browser = nil
     }
     
+    func clearBonjourLastException() {
+        bonjourLastError = nil
+    }
+    
     // MARK: - Utils
     private func addResult(_ result: NWBrowser.Result) {
         if case let(.service(name, type, domain, _)) = result.endpoint {
@@ -118,6 +125,7 @@ class BonjourScannerImpl: BonjourScanner {
                     
                 case .failure(let error):
                     DLog("Error resolving: \(error)")
+                    self.bonjourLastError = error
                 }
             }
             

@@ -11,6 +11,10 @@ protocol BonjourScanner: ObservableObject {
     var knownWifiPeripherals: [WifiPeripheral] { get }
     var knownWifiPeripheralsPublisher: Published<[WifiPeripheral]>.Publisher { get }
     
+    var bonjourLastErrorPublisher: Published<Error?>.Publisher { get }
+    
     func start()
     func stop()
+    
+    func clearBonjourLastException()
 }

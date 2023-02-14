@@ -31,14 +31,16 @@ class Scanner: ObservableObject {
     
     @Published var scanningState: ScanningState = .idle
     var bleLastErrorPublisher: Published<Error?>.Publisher
-    
+    var bonjourLastErrorPublisher: Published<Error?>.Publisher
+
     init(blePeripheralScanner: any BlePeripheralScanner, wifiPeripheralScanner: any BonjourScanner) {
         self.blePeripheralScanner = blePeripheralScanner
         self.wifiPeripheralScanner = wifiPeripheralScanner
         
         // Map errors
         bleLastErrorPublisher = blePeripheralScanner.bleLastErrorPublisher
-        
+        bonjourLastErrorPublisher = wifiPeripheralScanner.bonjourLastErrorPublisher
+
         // Map wifi peripherals
         wifiPeripheralScanner.knownWifiPeripheralsPublisher
             //.receive(on: RunLoop.main)

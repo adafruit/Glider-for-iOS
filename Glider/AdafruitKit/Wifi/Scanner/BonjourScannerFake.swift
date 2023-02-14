@@ -12,6 +12,13 @@ class BonjourScannerFake: BonjourScanner {
     @Published private(set) var knownWifiPeripherals = [WifiPeripheral]()
     var knownWifiPeripheralsPublisher: Published<[WifiPeripheral]>.Publisher { $knownWifiPeripherals }
 
+    @Published private(set) var bonjourLastError: Error? = nil
+    var bonjourLastErrorPublisher: Published<Error?>.Publisher { $bonjourLastError }
+    
     func start() {}
     func stop() {}
+    
+    func clearBonjourLastException() {
+        bonjourLastError = nil
+    }
 }

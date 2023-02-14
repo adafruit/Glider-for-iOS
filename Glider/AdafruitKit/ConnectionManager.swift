@@ -23,6 +23,7 @@ class ConnectionManager: ObservableObject {
     @Published var peripheralAddressesBeingSetup = Set<String>()
 
     var bleScanningLastErrorPublisher: Published<Error?>.Publisher
+    var bonjourLastErrorPublisher: Published<Error?>.Publisher
     @Published var lastReconnectionError: Error?
 
     // Data
@@ -68,7 +69,8 @@ class ConnectionManager: ObservableObject {
         self.onWifiPeripheralGetPasswordForHostName = onWifiPeripheralGetPasswordForHostName
         
         bleScanningLastErrorPublisher = scanner.bleLastErrorPublisher
-        
+        bonjourLastErrorPublisher = scanner.bonjourLastErrorPublisher
+
         scanner.$scanningState
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             //.receive(on: RunLoop.main)
