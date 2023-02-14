@@ -83,12 +83,12 @@ class FileTransferNetwork {
             case .failure(let error):
                 // TODO: add better descriptions for error codes
                 /*
-                if case let NetworkError.invalidStatus(statusCode: statusCode) = error {
+                if case let NetworkError.invalidStatus(statusCode, response) = error {
                     if statusCode == 204 {
                         
                     }
-                }*/
-                            
+                }
+                  */
                 completion?(.failure(error))
             }
         }

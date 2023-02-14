@@ -40,7 +40,7 @@ struct FileExplorerView: View {
                 }
                 
             }
-            .padding(.horizontal)
+            .padding([.horizontal, .top])
             .defaultGradientBackground(hidesKeyboardOnTap: true)
             .navigationBarTitle("File Explorer", displayMode: .inline)
             .id(fileTransferClient?.peripheral.address)       // Force reload when peripheral changes

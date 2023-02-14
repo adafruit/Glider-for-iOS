@@ -74,7 +74,13 @@ class FileCommandsViewModel: ObservableObject {
 
                 case .failure(let error):
                     DLog("makeDirectory \(path) error: \(error)")
-                    self.lastTransmit = TransmissionLog(type: .error(message: error.localizedDescription))
+                    
+                    var message = error.localizedDescription
+                    if case let FileTransferNetwork.NetworkError.invalidStatus(statusCode, _) = error, let statusCode = statusCode {
+                        message = "Network Error. Status Code: \(statusCode)"
+                    }
+                    
+                    self.lastTransmit = TransmissionLog(type: .error(message: message))
                 }
                 
                 self.endCommand()

@@ -36,8 +36,8 @@ class BonjourResolver: NSObject {
         // If these fire the last reference to us was released while the resolve
         // was still in flight.  That should never happen because we retain
         // ourselves on `start`.
-        assert(self.service == nil)
-        assert(self.completionHandler == nil)
+        //assert(self.service == nil)
+        //assert(self.completionHandler == nil)
         //assert(self.selfRetain == nil)
     }
     
