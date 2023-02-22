@@ -95,8 +95,7 @@ class ConnectionManager: ObservableObject {
     }
     
     func stopScan() {
-        scanner.stop()
-        disposables.removeAll()
+        scanner.stop()       
     }
     
     func connect(knownAddress: String, completion: @escaping ((Result<FileTransferClient, Error>) -> Void)) {

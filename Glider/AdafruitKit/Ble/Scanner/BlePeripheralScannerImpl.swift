@@ -191,13 +191,13 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
         let peripheralsWithService = bleManager.retrieveConnectedPeripherals(withServices: [serviceId])
         if !peripheralsWithService.isEmpty {
             
-            let existingPeripheralsIdentifiers = Array(peripheralsFound.keys)
+            //let existingPeripheralsIdentifiers = Array(peripheralsFound.keys)
             for peripheral in peripheralsWithService {
-                if !existingPeripheralsIdentifiers.contains(peripheral.identifier) {
-                    DLog("Discovered peripheral with known service: \(peripheral.name ?? peripheral.identifier.uuidString)")
+                //if !existingPeripheralsIdentifiers.contains(peripheral.identifier) {
+                    DLog("Connected peripheral with known service: \(peripheral.name ?? peripheral.identifier.uuidString)")
                     let advertisementData = [CBAdvertisementDataServiceUUIDsKey: [serviceId]]
                     self.onPeripheralDiscovered(peripheral: peripheral, advertisementData: advertisementData)
-                }
+                //}
             }
         }
     }

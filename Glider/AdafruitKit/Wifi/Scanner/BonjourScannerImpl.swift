@@ -90,7 +90,6 @@ class BonjourScannerImpl: BonjourScanner {
         
         self.browser = browser
         browser.start(queue: DispatchQueue.main)
-        
     }
     
     func stop() {

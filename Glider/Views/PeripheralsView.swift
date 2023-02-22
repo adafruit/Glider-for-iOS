@@ -10,9 +10,10 @@ import SwiftUI
 struct PeripheralsView: View {
     @EnvironmentObject private var connectionManager: ConnectionManager
     @EnvironmentObject private var savedBondedBlePeripherals: SavedBondedBlePeripherals
+    @Environment(\.scenePhase) var scenePhase
     @StateObject private var model: PeripheralsViewModel
-    
-     
+    @State private var isVisible = false
+         
     init(connectionManager: ConnectionManager, savedSettingsWifiPeripherals: SavedSettingsWifiPeripherals) {
         // Inject viewmodel parameters
         _model = StateObject(wrappedValue: PeripheralsViewModel(connectionManager: connectionManager, savedSettingsWifiPeripherals: savedSettingsWifiPeripherals))
@@ -64,10 +65,31 @@ struct PeripheralsView: View {
             activeAlert: $model.activeAlert
         )
         .onAppear {
+            isVisible = true
             model.onAppear()
         }
         .onDisappear {
             model.onDissapear()
+            isVisible = false
+        }
+        // Stop/Start when the app is inactive/active
+        .onChange(of: scenePhase) { scenePhase in
+            switch scenePhase {
+            case .background:
+                if isVisible {
+                    model.onDissapear()
+                }
+            case .inactive:
+                if isVisible {
+                    model.onDissapear()
+                }
+            case .active:
+                if isVisible {
+                    model.onAppear()
+                }
+            @unknown default:
+                break
+            }
         }
     }
 }
@@ -267,7 +289,7 @@ private struct PeripheralsListByType: View {
             if !blePeripherals.isEmpty {
                 
                 VStack(spacing: 12) {
-                    Text("Bluetooth Advertising".uppercased())
+                    Text("Bluetooth Discovered".uppercased())
                         .font(.subheadline)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     

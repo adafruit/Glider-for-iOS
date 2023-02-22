@@ -49,6 +49,7 @@ class PeripheralsViewModel: ObservableObject {
     // Data
     private let connectionManager: ConnectionManager
     private let savedSettingsWifiPeripherals: SavedSettingsWifiPeripherals
+    private var hasViewAppeared = false
     private var disposables = Set<AnyCancellable>()
   
     private var connectionManagerPeripheralAddressesBeingSetup = Set<String>() {
@@ -115,12 +116,16 @@ class PeripheralsViewModel: ObservableObject {
     }
     
     func onAppear() {
+        guard !hasViewAppeared else { return }
+        hasViewAppeared = true
         startScan()
     }
     
     func onDissapear() {
+        guard hasViewAppeared else { return }
         stopScan()
         disposables.removeAll()
+        hasViewAppeared = false
     }
     
     private func startScan() {

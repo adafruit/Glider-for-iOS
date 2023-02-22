@@ -55,14 +55,14 @@ class Scanner: ObservableObject {
         blePeripheralScanner.blePeripheralsPublisher
             //.receive(on: RunLoop.main)
             .sink { blePeripherals in
-                let filteredPeripherals = blePeripherals.sorted(by: { $0.createdTime < $1.createdTime })
+                let filteredPeripherals = blePeripherals
                     .filter({/*$0.advertisement.isManufacturerAdafruit() &&*/ $0.advertisement.services?.contains(BleFileTransferPeripheral.kFileTransferServiceUUID) ?? false})
-                
+                    .sorted(by: { $0.createdTime < $1.createdTime })
+
                 self.scannedBlePeripherals = filteredPeripherals
                 self.updateScanningState()
             }
             .store(in: &disposables)
-        
     }
     
     func start() {
@@ -76,7 +76,6 @@ class Scanner: ObservableObject {
     func stop() {
         blePeripheralScanner.stop()
         wifiPeripheralScanner.stop()
-        disposables.removeAll()
     }
     
     private func updateScanningState() {
