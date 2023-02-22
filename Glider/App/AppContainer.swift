@@ -38,8 +38,8 @@ class AppContainerImpl: AppContainer {
     
     init() {
         bleManager = BleManagerImpl()
-        blePeripheralScanner = BlePeripheralScannerImpl(bleManager: bleManager)
-        
+        blePeripheralScanner = BlePeripheralScannerImpl(bleManager: bleManager, includeConnectedPeripheralsWithServiceId: BleFileTransferPeripheral.kFileTransferServiceUUID)
+
         wifiPeripheralScanner = BonjourScannerImpl(serviceType: "_circuitpython._tcp", serviceDomain: "local.")
         
         savedSettingsWifiPeripherals = SavedSettingsWifiPeripherals()

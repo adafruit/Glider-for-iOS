@@ -40,12 +40,14 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
     internal var peripheralsFoundLock = NSLock()
 
     private let bleManager: BleManager
+    private let includeConnectedPeripheralsWithServiceId: CBUUID?
     private var disposables = Set<AnyCancellable>()
     
     // MARK: - Lifecycle
-    init(bleManager: BleManager) {
+    init(bleManager: BleManager, includeConnectedPeripheralsWithServiceId: CBUUID?) {
         self.bleManager = bleManager
-        
+        self.includeConnectedPeripheralsWithServiceId = includeConnectedPeripheralsWithServiceId
+
         // Ble status observer
         bleManager.bleStatePublisher.sink { [weak self] state in
             self?.onBleStateChanged(state: state)
@@ -58,13 +60,13 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
         }
         .store(in: &disposables)
         
-        // Ble discover observer
+        // Ble connection failure observer
         bleManager.bleDidFailToConnectPublisher.sink { [weak self] (peripheral, error) in
             self?.onPeripheralDidFailToConnect(peripheral: peripheral, error: error)
         }
         .store(in: &disposables)
         
-        // Ble discover observer
+        // Ble disconnection observer
         bleManager.bleDidDisconnectPublisher.sink { [weak self] (peripheral, error) in
             self?.onPeripheralDidDisconnect(peripheral: peripheral, error: error)
         }
@@ -90,6 +92,10 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
         guard bleState == .poweredOn else {
             DLog("startScan failed because central manager is not powered on")
             return
+        }
+                
+        if let includeConnectedPeripheralsWithServiceId = includeConnectedPeripheralsWithServiceId {
+            self.discoverConnectedPeripherals(serviceId: includeConnectedPeripheralsWithServiceId)
         }
 
         // DLog("start scan")
@@ -139,10 +145,10 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
     private func onPeripheralDiscovered(peripheral: CBPeripheral, advertisementData: [String: Any]? = nil, rssi: Int? = nil) {
         peripheralsFoundLock.lock(); defer { peripheralsFoundLock.unlock() }
 
-    
+        /*
         if AppEnvironment.isDebug, peripheral.name?.starts(with: "CIRCUIT") != true {
             return
-        }
+        }*/
         
         if let existingPeripheral = peripheralsFound[peripheral.identifier] {
             existingPeripheral.lastSeenTime = CFAbsoluteTimeGetCurrent()
@@ -176,6 +182,24 @@ class BlePeripheralScannerImpl: BlePeripheralScanner {
         peripheralsFound.removeValue(forKey: peripheral.identifier)
         peripheralsFoundLock.unlock()
         bleLastError = error
+    }
+    
+    
+    // MARK: - Connected Peripherals
+    func discoverConnectedPeripherals(serviceId: CBUUID) {
+
+        let peripheralsWithService = bleManager.retrieveConnectedPeripherals(withServices: [serviceId])
+        if !peripheralsWithService.isEmpty {
+            
+            let existingPeripheralsIdentifiers = Array(peripheralsFound.keys)
+            for peripheral in peripheralsWithService {
+                if !existingPeripheralsIdentifiers.contains(peripheral.identifier) {
+                    DLog("Discovered peripheral with known service: \(peripheral.name ?? peripheral.identifier.uuidString)")
+                    let advertisementData = [CBAdvertisementDataServiceUUIDsKey: [serviceId]]
+                    self.onPeripheralDiscovered(peripheral: peripheral, advertisementData: advertisementData)
+                }
+            }
+        }
     }
 }
 

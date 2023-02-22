@@ -8,7 +8,7 @@ on:
 jobs:
   build-stable:
     name: Build the Glider in stable Xcode
-    runs-on: macos-11
+    runs-on: macos-latest
     strategy:
       matrix:
         xcode: ['14.2']
