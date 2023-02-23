@@ -3,589 +3,634 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A905E1DF26824ADA0051C558 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = A905E1DE26824AD90051C558 /* Readme.md */; };
-		A908EA702768D59100320AFE /* SafeAreaInsetsEnvironmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A908EA6F2768D59100320AFE /* SafeAreaInsetsEnvironmentValue.swift */; };
-		A908EA7A2768D8FD00320AFE /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
-		A908EA7B2768D8FD00320AFE /* ScanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5C26543893007A5E5A /* ScanViewModel.swift */; };
-		A908EA7C2768D8FD00320AFE /* FileCommandsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */; };
-		A908EA7D2768D8FD00320AFE /* StartupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5A26543893007A5E5A /* StartupViewModel.swift */; };
-		A908EA7E2768D8FD00320AFE /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4C26543893007A5E5A /* ButtonStyles.swift */; };
-		A908EA7F2768D8FD00320AFE /* PeripheralAutoConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */; };
-		A908EA802768D8FD00320AFE /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5826543893007A5E5A /* TodoView.swift */; };
-		A908EA812768D8FD00320AFE /* FileSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4E29271D9BA70023C03A /* FileSystemView.swift */; };
-		A908EA822768D8FD00320AFE /* TransmissionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */; };
-		A908EA832768D8FD00320AFE /* PeripheralList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6326543893007A5E5A /* PeripheralList.swift */; };
-		A908EA842768D8FD00320AFE /* FileCommandsStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */; };
-		A908EA852768D8FD00320AFE /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8126E78797003936DC /* WaveView.swift */; };
-		A908EA862768D8FD00320AFE /* StartupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4F26543893007A5E5A /* StartupView.swift */; };
-		A908EA872768D8FD00320AFE /* LimitWidthOnRegularSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */; };
-		A908EA882768D8FD00320AFE /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8926E7FB58003936DC /* LogView.swift */; };
-		A908EA892768D8FD00320AFE /* GliderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7B26543893007A5E5A /* GliderApp.swift */; };
-		A908EA8A2768D8FD00320AFE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7C26543894007A5E5A /* AppDelegate.swift */; };
-		A908EA8B2768D8FD00320AFE /* PeripheralChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */; };
-		A908EA8C2768D8FD00320AFE /* View+If.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5226543893007A5E5A /* View+If.swift */; };
-		A908EA8D2768D8FD00320AFE /* SafeAreaInsetsEnvironmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A908EA6F2768D59100320AFE /* SafeAreaInsetsEnvironmentValue.swift */; };
-		A908EA8E2768D8FD00320AFE /* FileMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67DB271D999100787A02 /* FileMoveView.swift */; };
-		A908EA8F2768D8FD00320AFE /* FileSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileSystemViewModel.swift */; };
-		A908EA902768D8FD00320AFE /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8526E7D191003936DC /* InfoView.swift */; };
-		A908EA912768D8FD00320AFE /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */; };
-		A908EA922768D8FD00320AFE /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5026543893007A5E5A /* ScanView.swift */; };
-		A908EA932768D8FD00320AFE /* BluetoothStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */; };
-		A908EA942768D8FD00320AFE /* FileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E356271918EC0048EB12 /* FileEditView.swift */; };
-		A908EA952768D8FD00320AFE /* FileExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E352271890870048EB12 /* FileExplorerView.swift */; };
-		A908EA962768D8FD00320AFE /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5426543893007A5E5A /* RootView.swift */; };
-		A908EA972768D8FD00320AFE /* FileEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5B26543893007A5E5A /* FileEditViewModel.swift */; };
-		A908EA982768D8FD00320AFE /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5926543893007A5E5A /* RootViewModel.swift */; };
-		A908EA992768D8FD00320AFE /* SnackBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4E2B271F00B20023C03A /* SnackBarView.swift */; };
-		A908EA9A2768D8FD00320AFE /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C52C8274D500A00552886 /* ActivityViewController.swift */; };
-		A908EA9B2768D8FD00320AFE /* ConnectedTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8326E7C98E003936DC /* ConnectedTabView.swift */; };
-		A908EA9C2768D8FD00320AFE /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5326543893007A5E5A /* HideKeyboard.swift */; };
-		A908EA9D2768D8FD00320AFE /* DefaultBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4E26543893007A5E5A /* DefaultBackground.swift */; };
-		A908EA9E2768D8FD00320AFE /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */; };
-		A908EAA02768D8FD00320AFE /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A908EA782768D8FD00320AFE /* FileTransferClient */; };
-		A908EAA22768D8FD00320AFE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FE422654383A007A5E5A /* Preview Assets.xcassets */; };
-		A908EAA32768D8FD00320AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FEA92654392F007A5E5A /* Assets.xcassets */; };
-		A908EAA42768D8FD00320AFE /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = A905E1DE26824AD90051C558 /* Readme.md */; };
-		A908EABB2768E42100320AFE /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A908EABA2768E42100320AFE /* Config.swift */; };
-		A908EABC2768E45500320AFE /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A908EABA2768E42100320AFE /* Config.swift */; };
-		A908EAC72768EA3B00320AFE /* FileTransferConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A908EAC42768EA3B00320AFE /* FileTransferConnectionManager.swift */; };
-		A908EAC82768EA3B00320AFE /* BlePeripheralSimulated.swift in Sources */ = {isa = PBXBuildFile; fileRef = A908EAC52768EA3B00320AFE /* BlePeripheralSimulated.swift */; };
-		A908EAC92768EA3B00320AFE /* ObjectBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A908EAC62768EA3B00320AFE /* ObjectBuilder.m */; };
-		A91C52CA274D509D00552886 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C52C8274D500A00552886 /* ActivityViewController.swift */; };
-		A944E6862729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */; };
-		A947FE432654383A007A5E5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FE422654383A007A5E5A /* Preview Assets.xcassets */; };
-		A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4C26543893007A5E5A /* ButtonStyles.swift */; };
-		A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4E26543893007A5E5A /* DefaultBackground.swift */; };
-		A947FE8426543894007A5E5A /* StartupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE4F26543893007A5E5A /* StartupView.swift */; };
-		A947FE8526543894007A5E5A /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5026543893007A5E5A /* ScanView.swift */; };
-		A947FE8626543894007A5E5A /* View+If.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5226543893007A5E5A /* View+If.swift */; };
-		A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5326543893007A5E5A /* HideKeyboard.swift */; };
-		A947FE8826543894007A5E5A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5426543893007A5E5A /* RootView.swift */; };
-		A947FE8B26543894007A5E5A /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5826543893007A5E5A /* TodoView.swift */; };
-		A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5926543893007A5E5A /* RootViewModel.swift */; };
-		A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5A26543893007A5E5A /* StartupViewModel.swift */; };
-		A947FE8E26543894007A5E5A /* FileEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5B26543893007A5E5A /* FileEditViewModel.swift */; };
-		A947FE8F26543894007A5E5A /* ScanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE5C26543893007A5E5A /* ScanViewModel.swift */; };
-		A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6326543893007A5E5A /* PeripheralList.swift */; };
-		A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */; };
-		A947FEA426543894007A5E5A /* GliderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7B26543893007A5E5A /* GliderApp.swift */; };
-		A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A947FE7C26543894007A5E5A /* AppDelegate.swift */; };
-		A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A947FEA92654392F007A5E5A /* Assets.xcassets */; };
-		A9678E8026E758B2003936DC /* BluetoothStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */; };
-		A9678E8226E78797003936DC /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8126E78797003936DC /* WaveView.swift */; };
-		A9678E8426E7C98F003936DC /* ConnectedTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8326E7C98E003936DC /* ConnectedTabView.swift */; };
-		A9678E8626E7D191003936DC /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8526E7D191003936DC /* InfoView.swift */; };
-		A9678E8A26E7FB58003936DC /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8926E7FB58003936DC /* LogView.swift */; };
-		A9678E8E26E828E2003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
-		A9678E8F26E8C941003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
-		A9678E9026E8C980003936DC /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E8D26E828E2003936DC /* LogManager.swift */; };
-		A9678E9226E91B90003936DC /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */; };
-		A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */; };
-		A96E4E2A271D9BA70023C03A /* FileSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4E29271D9BA70023C03A /* FileSystemView.swift */; };
-		A96E4E2C271F00B20023C03A /* SnackBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4E2B271F00B20023C03A /* SnackBarView.swift */; };
-		A980AC732704ED3A0093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC722704ED3A0093222F /* FileTransferClient */; };
-		A980AC752704ED450093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC742704ED450093222F /* FileTransferClient */; };
-		A980AC772704ED4A0093222F /* FileTransferClient in Frameworks */ = {isa = PBXBuildFile; productRef = A980AC762704ED4A0093222F /* FileTransferClient */; };
-		A98254B32768EF3C00DA1F75 /* FileTransferClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98254B22768EF3C00DA1F75 /* FileTransferClient.swift */; };
-		A98254D42768FB6000DA1F75 /* Glider_SimulateBluetoothUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98254D22768FB6000DA1F75 /* Glider_SimulateBluetoothUITestsLaunchTests.swift */; };
-		A98254D52768FB6000DA1F75 /* Glider_SimulateBluetoothUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98254D32768FB6000DA1F75 /* Glider_SimulateBluetoothUITests.swift */; };
-		A98254D72768FBF300DA1F75 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98254D62768FBF300DA1F75 /* SnapshotHelper.swift */; };
-		A98B67D6271BA58B00787A02 /* FileCommandsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */; };
-		A98B67D8271BA83E00787A02 /* FileCommandsStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */; };
-		A98B67DA271D6D3800787A02 /* PeripheralChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */; };
-		A98B67DC271D999200787A02 /* FileMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B67DB271D999100787A02 /* FileMoveView.swift */; };
-		A9C20E512773605E003DCA44 /* Result+SimpleCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C20E502773605E003DCA44 /* Result+SimpleCheck.swift */; };
-		A9D6E353271890870048EB12 /* FileExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E352271890870048EB12 /* FileExplorerView.swift */; };
-		A9D6E35527190A2E0048EB12 /* TransmissionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */; };
-		A9D6E357271918EC0048EB12 /* FileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6E356271918EC0048EB12 /* FileEditView.swift */; };
-		A9E3CBAE2704D1FB00CD4BA3 /* GliderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3CBAD2704D1FB00CD4BA3 /* GliderClient.swift */; };
-		A9ED1F292687530700B6C27F /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F282687530700B6C27F /* FileProviderExtension.swift */; };
-		A9ED1F2B2687530700B6C27F /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */; };
-		A9ED1F2D2687530700B6C27F /* FileProviderEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F2C2687530700B6C27F /* FileProviderEnumerator.swift */; };
-		A9ED1F372687530800B6C27F /* DocumentActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F362687530800B6C27F /* DocumentActionViewController.swift */; };
-		A9ED1F3A2687530800B6C27F /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9ED1F382687530800B6C27F /* MainInterface.storyboard */; };
-		A9ED1F3E2687530800B6C27F /* GliderFileProviderUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A9ED1F342687530800B6C27F /* GliderFileProviderUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A9ED1F412687530800B6C27F /* GliderFileProvider.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A9ED1F262687530700B6C27F /* GliderFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A9ED1F6126878ABF00B6C27F /* FileMetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED1F6026878ABF00B6C27F /* FileMetadataCache.swift */; };
-		A9F116F926895DC7006F8FE4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F116F826895DC7006F8FE4 /* ShareViewController.swift */; };
-		A9F116FC26895DC7006F8FE4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */; };
-		A9F22528265B9DE800D3B2C6 /* FileSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F22527265B9DE800D3B2C6 /* FileSystemViewModel.swift */; };
-		A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */; };
+		A911751E28FE3D7B00F86706 /* NavigationBarColorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A911751D28FE3D7B00F86706 /* NavigationBarColorModifier.swift */; };
+		A92161DA2988401200FF2474 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A92161D92988401200FF2474 /* UniformTypeIdentifiers.framework */; };
+		A92161DD2988401200FF2474 /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161DC2988401200FF2474 /* FileProviderExtension.swift */; };
+		A92161DF2988401200FF2474 /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161DE2988401200FF2474 /* FileProviderItem.swift */; };
+		A92161E12988401200FF2474 /* FileProviderEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161E02988401200FF2474 /* FileProviderEnumerator.swift */; };
+		A92161EB2988401200FF2474 /* DocumentActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161EA2988401200FF2474 /* DocumentActionViewController.swift */; };
+		A92161EE2988401200FF2474 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A92161EC2988401200FF2474 /* MainInterface.storyboard */; };
+		A92161F22988401200FF2474 /* GliderFileProviderUI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A92161E82988401200FF2474 /* GliderFileProviderUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A92161F52988401200FF2474 /* GliderFileProvider.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A92161D72988401200FF2474 /* GliderFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A92161FE2988416400FF2474 /* Logger+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161FD2988416400FF2474 /* Logger+Utils.swift */; };
+		A92161FF298841AB00FF2474 /* Logger+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92161FD2988416400FF2474 /* Logger+Utils.swift */; };
+		A9216200298841BA00FF2474 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163C28D8592E0050727A /* AppEnvironment.swift */; };
+		A92162022988446100FF2474 /* GliderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92162012988446100FF2474 /* GliderClient.swift */; };
+		A92162032988448100FF2474 /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163A28D8592E0050727A /* LogHelper.swift */; };
+		A9216204298844EF00FF2474 /* FileTransferPathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163E28D8592E0050727A /* FileTransferPathUtils.swift */; };
+		A9216205298845CE00FF2474 /* String+DeletingPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163628D8592E0050727A /* String+DeletingPrefix.swift */; };
+		A9216206298845E100FF2474 /* DirectoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E628D987D10056177D /* DirectoryEntry.swift */; };
+		A921620A298847A300FF2474 /* ScanEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9216208298847A300FF2474 /* ScanEnumerator.swift */; };
+		A921620B298847A300FF2474 /* ItemEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9216209298847A300FF2474 /* ItemEnumerator.swift */; };
+		A921620C298847B800FF2474 /* PeripheralsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169128D8A1610050727A /* PeripheralsViewModel.swift */; };
+		A921620D298847C900FF2474 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165A28D85F2A0050727A /* ConnectionManager.swift */; };
+		A921620E298847F000FF2474 /* CommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163928D8592E0050727A /* CommandQueue.swift */; };
+		A921620F298847F000FF2474 /* BonjourScannerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DA28D8ED330056177D /* BonjourScannerFake.swift */; };
+		A9216210298847F000FF2474 /* Data+LittleEndianTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163528D8592E0050727A /* Data+LittleEndianTypes.swift */; };
+		A9216211298847F000FF2474 /* WifiPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169728D8A6EA0050727A /* WifiPeripheral.swift */; };
+		A9216212298847F000FF2474 /* Int+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163828D8592E0050727A /* Int+Bytes.swift */; };
+		A9216213298847F000FF2474 /* Result+SimpleCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167F28D862B80050727A /* Result+SimpleCheck.swift */; };
+		A9216214298847F000FF2474 /* BleManagerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B94128EF3E3A0039FE2F /* BleManagerFake.swift */; };
+		A9216215298847F000FF2474 /* BlePeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6128EB996C008A81FD /* BlePeripheral.swift */; };
+		A9216216298847F000FF2474 /* FileTransferJsonDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F328DA04B50056177D /* FileTransferJsonDeserializer.swift */; };
+		A9216217298847F000FF2474 /* BleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B93D28EF24490039FE2F /* BleManager.swift */; };
+		A9216218298847F000FF2474 /* FileTransferNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5B28EB10E3008A81FD /* FileTransferNetwork.swift */; };
+		A9216219298847F000FF2474 /* BonjourScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D528D8E21C0056177D /* BonjourScanner.swift */; };
+		A921621A298847F000FF2474 /* BonjourScannerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DC28D8ED430056177D /* BonjourScannerImpl.swift */; };
+		A921621B298847F000FF2474 /* BleManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B93F28EF3BAD0039FE2F /* BleManagerImpl.swift */; };
+		A921621C298847F000FF2474 /* SavedSettingsWifiPeripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F528DA10250056177D /* SavedSettingsWifiPeripherals.swift */; };
+		A921621D298847F000FF2474 /* BonjourResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D428D8E21C0056177D /* BonjourResolver.swift */; };
+		A921621E298847F000FF2474 /* BlePeripheralScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5D28EB98A4008A81FD /* BlePeripheralScanner.swift */; };
+		A921621F298847F000FF2474 /* Data+ScanValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163D28D8592E0050727A /* Data+ScanValue.swift */; };
+		A9216220298847F000FF2474 /* FileTransferWebApiVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F028DA040F0056177D /* FileTransferWebApiVersion.swift */; };
+		A9216221298847F000FF2474 /* SavedBondedBlePeripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */; };
+		A9216222298847F000FF2474 /* FileTransferNetworkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5928EAD506008A81FD /* FileTransferNetworkRouter.swift */; };
+		A9216223298847F000FF2474 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169328D8A5A10050727A /* Peripheral.swift */; };
+		A9216224298847F000FF2474 /* HostNameResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D228D8E21C0056177D /* HostNameResolver.swift */; };
+		A9216225298847F000FF2474 /* HexUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163728D8592E0050727A /* HexUtils.swift */; };
+		A9216226298847F000FF2474 /* Types+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163B28D8592E0050727A /* Types+Data.swift */; };
+		A9216227298847F000FF2474 /* BlePeripheralScannerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6328EC2FF0008A81FD /* BlePeripheralScannerFake.swift */; };
+		A9216228298847F000FF2474 /* NWEndpoint+bonjourName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D328D8E21C0056177D /* NWEndpoint+bonjourName.swift */; };
+		A9216229298847F000FF2474 /* BleAdvertisement+ManufacturerAdafruit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6928EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift */; };
+		A921622A298847F000FF2474 /* BlePeripheralScannerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6528EC3036008A81FD /* BlePeripheralScannerImpl.swift */; };
+		A921622B298847F000FF2474 /* BleAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6728EC69D2008A81FD /* BleAdvertisement.swift */; };
+		A921622C2988480C00FF2474 /* WifiFileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E228D985E90056177D /* WifiFileTransferPeripheral.swift */; };
+		A921622D2988480C00FF2474 /* FileTransferClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E828D98B060056177D /* FileTransferClient.swift */; };
+		A921622E2988480C00FF2474 /* BleFileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6B28EC6AB8008A81FD /* BleFileTransferPeripheral.swift */; };
+		A921622F2988480C00FF2474 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */; };
+		A92162302988480C00FF2474 /* FileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E428D9861F0056177D /* FileTransferPeripheral.swift */; };
+		A92162312988480C00FF2474 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DF28D914990056177D /* Scanner.swift */; };
+		A92162332988482300FF2474 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = A92162322988482300FF2474 /* SwiftyJSON */; };
+		A9216235298848AF00FF2474 /* FileMetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9216234298848AF00FF2474 /* FileMetadataCache.swift */; };
+		A940C70228EC78BB0017B277 /* SavedBondedBlePeripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */; };
+		A940C70428EC91460017B277 /* BleDataProcessingQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */; };
+		A96EE38E28CFC64800D21360 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A96EE38D28CFC64800D21360 /* Assets.xcassets */; };
+		A96EE39228CFC64800D21360 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A96EE39128CFC64800D21360 /* Preview Assets.xcassets */; };
+		A975B93E28EF24490039FE2F /* BleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B93D28EF24490039FE2F /* BleManager.swift */; };
+		A975B94028EF3BAD0039FE2F /* BleManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B93F28EF3BAD0039FE2F /* BleManagerImpl.swift */; };
+		A975B94228EF3E3A0039FE2F /* BleManagerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B94128EF3E3A0039FE2F /* BleManagerFake.swift */; };
+		A985BC5A28EAD506008A81FD /* FileTransferNetworkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5928EAD506008A81FD /* FileTransferNetworkRouter.swift */; };
+		A985BC5C28EB10E3008A81FD /* FileTransferNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5B28EB10E3008A81FD /* FileTransferNetwork.swift */; };
+		A985BC5E28EB98A4008A81FD /* BlePeripheralScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC5D28EB98A4008A81FD /* BlePeripheralScanner.swift */; };
+		A985BC6228EB996C008A81FD /* BlePeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6128EB996C008A81FD /* BlePeripheral.swift */; };
+		A985BC6428EC2FF0008A81FD /* BlePeripheralScannerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6328EC2FF0008A81FD /* BlePeripheralScannerFake.swift */; };
+		A985BC6628EC3036008A81FD /* BlePeripheralScannerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6528EC3036008A81FD /* BlePeripheralScannerImpl.swift */; };
+		A985BC6828EC69D2008A81FD /* BleAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6728EC69D2008A81FD /* BleAdvertisement.swift */; };
+		A985BC6A28EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6928EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift */; };
+		A985BC6C28EC6AB8008A81FD /* BleFileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985BC6B28EC6AB8008A81FD /* BleFileTransferPeripheral.swift */; };
+		A98A1DF729916D66007102A8 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165328D85A3B0050727A /* AppContainer.swift */; };
+		A98A1DF829916D74007102A8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161B28D8580E0050727A /* Config.swift */; };
+		A98A1DFC299B0D34007102A8 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A1DFB299B0D34007102A8 /* DocumentPicker.swift */; };
+		A98A1DFD299BA879007102A8 /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD162528D858D40050727A /* LogManager.swift */; };
+		A98CE9F628E2F17800795BC7 /* FileExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F728DA2A070056177D /* FileExplorerView.swift */; };
+		A9AD162128D858460050727A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161B28D8580E0050727A /* Config.swift */; };
+		A9AD162228D8584C0050727A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161D28D8580E0050727A /* AppDelegate.swift */; };
+		A9AD162328D858760050727A /* GliderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD161C28D8580E0050727A /* GliderApp.swift */; };
+		A9AD162628D858D40050727A /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD162528D858D40050727A /* LogManager.swift */; };
+		A9AD164828D8592E0050727A /* Data+LittleEndianTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163528D8592E0050727A /* Data+LittleEndianTypes.swift */; };
+		A9AD164928D8592E0050727A /* String+DeletingPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163628D8592E0050727A /* String+DeletingPrefix.swift */; };
+		A9AD164A28D8592E0050727A /* HexUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163728D8592E0050727A /* HexUtils.swift */; };
+		A9AD164B28D8592E0050727A /* Int+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163828D8592E0050727A /* Int+Bytes.swift */; };
+		A9AD164C28D8592E0050727A /* CommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163928D8592E0050727A /* CommandQueue.swift */; };
+		A9AD164D28D8592E0050727A /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163A28D8592E0050727A /* LogHelper.swift */; };
+		A9AD164E28D8592E0050727A /* Types+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163B28D8592E0050727A /* Types+Data.swift */; };
+		A9AD164F28D8592E0050727A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163C28D8592E0050727A /* AppEnvironment.swift */; };
+		A9AD165028D8592E0050727A /* Data+ScanValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163D28D8592E0050727A /* Data+ScanValue.swift */; };
+		A9AD165128D8592E0050727A /* FileTransferPathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD163E28D8592E0050727A /* FileTransferPathUtils.swift */; };
+		A9AD165428D85A3B0050727A /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165328D85A3B0050727A /* AppContainer.swift */; };
+		A9AD165728D85D850050727A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165628D85D850050727A /* RootView.swift */; };
+		A9AD165928D85DF30050727A /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165828D85DF30050727A /* RootViewModel.swift */; };
+		A9AD165B28D85F2A0050727A /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165A28D85F2A0050727A /* ConnectionManager.swift */; };
+		A9AD166028D860AE0050727A /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165D28D860AE0050727A /* WaveView.swift */; };
+		A9AD166128D860AE0050727A /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165E28D860AE0050727A /* ButtonStyles.swift */; };
+		A9AD166228D860AE0050727A /* SnackBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD165F28D860AE0050727A /* SnackBarView.swift */; };
+		A9AD166428D862070050727A /* ConnectedTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD166328D862070050727A /* ConnectedTabView.swift */; };
+		A9AD167628D862A80050727A /* SafeAreaInsetsEnvironmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167128D862A80050727A /* SafeAreaInsetsEnvironmentValue.swift */; };
+		A9AD167728D862A80050727A /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167228D862A80050727A /* ActivityViewController.swift */; };
+		A9AD167828D862A80050727A /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167328D862A80050727A /* TextFieldAlert.swift */; };
+		A9AD167928D862A80050727A /* View+If.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167428D862A80050727A /* View+If.swift */; };
+		A9AD167A28D862A80050727A /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167528D862A80050727A /* HideKeyboard.swift */; };
+		A9AD168028D862B80050727A /* KeyboardUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167C28D862B80050727A /* KeyboardUtils.swift */; };
+		A9AD168128D862B80050727A /* UIColor+LightAndDark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167D28D862B80050727A /* UIColor+LightAndDark.swift */; };
+		A9AD168228D862B80050727A /* FileProviderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167E28D862B80050727A /* FileProviderUtils.swift */; };
+		A9AD168328D862B80050727A /* Result+SimpleCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD167F28D862B80050727A /* Result+SimpleCheck.swift */; };
+		A9AD168528D875780050727A /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD168428D875780050727A /* TodoView.swift */; };
+		A9AD168928D8759D0050727A /* LimitWidthOnRegularSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD168728D8759D0050727A /* LimitWidthOnRegularSizeClass.swift */; };
+		A9AD168A28D8759D0050727A /* DefaultBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD168828D8759D0050727A /* DefaultBackground.swift */; };
+		A9AD168C28D876490050727A /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD168B28D876490050727A /* LogView.swift */; };
+		A9AD168E28D877C60050727A /* Application+KeyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD168D28D877C60050727A /* Application+KeyWindow.swift */; };
+		A9AD169028D886110050727A /* PeripheralsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD168F28D886110050727A /* PeripheralsView.swift */; };
+		A9AD169228D8A1610050727A /* PeripheralsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169128D8A1610050727A /* PeripheralsViewModel.swift */; };
+		A9AD169428D8A5A10050727A /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169328D8A5A10050727A /* Peripheral.swift */; };
+		A9AD169828D8A6EA0050727A /* WifiPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD169728D8A6EA0050727A /* WifiPeripheral.swift */; };
+		A9D530D628D8E21C0056177D /* HostNameResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D228D8E21C0056177D /* HostNameResolver.swift */; };
+		A9D530D728D8E21C0056177D /* NWEndpoint+bonjourName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D328D8E21C0056177D /* NWEndpoint+bonjourName.swift */; };
+		A9D530D828D8E21C0056177D /* BonjourResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D428D8E21C0056177D /* BonjourResolver.swift */; };
+		A9D530D928D8E21C0056177D /* BonjourScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530D528D8E21C0056177D /* BonjourScanner.swift */; };
+		A9D530DB28D8ED330056177D /* BonjourScannerFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DA28D8ED330056177D /* BonjourScannerFake.swift */; };
+		A9D530DD28D8ED430056177D /* BonjourScannerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DC28D8ED430056177D /* BonjourScannerImpl.swift */; };
+		A9D530E028D914990056177D /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530DF28D914990056177D /* Scanner.swift */; };
+		A9D530E328D985E90056177D /* WifiFileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E228D985E90056177D /* WifiFileTransferPeripheral.swift */; };
+		A9D530E528D9861F0056177D /* FileTransferPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E428D9861F0056177D /* FileTransferPeripheral.swift */; };
+		A9D530E728D987D10056177D /* DirectoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E628D987D10056177D /* DirectoryEntry.swift */; };
+		A9D530E928D98B060056177D /* FileTransferClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530E828D98B060056177D /* FileTransferClient.swift */; };
+		A9D530EF28DA03D70056177D /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = A9D530EE28DA03D70056177D /* SwiftyJSON */; };
+		A9D530F128DA040F0056177D /* FileTransferWebApiVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F028DA040F0056177D /* FileTransferWebApiVersion.swift */; };
+		A9D530F428DA04B50056177D /* FileTransferJsonDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F328DA04B50056177D /* FileTransferJsonDeserializer.swift */; };
+		A9D530F628DA10250056177D /* SavedSettingsWifiPeripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F528DA10250056177D /* SavedSettingsWifiPeripherals.swift */; };
+		A9D530FF28DA2A820056177D /* FileCommandsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530FB28DA2A820056177D /* FileCommandsViewModel.swift */; };
+		A9D5310228DA2AE70056177D /* TransmissionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D5310128DA2AE70056177D /* TransmissionStatus.swift */; };
+		A9D5310328DA2CA80056177D /* FileSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530FC28DA2A820056177D /* FileSystemViewModel.swift */; };
+		A9D5310428DA2D510056177D /* FileEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530FD28DA2A820056177D /* FileEditViewModel.swift */; };
+		A9D5310628DA2D800056177D /* FileCommandsStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D5310528DA2D800056177D /* FileCommandsStatusBarView.swift */; };
+		A9D5310728DA2D970056177D /* FileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D530F828DA2A070056177D /* FileEditView.swift */; };
+		A9D5310A28DA60750056177D /* FileSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D5310928DA60750056177D /* FileSystemView.swift */; };
+		A9D5310C28DA60A80056177D /* FileMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D5310B28DA60A80056177D /* FileMoveView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A98254CD2768FB3F00DA1F75 /* PBXContainerItemProxy */ = {
+		A92161F02988401200FF2474 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A947FE3026543839007A5E5A /* Project object */;
+			containerPortal = A96EE37E28CFC64700D21360 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A908EA732768D8FD00320AFE;
-			remoteInfo = "Glider SimulateBluetooth";
-		};
-		A9ED1F3C2687530800B6C27F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A947FE3026543839007A5E5A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A9ED1F332687530800B6C27F;
+			remoteGlobalIDString = A92161E72988401200FF2474;
 			remoteInfo = GliderFileProviderUI;
 		};
-		A9ED1F3F2687530800B6C27F /* PBXContainerItemProxy */ = {
+		A92161F32988401200FF2474 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A947FE3026543839007A5E5A /* Project object */;
+			containerPortal = A96EE37E28CFC64700D21360 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A9ED1F252687530700B6C27F;
+			remoteGlobalIDString = A92161D62988401200FF2474;
 			remoteInfo = GliderFileProvider;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A9ED1F482687530800B6C27F /* Embed App Extensions */ = {
+		A92161FC2988401300FF2474 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A9ED1F412687530800B6C27F /* GliderFileProvider.appex in Embed App Extensions */,
-				A9ED1F3E2687530800B6C27F /* GliderFileProviderUI.appex in Embed App Extensions */,
+				A92161F52988401200FF2474 /* GliderFileProvider.appex in Embed Foundation Extensions */,
+				A92161F22988401200FF2474 /* GliderFileProviderUI.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A905E1DE26824AD90051C558 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
-		A908EA6F2768D59100320AFE /* SafeAreaInsetsEnvironmentValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeAreaInsetsEnvironmentValue.swift; sourceTree = "<group>"; };
-		A908EAAB2768D8FD00320AFE /* Glider SimulateBluetooth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Glider SimulateBluetooth.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A908EAB92768E1B500320AFE /* ScreenshotMode-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ScreenshotMode-Info.plist"; sourceTree = "<group>"; };
-		A908EABA2768E42100320AFE /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		A908EAC32768EA3B00320AFE /* ObjectBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectBuilder.h; sourceTree = "<group>"; };
-		A908EAC42768EA3B00320AFE /* FileTransferConnectionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferConnectionManager.swift; sourceTree = "<group>"; };
-		A908EAC52768EA3B00320AFE /* BlePeripheralSimulated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlePeripheralSimulated.swift; sourceTree = "<group>"; };
-		A908EAC62768EA3B00320AFE /* ObjectBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectBuilder.m; sourceTree = "<group>"; };
-		A91C52C8274D500A00552886 /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
-		A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitWidthOnRegularSizeClass.swift; sourceTree = "<group>"; };
-		A947FE3826543839007A5E5A /* Glider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glider.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A947FE422654383A007A5E5A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A947FE442654383A007A5E5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A947FE4C26543893007A5E5A /* ButtonStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
-		A947FE4E26543893007A5E5A /* DefaultBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultBackground.swift; sourceTree = "<group>"; };
-		A947FE4F26543893007A5E5A /* StartupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupView.swift; sourceTree = "<group>"; };
-		A947FE5026543893007A5E5A /* ScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
-		A947FE5226543893007A5E5A /* View+If.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+If.swift"; sourceTree = "<group>"; };
-		A947FE5326543893007A5E5A /* HideKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HideKeyboard.swift; sourceTree = "<group>"; };
-		A947FE5426543893007A5E5A /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		A947FE5826543893007A5E5A /* TodoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
-		A947FE5926543893007A5E5A /* RootViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
-		A947FE5A26543893007A5E5A /* StartupViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupViewModel.swift; sourceTree = "<group>"; };
-		A947FE5B26543893007A5E5A /* FileEditViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileEditViewModel.swift; sourceTree = "<group>"; };
-		A947FE5C26543893007A5E5A /* ScanViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanViewModel.swift; sourceTree = "<group>"; };
-		A947FE6326543893007A5E5A /* PeripheralList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralList.swift; sourceTree = "<group>"; };
-		A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralAutoConnect.swift; sourceTree = "<group>"; };
-		A947FE7B26543893007A5E5A /* GliderApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderApp.swift; sourceTree = "<group>"; };
-		A947FE7C26543894007A5E5A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A947FEA92654392F007A5E5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothStatusView.swift; sourceTree = "<group>"; };
-		A9678E8126E78797003936DC /* WaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
-		A9678E8326E7C98E003936DC /* ConnectedTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedTabView.swift; sourceTree = "<group>"; };
-		A9678E8526E7D191003936DC /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
-		A9678E8926E7FB58003936DC /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
-		A9678E8D26E828E2003936DC /* LogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
-		A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+LightAndDark.swift"; sourceTree = "<group>"; };
-		A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderUtils.swift; sourceTree = "<group>"; };
-		A96E4E29271D9BA70023C03A /* FileSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemView.swift; sourceTree = "<group>"; };
-		A96E4E2B271F00B20023C03A /* SnackBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackBarView.swift; sourceTree = "<group>"; };
-		A980AC712704ED2E0093222F /* FileTransferClient */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FileTransferClient; sourceTree = "<group>"; };
-		A98254B22768EF3C00DA1F75 /* FileTransferClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferClient.swift; sourceTree = "<group>"; };
-		A98254C72768FB3F00DA1F75 /* Glider SimulateBluetoothUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Glider SimulateBluetoothUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A98254D22768FB6000DA1F75 /* Glider_SimulateBluetoothUITestsLaunchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Glider_SimulateBluetoothUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		A98254D32768FB6000DA1F75 /* Glider_SimulateBluetoothUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Glider_SimulateBluetoothUITests.swift; sourceTree = "<group>"; };
-		A98254D62768FBF300DA1F75 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
-		A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCommandsViewModel.swift; sourceTree = "<group>"; };
-		A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCommandsStatusBarView.swift; sourceTree = "<group>"; };
-		A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralChooserView.swift; sourceTree = "<group>"; };
-		A98B67DB271D999100787A02 /* FileMoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMoveView.swift; sourceTree = "<group>"; };
-		A9C20E502773605E003DCA44 /* Result+SimpleCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Result+SimpleCheck.swift"; sourceTree = "<group>"; };
-		A9D6E352271890870048EB12 /* FileExplorerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExplorerView.swift; sourceTree = "<group>"; };
-		A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransmissionStatus.swift; sourceTree = "<group>"; };
-		A9D6E356271918EC0048EB12 /* FileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEditView.swift; sourceTree = "<group>"; };
-		A9E3CBAD2704D1FB00CD4BA3 /* GliderClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderClient.swift; sourceTree = "<group>"; };
-		A9ED1F262687530700B6C27F /* GliderFileProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9ED1F282687530700B6C27F /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
-		A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderItem.swift; sourceTree = "<group>"; };
-		A9ED1F2C2687530700B6C27F /* FileProviderEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderEnumerator.swift; sourceTree = "<group>"; };
-		A9ED1F2E2687530700B6C27F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9ED1F2F2687530700B6C27F /* GliderFileProvider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GliderFileProvider.entitlements; sourceTree = "<group>"; };
-		A9ED1F342687530800B6C27F /* GliderFileProviderUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProviderUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9ED1F362687530800B6C27F /* DocumentActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActionViewController.swift; sourceTree = "<group>"; };
-		A9ED1F392687530800B6C27F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		A9ED1F3B2687530800B6C27F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9ED1F5F26876FD300B6C27F /* Glider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Glider.entitlements; sourceTree = "<group>"; };
-		A9ED1F6026878ABF00B6C27F /* FileMetadataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMetadataCache.swift; sourceTree = "<group>"; };
-		A9F116F626895DC7006F8FE4 /* GliderShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9F116F826895DC7006F8FE4 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		A9F116FB26895DC7006F8FE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		A9F116FD26895DC7006F8FE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9F22527265B9DE800D3B2C6 /* FileSystemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemViewModel.swift; sourceTree = "<group>"; };
-		A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
+		A911751D28FE3D7B00F86706 /* NavigationBarColorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarColorModifier.swift; sourceTree = "<group>"; };
+		A92161D72988401200FF2474 /* GliderFileProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A92161D92988401200FF2474 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		A92161DC2988401200FF2474 /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
+		A92161DE2988401200FF2474 /* FileProviderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderItem.swift; sourceTree = "<group>"; };
+		A92161E02988401200FF2474 /* FileProviderEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderEnumerator.swift; sourceTree = "<group>"; };
+		A92161E22988401200FF2474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A92161E32988401200FF2474 /* GliderFileProvider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GliderFileProvider.entitlements; sourceTree = "<group>"; };
+		A92161E82988401200FF2474 /* GliderFileProviderUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GliderFileProviderUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A92161EA2988401200FF2474 /* DocumentActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActionViewController.swift; sourceTree = "<group>"; };
+		A92161ED2988401200FF2474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		A92161EF2988401200FF2474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A92161FD2988416400FF2474 /* Logger+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+Utils.swift"; sourceTree = "<group>"; };
+		A92162012988446100FF2474 /* GliderClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderClient.swift; sourceTree = "<group>"; };
+		A9216208298847A300FF2474 /* ScanEnumerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanEnumerator.swift; sourceTree = "<group>"; };
+		A9216209298847A300FF2474 /* ItemEnumerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemEnumerator.swift; sourceTree = "<group>"; };
+		A9216234298848AF00FF2474 /* FileMetadataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileMetadataCache.swift; sourceTree = "<group>"; };
+		A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedBondedBlePeripherals.swift; sourceTree = "<group>"; };
+		A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleDataProcessingQueue.swift; sourceTree = "<group>"; };
+		A96EE38628CFC64700D21360 /* Glider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glider.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A96EE38D28CFC64800D21360 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A96EE38F28CFC64800D21360 /* Glider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Glider.entitlements; sourceTree = "<group>"; };
+		A96EE39128CFC64800D21360 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A975B93D28EF24490039FE2F /* BleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleManager.swift; sourceTree = "<group>"; };
+		A975B93F28EF3BAD0039FE2F /* BleManagerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleManagerImpl.swift; sourceTree = "<group>"; };
+		A975B94128EF3E3A0039FE2F /* BleManagerFake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleManagerFake.swift; sourceTree = "<group>"; };
+		A985BC5928EAD506008A81FD /* FileTransferNetworkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferNetworkRouter.swift; sourceTree = "<group>"; };
+		A985BC5B28EB10E3008A81FD /* FileTransferNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferNetwork.swift; sourceTree = "<group>"; };
+		A985BC5D28EB98A4008A81FD /* BlePeripheralScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlePeripheralScanner.swift; sourceTree = "<group>"; };
+		A985BC6128EB996C008A81FD /* BlePeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlePeripheral.swift; sourceTree = "<group>"; };
+		A985BC6328EC2FF0008A81FD /* BlePeripheralScannerFake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlePeripheralScannerFake.swift; sourceTree = "<group>"; };
+		A985BC6528EC3036008A81FD /* BlePeripheralScannerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlePeripheralScannerImpl.swift; sourceTree = "<group>"; };
+		A985BC6728EC69D2008A81FD /* BleAdvertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleAdvertisement.swift; sourceTree = "<group>"; };
+		A985BC6928EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BleAdvertisement+ManufacturerAdafruit.swift"; sourceTree = "<group>"; };
+		A985BC6B28EC6AB8008A81FD /* BleFileTransferPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BleFileTransferPeripheral.swift; sourceTree = "<group>"; };
+		A98A1DFB299B0D34007102A8 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		A9AD161B28D8580E0050727A /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		A9AD161C28D8580E0050727A /* GliderApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GliderApp.swift; sourceTree = "<group>"; };
+		A9AD161D28D8580E0050727A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A9AD162528D858D40050727A /* LogManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
+		A9AD163528D8592E0050727A /* Data+LittleEndianTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+LittleEndianTypes.swift"; sourceTree = "<group>"; };
+		A9AD163628D8592E0050727A /* String+DeletingPrefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+DeletingPrefix.swift"; sourceTree = "<group>"; };
+		A9AD163728D8592E0050727A /* HexUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexUtils.swift; sourceTree = "<group>"; };
+		A9AD163828D8592E0050727A /* Int+Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int+Bytes.swift"; sourceTree = "<group>"; };
+		A9AD163928D8592E0050727A /* CommandQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandQueue.swift; sourceTree = "<group>"; };
+		A9AD163A28D8592E0050727A /* LogHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogHelper.swift; sourceTree = "<group>"; };
+		A9AD163B28D8592E0050727A /* Types+Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Types+Data.swift"; sourceTree = "<group>"; };
+		A9AD163C28D8592E0050727A /* AppEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		A9AD163D28D8592E0050727A /* Data+ScanValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+ScanValue.swift"; sourceTree = "<group>"; };
+		A9AD163E28D8592E0050727A /* FileTransferPathUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferPathUtils.swift; sourceTree = "<group>"; };
+		A9AD165328D85A3B0050727A /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		A9AD165628D85D850050727A /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		A9AD165828D85DF30050727A /* RootViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
+		A9AD165A28D85F2A0050727A /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
+		A9AD165D28D860AE0050727A /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
+		A9AD165E28D860AE0050727A /* ButtonStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		A9AD165F28D860AE0050727A /* SnackBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnackBarView.swift; sourceTree = "<group>"; };
+		A9AD166328D862070050727A /* ConnectedTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectedTabView.swift; sourceTree = "<group>"; };
+		A9AD167128D862A80050727A /* SafeAreaInsetsEnvironmentValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeAreaInsetsEnvironmentValue.swift; sourceTree = "<group>"; };
+		A9AD167228D862A80050727A /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
+		A9AD167328D862A80050727A /* TextFieldAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
+		A9AD167428D862A80050727A /* View+If.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+If.swift"; sourceTree = "<group>"; };
+		A9AD167528D862A80050727A /* HideKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HideKeyboard.swift; sourceTree = "<group>"; };
+		A9AD167C28D862B80050727A /* KeyboardUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardUtils.swift; sourceTree = "<group>"; };
+		A9AD167D28D862B80050727A /* UIColor+LightAndDark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+LightAndDark.swift"; sourceTree = "<group>"; };
+		A9AD167E28D862B80050727A /* FileProviderUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileProviderUtils.swift; sourceTree = "<group>"; };
+		A9AD167F28D862B80050727A /* Result+SimpleCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Result+SimpleCheck.swift"; sourceTree = "<group>"; };
+		A9AD168428D875780050727A /* TodoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
+		A9AD168728D8759D0050727A /* LimitWidthOnRegularSizeClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LimitWidthOnRegularSizeClass.swift; sourceTree = "<group>"; };
+		A9AD168828D8759D0050727A /* DefaultBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultBackground.swift; sourceTree = "<group>"; };
+		A9AD168B28D876490050727A /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
+		A9AD168D28D877C60050727A /* Application+KeyWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Application+KeyWindow.swift"; sourceTree = "<group>"; };
+		A9AD168F28D886110050727A /* PeripheralsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralsView.swift; sourceTree = "<group>"; };
+		A9AD169128D8A1610050727A /* PeripheralsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralsViewModel.swift; sourceTree = "<group>"; };
+		A9AD169328D8A5A10050727A /* Peripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
+		A9AD169728D8A6EA0050727A /* WifiPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiPeripheral.swift; sourceTree = "<group>"; };
+		A9D530D228D8E21C0056177D /* HostNameResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostNameResolver.swift; sourceTree = "<group>"; };
+		A9D530D328D8E21C0056177D /* NWEndpoint+bonjourName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NWEndpoint+bonjourName.swift"; sourceTree = "<group>"; };
+		A9D530D428D8E21C0056177D /* BonjourResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourResolver.swift; sourceTree = "<group>"; };
+		A9D530D528D8E21C0056177D /* BonjourScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourScanner.swift; sourceTree = "<group>"; };
+		A9D530DA28D8ED330056177D /* BonjourScannerFake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourScannerFake.swift; sourceTree = "<group>"; };
+		A9D530DC28D8ED430056177D /* BonjourScannerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourScannerImpl.swift; sourceTree = "<group>"; };
+		A9D530DE28D910A10056177D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A9D530DF28D914990056177D /* Scanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
+		A9D530E228D985E90056177D /* WifiFileTransferPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiFileTransferPeripheral.swift; sourceTree = "<group>"; };
+		A9D530E428D9861F0056177D /* FileTransferPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferPeripheral.swift; sourceTree = "<group>"; };
+		A9D530E628D987D10056177D /* DirectoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryEntry.swift; sourceTree = "<group>"; };
+		A9D530E828D98B060056177D /* FileTransferClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferClient.swift; sourceTree = "<group>"; };
+		A9D530F028DA040F0056177D /* FileTransferWebApiVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferWebApiVersion.swift; sourceTree = "<group>"; };
+		A9D530F328DA04B50056177D /* FileTransferJsonDeserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferJsonDeserializer.swift; sourceTree = "<group>"; };
+		A9D530F528DA10250056177D /* SavedSettingsWifiPeripherals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSettingsWifiPeripherals.swift; sourceTree = "<group>"; };
+		A9D530F728DA2A070056177D /* FileExplorerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExplorerView.swift; sourceTree = "<group>"; };
+		A9D530F828DA2A070056177D /* FileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEditView.swift; sourceTree = "<group>"; };
+		A9D530FB28DA2A820056177D /* FileCommandsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCommandsViewModel.swift; sourceTree = "<group>"; };
+		A9D530FC28DA2A820056177D /* FileSystemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemViewModel.swift; sourceTree = "<group>"; };
+		A9D530FD28DA2A820056177D /* FileEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEditViewModel.swift; sourceTree = "<group>"; };
+		A9D5310128DA2AE70056177D /* TransmissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransmissionStatus.swift; sourceTree = "<group>"; };
+		A9D5310528DA2D800056177D /* FileCommandsStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCommandsStatusBarView.swift; sourceTree = "<group>"; };
+		A9D5310928DA60750056177D /* FileSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemView.swift; sourceTree = "<group>"; };
+		A9D5310B28DA60A80056177D /* FileMoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMoveView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A908EA9F2768D8FD00320AFE /* Frameworks */ = {
+		A92161D42988401200FF2474 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A908EAA02768D8FD00320AFE /* FileTransferClient in Frameworks */,
+				A92162332988482300FF2474 /* SwiftyJSON in Frameworks */,
+				A92161DA2988401200FF2474 /* UniformTypeIdentifiers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A947FE3526543839007A5E5A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A980AC732704ED3A0093222F /* FileTransferClient in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A98254C42768FB3F00DA1F75 /* Frameworks */ = {
+		A92161E52988401200FF2474 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9ED1F232687530700B6C27F /* Frameworks */ = {
+		A96EE38328CFC64700D21360 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A980AC752704ED450093222F /* FileTransferClient in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9ED1F312687530800B6C27F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A980AC772704ED4A0093222F /* FileTransferClient in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9F116F326895DC7006F8FE4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				A9D530EF28DA03D70056177D /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A908EAC22768EA3B00320AFE /* SimulateBluetooth */ = {
+		A92161D82988401200FF2474 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A908EAC42768EA3B00320AFE /* FileTransferConnectionManager.swift */,
-				A908EAC52768EA3B00320AFE /* BlePeripheralSimulated.swift */,
-				A98254B22768EF3C00DA1F75 /* FileTransferClient.swift */,
-				A908EAC32768EA3B00320AFE /* ObjectBuilder.h */,
-				A908EAC62768EA3B00320AFE /* ObjectBuilder.m */,
-			);
-			path = SimulateBluetooth;
-			sourceTree = "<group>";
-		};
-		A947FE2F26543839007A5E5A = {
-			isa = PBXGroup;
-			children = (
-				A947FE3A26543839007A5E5A /* Glider */,
-				A980AC702704ED2E0093222F /* Packages */,
-				A9ED1F272687530700B6C27F /* GliderFileProvider */,
-				A9ED1F352687530800B6C27F /* GliderFileProviderUI */,
-				A9F116F726895DC7006F8FE4 /* GliderShare */,
-				A98254C82768FB3F00DA1F75 /* Glider SimulateBluetoothUITests */,
-				A947FE3926543839007A5E5A /* Products */,
-				A9D366A52704CA3900DB63EC /* Frameworks */,
-			);
-			sourceTree = "<group>";
-		};
-		A947FE3926543839007A5E5A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE3826543839007A5E5A /* Glider.app */,
-				A9ED1F262687530700B6C27F /* GliderFileProvider.appex */,
-				A9ED1F342687530800B6C27F /* GliderFileProviderUI.appex */,
-				A9F116F626895DC7006F8FE4 /* GliderShare.appex */,
-				A908EAAB2768D8FD00320AFE /* Glider SimulateBluetooth.app */,
-				A98254C72768FB3F00DA1F75 /* Glider SimulateBluetoothUITests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A947FE3A26543839007A5E5A /* Glider */ = {
-			isa = PBXGroup;
-			children = (
-				A9ED1F5F26876FD300B6C27F /* Glider.entitlements */,
-				A905E1DE26824AD90051C558 /* Readme.md */,
-				A947FE7926543893007A5E5A /* App */,
-				A947FE4A26543893007A5E5A /* Views */,
-				A947FE5726543893007A5E5A /* ViewModels */,
-				A947FE5D26543893007A5E5A /* Models */,
-				A947FE7D26543894007A5E5A /* Utils */,
-				A908EAC22768EA3B00320AFE /* SimulateBluetooth */,
-				A947FEA92654392F007A5E5A /* Assets.xcassets */,
-				A947FE442654383A007A5E5A /* Info.plist */,
-				A908EAB92768E1B500320AFE /* ScreenshotMode-Info.plist */,
-				A947FE412654383A007A5E5A /* Preview Content */,
-			);
-			path = Glider;
-			sourceTree = "<group>";
-		};
-		A947FE412654383A007A5E5A /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE422654383A007A5E5A /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		A947FE4A26543893007A5E5A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE4B26543893007A5E5A /* Decoration */,
-				A947FE4D26543893007A5E5A /* Modifiers */,
-				A947FE5126543893007A5E5A /* Utils */,
-				A947FE5426543893007A5E5A /* RootView.swift */,
-				A947FE4F26543893007A5E5A /* StartupView.swift */,
-				A9678E7F26E758B2003936DC /* BluetoothStatusView.swift */,
-				A947FE5026543893007A5E5A /* ScanView.swift */,
-				A9678E8326E7C98E003936DC /* ConnectedTabView.swift */,
-				A9678E8526E7D191003936DC /* InfoView.swift */,
-				A9678E8926E7FB58003936DC /* LogView.swift */,
-				A947FE5826543893007A5E5A /* TodoView.swift */,
-				A9D6E352271890870048EB12 /* FileExplorerView.swift */,
-				A9D6E356271918EC0048EB12 /* FileEditView.swift */,
-				A98B67D7271BA83E00787A02 /* FileCommandsStatusBarView.swift */,
-				A98B67D9271D6D3800787A02 /* PeripheralChooserView.swift */,
-				A98B67DB271D999100787A02 /* FileMoveView.swift */,
-				A96E4E29271D9BA70023C03A /* FileSystemView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		A947FE4B26543893007A5E5A /* Decoration */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE4C26543893007A5E5A /* ButtonStyles.swift */,
-				A9678E8126E78797003936DC /* WaveView.swift */,
-				A96E4E2B271F00B20023C03A /* SnackBarView.swift */,
-			);
-			path = Decoration;
-			sourceTree = "<group>";
-		};
-		A947FE4D26543893007A5E5A /* Modifiers */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE4E26543893007A5E5A /* DefaultBackground.swift */,
-				A944E6852729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift */,
-			);
-			path = Modifiers;
-			sourceTree = "<group>";
-		};
-		A947FE5126543893007A5E5A /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				A908EA6F2768D59100320AFE /* SafeAreaInsetsEnvironmentValue.swift */,
-				A947FE5226543893007A5E5A /* View+If.swift */,
-				A947FE5326543893007A5E5A /* HideKeyboard.swift */,
-				A9F2252B265C85ED00D3B2C6 /* TextFieldAlert.swift */,
-				A91C52C8274D500A00552886 /* ActivityViewController.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		A947FE5726543893007A5E5A /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE5926543893007A5E5A /* RootViewModel.swift */,
-				A947FE5A26543893007A5E5A /* StartupViewModel.swift */,
-				A947FE5C26543893007A5E5A /* ScanViewModel.swift */,
-				A9F22527265B9DE800D3B2C6 /* FileSystemViewModel.swift */,
-				A947FE5B26543893007A5E5A /* FileEditViewModel.swift */,
-				A98B67D5271BA58B00787A02 /* FileCommandsViewModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		A947FE5D26543893007A5E5A /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE6226543893007A5E5A /* Scanner */,
-				A9678E8D26E828E2003936DC /* LogManager.swift */,
-				A9D6E35427190A2E0048EB12 /* TransmissionStatus.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		A947FE6226543893007A5E5A /* Scanner */ = {
-			isa = PBXGroup;
-			children = (
-				A947FE6326543893007A5E5A /* PeripheralList.swift */,
-				A947FE6426543893007A5E5A /* PeripheralAutoConnect.swift */,
-			);
-			path = Scanner;
-			sourceTree = "<group>";
-		};
-		A947FE7926543893007A5E5A /* App */ = {
-			isa = PBXGroup;
-			children = (
-				A908EABA2768E42100320AFE /* Config.swift */,
-				A947FE7B26543893007A5E5A /* GliderApp.swift */,
-				A947FE7C26543894007A5E5A /* AppDelegate.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		A947FE7D26543894007A5E5A /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				A9C20E502773605E003DCA44 /* Result+SimpleCheck.swift */,
-				A96D27842687F9DB00D6E247 /* FileProviderUtils.swift */,
-				A9678E9126E91B90003936DC /* UIColor+LightAndDark.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		A980AC702704ED2E0093222F /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				A980AC712704ED2E0093222F /* FileTransferClient */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
-		A98254C82768FB3F00DA1F75 /* Glider SimulateBluetoothUITests */ = {
-			isa = PBXGroup;
-			children = (
-				A98254D62768FBF300DA1F75 /* SnapshotHelper.swift */,
-				A98254D32768FB6000DA1F75 /* Glider_SimulateBluetoothUITests.swift */,
-				A98254D22768FB6000DA1F75 /* Glider_SimulateBluetoothUITestsLaunchTests.swift */,
-			);
-			path = "Glider SimulateBluetoothUITests";
-			sourceTree = "<group>";
-		};
-		A9D366A52704CA3900DB63EC /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
+				A92161D92988401200FF2474 /* UniformTypeIdentifiers.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A9ED1F272687530700B6C27F /* GliderFileProvider */ = {
+		A92161DB2988401200FF2474 /* GliderFileProvider */ = {
 			isa = PBXGroup;
 			children = (
-				A9ED1F282687530700B6C27F /* FileProviderExtension.swift */,
-				A9ED1F2C2687530700B6C27F /* FileProviderEnumerator.swift */,
-				A9ED1F2A2687530700B6C27F /* FileProviderItem.swift */,
-				A9E3CBAD2704D1FB00CD4BA3 /* GliderClient.swift */,
-				A9ED1F2E2687530700B6C27F /* Info.plist */,
-				A9ED1F2F2687530700B6C27F /* GliderFileProvider.entitlements */,
-				A9ED1F6026878ABF00B6C27F /* FileMetadataCache.swift */,
+				A9216207298847A300FF2474 /* Enumerators */,
+				A92161DC2988401200FF2474 /* FileProviderExtension.swift */,
+				A92161DE2988401200FF2474 /* FileProviderItem.swift */,
+				A92161E02988401200FF2474 /* FileProviderEnumerator.swift */,
+				A9216234298848AF00FF2474 /* FileMetadataCache.swift */,
+				A92162012988446100FF2474 /* GliderClient.swift */,
+				A92161E22988401200FF2474 /* Info.plist */,
+				A92161E32988401200FF2474 /* GliderFileProvider.entitlements */,
 			);
 			path = GliderFileProvider;
 			sourceTree = "<group>";
 		};
-		A9ED1F352687530800B6C27F /* GliderFileProviderUI */ = {
+		A92161E92988401200FF2474 /* GliderFileProviderUI */ = {
 			isa = PBXGroup;
 			children = (
-				A9ED1F362687530800B6C27F /* DocumentActionViewController.swift */,
-				A9ED1F382687530800B6C27F /* MainInterface.storyboard */,
-				A9ED1F3B2687530800B6C27F /* Info.plist */,
+				A92161EA2988401200FF2474 /* DocumentActionViewController.swift */,
+				A92161EC2988401200FF2474 /* MainInterface.storyboard */,
+				A92161EF2988401200FF2474 /* Info.plist */,
 			);
 			path = GliderFileProviderUI;
 			sourceTree = "<group>";
 		};
-		A9F116F726895DC7006F8FE4 /* GliderShare */ = {
+		A9216207298847A300FF2474 /* Enumerators */ = {
 			isa = PBXGroup;
 			children = (
-				A9F116F826895DC7006F8FE4 /* ShareViewController.swift */,
-				A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */,
-				A9F116FD26895DC7006F8FE4 /* Info.plist */,
+				A9216208298847A300FF2474 /* ScanEnumerator.swift */,
+				A9216209298847A300FF2474 /* ItemEnumerator.swift */,
 			);
-			path = GliderShare;
+			path = Enumerators;
+			sourceTree = "<group>";
+		};
+		A96EE37D28CFC64700D21360 = {
+			isa = PBXGroup;
+			children = (
+				A96EE38828CFC64700D21360 /* Glider */,
+				A92161DB2988401200FF2474 /* GliderFileProvider */,
+				A92161E92988401200FF2474 /* GliderFileProviderUI */,
+				A92161D82988401200FF2474 /* Frameworks */,
+				A96EE38728CFC64700D21360 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A96EE38728CFC64700D21360 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A96EE38628CFC64700D21360 /* Glider.app */,
+				A92161D72988401200FF2474 /* GliderFileProvider.appex */,
+				A92161E82988401200FF2474 /* GliderFileProviderUI.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A96EE38828CFC64700D21360 /* Glider */ = {
+			isa = PBXGroup;
+			children = (
+				A9D530DE28D910A10056177D /* Info.plist */,
+				A96EE38D28CFC64800D21360 /* Assets.xcassets */,
+				A96EE38F28CFC64800D21360 /* Glider.entitlements */,
+				A9AD161A28D8580E0050727A /* App */,
+				A9AD162428D858D40050727A /* Models */,
+				A9AD165528D85D850050727A /* Views */,
+				A9AD162728D8592E0050727A /* AdafruitKit */,
+				A9AD167B28D862B80050727A /* Utils */,
+				A96EE39028CFC64800D21360 /* Preview Content */,
+			);
+			path = Glider;
+			sourceTree = "<group>";
+		};
+		A96EE39028CFC64800D21360 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				A96EE39128CFC64800D21360 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A985BC5F28EB9948008A81FD /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				A985BC5D28EB98A4008A81FD /* BlePeripheralScanner.swift */,
+				A985BC6328EC2FF0008A81FD /* BlePeripheralScannerFake.swift */,
+				A985BC6528EC3036008A81FD /* BlePeripheralScannerImpl.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
+		A985BC6028EB994F008A81FD /* Peripheral */ = {
+			isa = PBXGroup;
+			children = (
+				A985BC6128EB996C008A81FD /* BlePeripheral.swift */,
+				A985BC6728EC69D2008A81FD /* BleAdvertisement.swift */,
+				A985BC6928EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift */,
+				A940C70128EC78BB0017B277 /* SavedBondedBlePeripherals.swift */,
+			);
+			path = Peripheral;
+			sourceTree = "<group>";
+		};
+		A9AD161A28D8580E0050727A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A9AD161B28D8580E0050727A /* Config.swift */,
+				A9AD161C28D8580E0050727A /* GliderApp.swift */,
+				A9AD161D28D8580E0050727A /* AppDelegate.swift */,
+				A9AD165328D85A3B0050727A /* AppContainer.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A9AD162428D858D40050727A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A9AD162528D858D40050727A /* LogManager.swift */,
+				A9D5310128DA2AE70056177D /* TransmissionStatus.swift */,
+				A98A1DFB299B0D34007102A8 /* DocumentPicker.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A9AD162728D8592E0050727A /* AdafruitKit */ = {
+			isa = PBXGroup;
+			children = (
+				A9D530E128D914A40056177D /* FileTransfer */,
+				A9AD165A28D85F2A0050727A /* ConnectionManager.swift */,
+				A9AD169628D8A6DC0050727A /* Ble */,
+				A9AD169528D8A6D70050727A /* Wifi */,
+				A9AD163428D8592E0050727A /* Utils */,
+				A9AD169328D8A5A10050727A /* Peripheral.swift */,
+			);
+			path = AdafruitKit;
+			sourceTree = "<group>";
+		};
+		A9AD163428D8592E0050727A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A92161FD2988416400FF2474 /* Logger+Utils.swift */,
+				A9AD167F28D862B80050727A /* Result+SimpleCheck.swift */,
+				A9AD163E28D8592E0050727A /* FileTransferPathUtils.swift */,
+				A9AD163528D8592E0050727A /* Data+LittleEndianTypes.swift */,
+				A9AD163628D8592E0050727A /* String+DeletingPrefix.swift */,
+				A9AD163728D8592E0050727A /* HexUtils.swift */,
+				A9AD163828D8592E0050727A /* Int+Bytes.swift */,
+				A9AD163928D8592E0050727A /* CommandQueue.swift */,
+				A9AD163A28D8592E0050727A /* LogHelper.swift */,
+				A9AD163B28D8592E0050727A /* Types+Data.swift */,
+				A9AD163C28D8592E0050727A /* AppEnvironment.swift */,
+				A9AD163D28D8592E0050727A /* Data+ScanValue.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A9AD165528D85D850050727A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A9AD165C28D860AE0050727A /* Decoration */,
+				A9AD168628D8759D0050727A /* Modifiers */,
+				A9AD167028D862A80050727A /* Utils */,
+				A9AD165628D85D850050727A /* RootView.swift */,
+				A9AD165828D85DF30050727A /* RootViewModel.swift */,
+				A9AD166328D862070050727A /* ConnectedTabView.swift */,
+				A9AD168F28D886110050727A /* PeripheralsView.swift */,
+				A9AD169128D8A1610050727A /* PeripheralsViewModel.swift */,
+				A9D530F728DA2A070056177D /* FileExplorerView.swift */,
+				A9D530F828DA2A070056177D /* FileEditView.swift */,
+				A9D530FD28DA2A820056177D /* FileEditViewModel.swift */,
+				A9D5310928DA60750056177D /* FileSystemView.swift */,
+				A9D530FC28DA2A820056177D /* FileSystemViewModel.swift */,
+				A9D5310B28DA60A80056177D /* FileMoveView.swift */,
+				A9D530FB28DA2A820056177D /* FileCommandsViewModel.swift */,
+				A9D5310528DA2D800056177D /* FileCommandsStatusBarView.swift */,
+				A9AD168B28D876490050727A /* LogView.swift */,
+				A9AD168428D875780050727A /* TodoView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A9AD165C28D860AE0050727A /* Decoration */ = {
+			isa = PBXGroup;
+			children = (
+				A9AD165D28D860AE0050727A /* WaveView.swift */,
+				A9AD165E28D860AE0050727A /* ButtonStyles.swift */,
+				A9AD165F28D860AE0050727A /* SnackBarView.swift */,
+			);
+			path = Decoration;
+			sourceTree = "<group>";
+		};
+		A9AD167028D862A80050727A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A9AD167128D862A80050727A /* SafeAreaInsetsEnvironmentValue.swift */,
+				A9AD167228D862A80050727A /* ActivityViewController.swift */,
+				A9AD167328D862A80050727A /* TextFieldAlert.swift */,
+				A9AD167428D862A80050727A /* View+If.swift */,
+				A9AD167528D862A80050727A /* HideKeyboard.swift */,
+				A911751D28FE3D7B00F86706 /* NavigationBarColorModifier.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A9AD167B28D862B80050727A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A9AD167C28D862B80050727A /* KeyboardUtils.swift */,
+				A9AD167D28D862B80050727A /* UIColor+LightAndDark.swift */,
+				A9AD167E28D862B80050727A /* FileProviderUtils.swift */,
+				A9AD168D28D877C60050727A /* Application+KeyWindow.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A9AD168628D8759D0050727A /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				A9AD168728D8759D0050727A /* LimitWidthOnRegularSizeClass.swift */,
+				A9AD168828D8759D0050727A /* DefaultBackground.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		A9AD169528D8A6D70050727A /* Wifi */ = {
+			isa = PBXGroup;
+			children = (
+				A9D530EC28D9FC6B0056177D /* Peripheral */,
+				A9D530EB28D9FC5D0056177D /* Model */,
+				A9D530F228DA04A80056177D /* Network */,
+				A9D530EA28D9FC510056177D /* Scanner */,
+			);
+			path = Wifi;
+			sourceTree = "<group>";
+		};
+		A9AD169628D8A6DC0050727A /* Ble */ = {
+			isa = PBXGroup;
+			children = (
+				A975B93D28EF24490039FE2F /* BleManager.swift */,
+				A975B93F28EF3BAD0039FE2F /* BleManagerImpl.swift */,
+				A985BC6028EB994F008A81FD /* Peripheral */,
+				A985BC5F28EB9948008A81FD /* Scanner */,
+				A975B94128EF3E3A0039FE2F /* BleManagerFake.swift */,
+			);
+			path = Ble;
+			sourceTree = "<group>";
+		};
+		A9D530E128D914A40056177D /* FileTransfer */ = {
+			isa = PBXGroup;
+			children = (
+				A9D530DF28D914990056177D /* Scanner.swift */,
+				A9D530E228D985E90056177D /* WifiFileTransferPeripheral.swift */,
+				A9D530E428D9861F0056177D /* FileTransferPeripheral.swift */,
+				A9D530E628D987D10056177D /* DirectoryEntry.swift */,
+				A9D530E828D98B060056177D /* FileTransferClient.swift */,
+				A985BC6B28EC6AB8008A81FD /* BleFileTransferPeripheral.swift */,
+				A940C70328EC91460017B277 /* BleDataProcessingQueue.swift */,
+			);
+			path = FileTransfer;
+			sourceTree = "<group>";
+		};
+		A9D530EA28D9FC510056177D /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				A9D530D428D8E21C0056177D /* BonjourResolver.swift */,
+				A9D530D528D8E21C0056177D /* BonjourScanner.swift */,
+				A9D530DA28D8ED330056177D /* BonjourScannerFake.swift */,
+				A9D530DC28D8ED430056177D /* BonjourScannerImpl.swift */,
+				A9D530D228D8E21C0056177D /* HostNameResolver.swift */,
+				A9D530D328D8E21C0056177D /* NWEndpoint+bonjourName.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
+		A9D530EB28D9FC5D0056177D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A9D530F028DA040F0056177D /* FileTransferWebApiVersion.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A9D530EC28D9FC6B0056177D /* Peripheral */ = {
+			isa = PBXGroup;
+			children = (
+				A9AD169728D8A6EA0050727A /* WifiPeripheral.swift */,
+				A9D530F528DA10250056177D /* SavedSettingsWifiPeripherals.swift */,
+			);
+			path = Peripheral;
+			sourceTree = "<group>";
+		};
+		A9D530F228DA04A80056177D /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				A9D530F328DA04B50056177D /* FileTransferJsonDeserializer.swift */,
+				A985BC5928EAD506008A81FD /* FileTransferNetworkRouter.swift */,
+				A985BC5B28EB10E3008A81FD /* FileTransferNetwork.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A908EA732768D8FD00320AFE /* Glider SimulateBluetooth */ = {
+		A92161D62988401200FF2474 /* GliderFileProvider */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A908EAA82768D8FD00320AFE /* Build configuration list for PBXNativeTarget "Glider SimulateBluetooth" */;
+			buildConfigurationList = A92161F92988401300FF2474 /* Build configuration list for PBXNativeTarget "GliderFileProvider" */;
 			buildPhases = (
-				A908EA792768D8FD00320AFE /* Sources */,
-				A908EA9F2768D8FD00320AFE /* Frameworks */,
-				A908EAA12768D8FD00320AFE /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Glider SimulateBluetooth";
-			packageProductDependencies = (
-				A908EA782768D8FD00320AFE /* FileTransferClient */,
-			);
-			productName = Glider;
-			productReference = A908EAAB2768D8FD00320AFE /* Glider SimulateBluetooth.app */;
-			productType = "com.apple.product-type.application";
-		};
-		A947FE3726543839007A5E5A /* Glider */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A947FE472654383A007A5E5A /* Build configuration list for PBXNativeTarget "Glider" */;
-			buildPhases = (
-				A947FE3426543839007A5E5A /* Sources */,
-				A947FE3526543839007A5E5A /* Frameworks */,
-				A947FE3626543839007A5E5A /* Resources */,
-				A9ED1F482687530800B6C27F /* Embed App Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A9ED1F3D2687530800B6C27F /* PBXTargetDependency */,
-				A9ED1F402687530800B6C27F /* PBXTargetDependency */,
-			);
-			name = Glider;
-			packageProductDependencies = (
-				A980AC722704ED3A0093222F /* FileTransferClient */,
-			);
-			productName = Glider;
-			productReference = A947FE3826543839007A5E5A /* Glider.app */;
-			productType = "com.apple.product-type.application";
-		};
-		A98254C62768FB3F00DA1F75 /* Glider SimulateBluetoothUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A98254CF2768FB3F00DA1F75 /* Build configuration list for PBXNativeTarget "Glider SimulateBluetoothUITests" */;
-			buildPhases = (
-				A98254C32768FB3F00DA1F75 /* Sources */,
-				A98254C42768FB3F00DA1F75 /* Frameworks */,
-				A98254C52768FB3F00DA1F75 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A98254CE2768FB3F00DA1F75 /* PBXTargetDependency */,
-			);
-			name = "Glider SimulateBluetoothUITests";
-			productName = "Glider SimulateBluetoothUITests";
-			productReference = A98254C72768FB3F00DA1F75 /* Glider SimulateBluetoothUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		A9ED1F252687530700B6C27F /* GliderFileProvider */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A9ED1F452687530800B6C27F /* Build configuration list for PBXNativeTarget "GliderFileProvider" */;
-			buildPhases = (
-				A9ED1F222687530700B6C27F /* Sources */,
-				A9ED1F232687530700B6C27F /* Frameworks */,
-				A9ED1F242687530700B6C27F /* Resources */,
+				A92161D32988401200FF2474 /* Sources */,
+				A92161D42988401200FF2474 /* Frameworks */,
+				A92161D52988401200FF2474 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -593,323 +638,300 @@
 			);
 			name = GliderFileProvider;
 			packageProductDependencies = (
-				A980AC742704ED450093222F /* FileTransferClient */,
+				A92162322988482300FF2474 /* SwiftyJSON */,
 			);
 			productName = GliderFileProvider;
-			productReference = A9ED1F262687530700B6C27F /* GliderFileProvider.appex */;
+			productReference = A92161D72988401200FF2474 /* GliderFileProvider.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		A9ED1F332687530800B6C27F /* GliderFileProviderUI */ = {
+		A92161E72988401200FF2474 /* GliderFileProviderUI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A9ED1F422687530800B6C27F /* Build configuration list for PBXNativeTarget "GliderFileProviderUI" */;
+			buildConfigurationList = A92161F62988401300FF2474 /* Build configuration list for PBXNativeTarget "GliderFileProviderUI" */;
 			buildPhases = (
-				A9ED1F302687530800B6C27F /* Sources */,
-				A9ED1F312687530800B6C27F /* Frameworks */,
-				A9ED1F322687530800B6C27F /* Resources */,
+				A92161E42988401200FF2474 /* Sources */,
+				A92161E52988401200FF2474 /* Frameworks */,
+				A92161E62988401200FF2474 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = GliderFileProviderUI;
-			packageProductDependencies = (
-				A980AC762704ED4A0093222F /* FileTransferClient */,
-			);
 			productName = GliderFileProviderUI;
-			productReference = A9ED1F342687530800B6C27F /* GliderFileProviderUI.appex */;
+			productReference = A92161E82988401200FF2474 /* GliderFileProviderUI.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		A9F116F526895DC7006F8FE4 /* GliderShare */ = {
+		A96EE38528CFC64700D21360 /* Glider */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A9F1170326895DC7006F8FE4 /* Build configuration list for PBXNativeTarget "GliderShare" */;
+			buildConfigurationList = A96EE39528CFC64800D21360 /* Build configuration list for PBXNativeTarget "Glider" */;
 			buildPhases = (
-				A9F116F226895DC7006F8FE4 /* Sources */,
-				A9F116F326895DC7006F8FE4 /* Frameworks */,
-				A9F116F426895DC7006F8FE4 /* Resources */,
+				A96EE38228CFC64700D21360 /* Sources */,
+				A96EE38328CFC64700D21360 /* Frameworks */,
+				A96EE38428CFC64700D21360 /* Resources */,
+				A92161FC2988401300FF2474 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A92161F12988401200FF2474 /* PBXTargetDependency */,
+				A92161F42988401200FF2474 /* PBXTargetDependency */,
 			);
-			name = GliderShare;
-			productName = GliderShare;
-			productReference = A9F116F626895DC7006F8FE4 /* GliderShare.appex */;
-			productType = "com.apple.product-type.app-extension";
+			name = Glider;
+			packageProductDependencies = (
+				A9D530EE28DA03D70056177D /* SwiftyJSON */,
+			);
+			productName = Glider;
+			productReference = A96EE38628CFC64700D21360 /* Glider.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		A947FE3026543839007A5E5A /* Project object */ = {
+		A96EE37E28CFC64700D21360 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1250;
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1410;
 				TargetAttributes = {
-					A947FE3726543839007A5E5A = {
-						CreatedOnToolsVersion = 12.5;
+					A92161D62988401200FF2474 = {
+						CreatedOnToolsVersion = 14.2;
 					};
-					A98254C62768FB3F00DA1F75 = {
-						CreatedOnToolsVersion = 13.2;
-						LastSwiftMigration = 1320;
-						TestTargetID = A908EA732768D8FD00320AFE;
+					A92161E72988401200FF2474 = {
+						CreatedOnToolsVersion = 14.2;
 					};
-					A9ED1F252687530700B6C27F = {
-						CreatedOnToolsVersion = 12.5.1;
-					};
-					A9ED1F332687530800B6C27F = {
-						CreatedOnToolsVersion = 12.5.1;
-					};
-					A9F116F526895DC7006F8FE4 = {
-						CreatedOnToolsVersion = 12.5.1;
+					A96EE38528CFC64700D21360 = {
+						CreatedOnToolsVersion = 14.0;
 					};
 				};
 			};
-			buildConfigurationList = A947FE3326543839007A5E5A /* Build configuration list for PBXProject "Glider" */;
-			compatibilityVersion = "Xcode 9.3";
+			buildConfigurationList = A96EE38128CFC64700D21360 /* Build configuration list for PBXProject "Glider" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = A947FE2F26543839007A5E5A;
-			productRefGroup = A947FE3926543839007A5E5A /* Products */;
+			mainGroup = A96EE37D28CFC64700D21360;
+			packageReferences = (
+				A9D530ED28DA03D70056177D /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
+			productRefGroup = A96EE38728CFC64700D21360 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A947FE3726543839007A5E5A /* Glider */,
-				A908EA732768D8FD00320AFE /* Glider SimulateBluetooth */,
-				A9ED1F252687530700B6C27F /* GliderFileProvider */,
-				A9ED1F332687530800B6C27F /* GliderFileProviderUI */,
-				A9F116F526895DC7006F8FE4 /* GliderShare */,
-				A98254C62768FB3F00DA1F75 /* Glider SimulateBluetoothUITests */,
+				A96EE38528CFC64700D21360 /* Glider */,
+				A92161D62988401200FF2474 /* GliderFileProvider */,
+				A92161E72988401200FF2474 /* GliderFileProviderUI */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A908EAA12768D8FD00320AFE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A908EAA22768D8FD00320AFE /* Preview Assets.xcassets in Resources */,
-				A908EAA32768D8FD00320AFE /* Assets.xcassets in Resources */,
-				A908EAA42768D8FD00320AFE /* Readme.md in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A947FE3626543839007A5E5A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A947FE432654383A007A5E5A /* Preview Assets.xcassets in Resources */,
-				A947FEAA2654392F007A5E5A /* Assets.xcassets in Resources */,
-				A905E1DF26824ADA0051C558 /* Readme.md in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A98254C52768FB3F00DA1F75 /* Resources */ = {
+		A92161D52988401200FF2474 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9ED1F242687530700B6C27F /* Resources */ = {
+		A92161E62988401200FF2474 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A92161EE2988401200FF2474 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9ED1F322687530800B6C27F /* Resources */ = {
+		A96EE38428CFC64700D21360 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9ED1F3A2687530800B6C27F /* MainInterface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9F116F426895DC7006F8FE4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9F116FC26895DC7006F8FE4 /* MainInterface.storyboard in Resources */,
+				A96EE39228CFC64800D21360 /* Preview Assets.xcassets in Resources */,
+				A96EE38E28CFC64800D21360 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A908EA792768D8FD00320AFE /* Sources */ = {
+		A92161D32988401200FF2474 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A908EA7A2768D8FD00320AFE /* LogManager.swift in Sources */,
-				A908EA7B2768D8FD00320AFE /* ScanViewModel.swift in Sources */,
-				A908EA7C2768D8FD00320AFE /* FileCommandsViewModel.swift in Sources */,
-				A908EA7D2768D8FD00320AFE /* StartupViewModel.swift in Sources */,
-				A908EA7E2768D8FD00320AFE /* ButtonStyles.swift in Sources */,
-				A908EA7F2768D8FD00320AFE /* PeripheralAutoConnect.swift in Sources */,
-				A908EA802768D8FD00320AFE /* TodoView.swift in Sources */,
-				A908EA812768D8FD00320AFE /* FileSystemView.swift in Sources */,
-				A908EA822768D8FD00320AFE /* TransmissionStatus.swift in Sources */,
-				A908EA832768D8FD00320AFE /* PeripheralList.swift in Sources */,
-				A908EA842768D8FD00320AFE /* FileCommandsStatusBarView.swift in Sources */,
-				A908EA852768D8FD00320AFE /* WaveView.swift in Sources */,
-				A908EA862768D8FD00320AFE /* StartupView.swift in Sources */,
-				A908EA872768D8FD00320AFE /* LimitWidthOnRegularSizeClass.swift in Sources */,
-				A908EAC82768EA3B00320AFE /* BlePeripheralSimulated.swift in Sources */,
-				A908EA882768D8FD00320AFE /* LogView.swift in Sources */,
-				A908EA892768D8FD00320AFE /* GliderApp.swift in Sources */,
-				A908EA8A2768D8FD00320AFE /* AppDelegate.swift in Sources */,
-				A908EA8B2768D8FD00320AFE /* PeripheralChooserView.swift in Sources */,
-				A908EA8C2768D8FD00320AFE /* View+If.swift in Sources */,
-				A908EAC72768EA3B00320AFE /* FileTransferConnectionManager.swift in Sources */,
-				A908EA8D2768D8FD00320AFE /* SafeAreaInsetsEnvironmentValue.swift in Sources */,
-				A908EA8E2768D8FD00320AFE /* FileMoveView.swift in Sources */,
-				A908EA8F2768D8FD00320AFE /* FileSystemViewModel.swift in Sources */,
-				A908EA902768D8FD00320AFE /* InfoView.swift in Sources */,
-				A908EA912768D8FD00320AFE /* TextFieldAlert.swift in Sources */,
-				A908EA922768D8FD00320AFE /* ScanView.swift in Sources */,
-				A908EA932768D8FD00320AFE /* BluetoothStatusView.swift in Sources */,
-				A908EA942768D8FD00320AFE /* FileEditView.swift in Sources */,
-				A98254B32768EF3C00DA1F75 /* FileTransferClient.swift in Sources */,
-				A908EA952768D8FD00320AFE /* FileExplorerView.swift in Sources */,
-				A908EA962768D8FD00320AFE /* RootView.swift in Sources */,
-				A908EA972768D8FD00320AFE /* FileEditViewModel.swift in Sources */,
-				A908EAC92768EA3B00320AFE /* ObjectBuilder.m in Sources */,
-				A908EA982768D8FD00320AFE /* RootViewModel.swift in Sources */,
-				A908EABC2768E45500320AFE /* Config.swift in Sources */,
-				A908EA992768D8FD00320AFE /* SnackBarView.swift in Sources */,
-				A908EA9A2768D8FD00320AFE /* ActivityViewController.swift in Sources */,
-				A908EA9B2768D8FD00320AFE /* ConnectedTabView.swift in Sources */,
-				A908EA9C2768D8FD00320AFE /* HideKeyboard.swift in Sources */,
-				A908EA9D2768D8FD00320AFE /* DefaultBackground.swift in Sources */,
-				A908EA9E2768D8FD00320AFE /* UIColor+LightAndDark.swift in Sources */,
+				A98A1DFD299BA879007102A8 /* LogManager.swift in Sources */,
+				A9216219298847F000FF2474 /* BonjourScanner.swift in Sources */,
+				A92162302988480C00FF2474 /* FileTransferPeripheral.swift in Sources */,
+				A921620C298847B800FF2474 /* PeripheralsViewModel.swift in Sources */,
+				A9216200298841BA00FF2474 /* AppEnvironment.swift in Sources */,
+				A9216220298847F000FF2474 /* FileTransferWebApiVersion.swift in Sources */,
+				A9216211298847F000FF2474 /* WifiPeripheral.swift in Sources */,
+				A9216221298847F000FF2474 /* SavedBondedBlePeripherals.swift in Sources */,
+				A921620A298847A300FF2474 /* ScanEnumerator.swift in Sources */,
+				A92162312988480C00FF2474 /* Scanner.swift in Sources */,
+				A921620F298847F000FF2474 /* BonjourScannerFake.swift in Sources */,
+				A9216216298847F000FF2474 /* FileTransferJsonDeserializer.swift in Sources */,
+				A921621D298847F000FF2474 /* BonjourResolver.swift in Sources */,
+				A921621A298847F000FF2474 /* BonjourScannerImpl.swift in Sources */,
+				A98A1DF729916D66007102A8 /* AppContainer.swift in Sources */,
+				A921620D298847C900FF2474 /* ConnectionManager.swift in Sources */,
+				A9216204298844EF00FF2474 /* FileTransferPathUtils.swift in Sources */,
+				A9216218298847F000FF2474 /* FileTransferNetwork.swift in Sources */,
+				A9216214298847F000FF2474 /* BleManagerFake.swift in Sources */,
+				A9216206298845E100FF2474 /* DirectoryEntry.swift in Sources */,
+				A9216229298847F000FF2474 /* BleAdvertisement+ManufacturerAdafruit.swift in Sources */,
+				A92162022988446100FF2474 /* GliderClient.swift in Sources */,
+				A9216227298847F000FF2474 /* BlePeripheralScannerFake.swift in Sources */,
+				A92161DD2988401200FF2474 /* FileProviderExtension.swift in Sources */,
+				A9216228298847F000FF2474 /* NWEndpoint+bonjourName.swift in Sources */,
+				A92162032988448100FF2474 /* LogHelper.swift in Sources */,
+				A921622F2988480C00FF2474 /* BleDataProcessingQueue.swift in Sources */,
+				A9216235298848AF00FF2474 /* FileMetadataCache.swift in Sources */,
+				A9216223298847F000FF2474 /* Peripheral.swift in Sources */,
+				A92161FF298841AB00FF2474 /* Logger+Utils.swift in Sources */,
+				A9216210298847F000FF2474 /* Data+LittleEndianTypes.swift in Sources */,
+				A921620B298847A300FF2474 /* ItemEnumerator.swift in Sources */,
+				A9216226298847F000FF2474 /* Types+Data.swift in Sources */,
+				A921622E2988480C00FF2474 /* BleFileTransferPeripheral.swift in Sources */,
+				A921622D2988480C00FF2474 /* FileTransferClient.swift in Sources */,
+				A921622B298847F000FF2474 /* BleAdvertisement.swift in Sources */,
+				A9216215298847F000FF2474 /* BlePeripheral.swift in Sources */,
+				A921621C298847F000FF2474 /* SavedSettingsWifiPeripherals.swift in Sources */,
+				A921621F298847F000FF2474 /* Data+ScanValue.swift in Sources */,
+				A98A1DF829916D74007102A8 /* Config.swift in Sources */,
+				A9216222298847F000FF2474 /* FileTransferNetworkRouter.swift in Sources */,
+				A921621E298847F000FF2474 /* BlePeripheralScanner.swift in Sources */,
+				A921622A298847F000FF2474 /* BlePeripheralScannerImpl.swift in Sources */,
+				A9216217298847F000FF2474 /* BleManager.swift in Sources */,
+				A921622C2988480C00FF2474 /* WifiFileTransferPeripheral.swift in Sources */,
+				A9216205298845CE00FF2474 /* String+DeletingPrefix.swift in Sources */,
+				A9216212298847F000FF2474 /* Int+Bytes.swift in Sources */,
+				A92161DF2988401200FF2474 /* FileProviderItem.swift in Sources */,
+				A9216213298847F000FF2474 /* Result+SimpleCheck.swift in Sources */,
+				A921620E298847F000FF2474 /* CommandQueue.swift in Sources */,
+				A92161E12988401200FF2474 /* FileProviderEnumerator.swift in Sources */,
+				A9216225298847F000FF2474 /* HexUtils.swift in Sources */,
+				A9216224298847F000FF2474 /* HostNameResolver.swift in Sources */,
+				A921621B298847F000FF2474 /* BleManagerImpl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A947FE3426543839007A5E5A /* Sources */ = {
+		A92161E42988401200FF2474 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9678E8E26E828E2003936DC /* LogManager.swift in Sources */,
-				A947FE8F26543894007A5E5A /* ScanViewModel.swift in Sources */,
-				A98B67D6271BA58B00787A02 /* FileCommandsViewModel.swift in Sources */,
-				A947FE8D26543894007A5E5A /* StartupViewModel.swift in Sources */,
-				A947FE8226543894007A5E5A /* ButtonStyles.swift in Sources */,
-				A947FE9426543894007A5E5A /* PeripheralAutoConnect.swift in Sources */,
-				A947FE8B26543894007A5E5A /* TodoView.swift in Sources */,
-				A96E4E2A271D9BA70023C03A /* FileSystemView.swift in Sources */,
-				A9D6E35527190A2E0048EB12 /* TransmissionStatus.swift in Sources */,
-				A947FE9326543894007A5E5A /* PeripheralList.swift in Sources */,
-				A98B67D8271BA83E00787A02 /* FileCommandsStatusBarView.swift in Sources */,
-				A9678E8226E78797003936DC /* WaveView.swift in Sources */,
-				A947FE8426543894007A5E5A /* StartupView.swift in Sources */,
-				A944E6862729C775001A2FBB /* LimitWidthOnRegularSizeClass.swift in Sources */,
-				A9678E8A26E7FB58003936DC /* LogView.swift in Sources */,
-				A947FEA426543894007A5E5A /* GliderApp.swift in Sources */,
-				A947FEA526543894007A5E5A /* AppDelegate.swift in Sources */,
-				A98B67DA271D6D3800787A02 /* PeripheralChooserView.swift in Sources */,
-				A947FE8626543894007A5E5A /* View+If.swift in Sources */,
-				A908EA702768D59100320AFE /* SafeAreaInsetsEnvironmentValue.swift in Sources */,
-				A98B67DC271D999200787A02 /* FileMoveView.swift in Sources */,
-				A9F22528265B9DE800D3B2C6 /* FileSystemViewModel.swift in Sources */,
-				A9678E8626E7D191003936DC /* InfoView.swift in Sources */,
-				A9F2252C265C85ED00D3B2C6 /* TextFieldAlert.swift in Sources */,
-				A947FE8526543894007A5E5A /* ScanView.swift in Sources */,
-				A9678E8026E758B2003936DC /* BluetoothStatusView.swift in Sources */,
-				A9D6E357271918EC0048EB12 /* FileEditView.swift in Sources */,
-				A9D6E353271890870048EB12 /* FileExplorerView.swift in Sources */,
-				A947FE8826543894007A5E5A /* RootView.swift in Sources */,
-				A947FE8E26543894007A5E5A /* FileEditViewModel.swift in Sources */,
-				A947FE8C26543894007A5E5A /* RootViewModel.swift in Sources */,
-				A908EABB2768E42100320AFE /* Config.swift in Sources */,
-				A96E4E2C271F00B20023C03A /* SnackBarView.swift in Sources */,
-				A91C52CA274D509D00552886 /* ActivityViewController.swift in Sources */,
-				A9678E8426E7C98F003936DC /* ConnectedTabView.swift in Sources */,
-				A947FE8726543894007A5E5A /* HideKeyboard.swift in Sources */,
-				A947FE8326543894007A5E5A /* DefaultBackground.swift in Sources */,
-				A9678E9226E91B90003936DC /* UIColor+LightAndDark.swift in Sources */,
+				A92161EB2988401200FF2474 /* DocumentActionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A98254C32768FB3F00DA1F75 /* Sources */ = {
+		A96EE38228CFC64700D21360 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A98254D42768FB6000DA1F75 /* Glider_SimulateBluetoothUITestsLaunchTests.swift in Sources */,
-				A98254D52768FB6000DA1F75 /* Glider_SimulateBluetoothUITests.swift in Sources */,
-				A98254D72768FBF300DA1F75 /* SnapshotHelper.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9ED1F222687530700B6C27F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9678E8F26E8C941003936DC /* LogManager.swift in Sources */,
-				A9ED1F292687530700B6C27F /* FileProviderExtension.swift in Sources */,
-				A9ED1F2B2687530700B6C27F /* FileProviderItem.swift in Sources */,
-				A9E3CBAE2704D1FB00CD4BA3 /* GliderClient.swift in Sources */,
-				A9ED1F6126878ABF00B6C27F /* FileMetadataCache.swift in Sources */,
-				A9C20E512773605E003DCA44 /* Result+SimpleCheck.swift in Sources */,
-				A96D27862687FA1800D6E247 /* FileProviderUtils.swift in Sources */,
-				A9ED1F2D2687530700B6C27F /* FileProviderEnumerator.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9ED1F302687530800B6C27F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9678E9026E8C980003936DC /* LogManager.swift in Sources */,
-				A9ED1F372687530800B6C27F /* DocumentActionViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9F116F226895DC7006F8FE4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9F116F926895DC7006F8FE4 /* ShareViewController.swift in Sources */,
+				A9D530E028D914990056177D /* Scanner.swift in Sources */,
+				A985BC6228EB996C008A81FD /* BlePeripheral.swift in Sources */,
+				A9D530E528D9861F0056177D /* FileTransferPeripheral.swift in Sources */,
+				A9D530E728D987D10056177D /* DirectoryEntry.swift in Sources */,
+				A9AD162628D858D40050727A /* LogManager.swift in Sources */,
+				A9D530DB28D8ED330056177D /* BonjourScannerFake.swift in Sources */,
+				A9D530E928D98B060056177D /* FileTransferClient.swift in Sources */,
+				A9AD164828D8592E0050727A /* Data+LittleEndianTypes.swift in Sources */,
+				A9AD165928D85DF30050727A /* RootViewModel.swift in Sources */,
+				A9AD162228D8584C0050727A /* AppDelegate.swift in Sources */,
+				A9D5310228DA2AE70056177D /* TransmissionStatus.swift in Sources */,
+				A9AD165B28D85F2A0050727A /* ConnectionManager.swift in Sources */,
+				A985BC6628EC3036008A81FD /* BlePeripheralScannerImpl.swift in Sources */,
+				A9AD162128D858460050727A /* Config.swift in Sources */,
+				A9AD168928D8759D0050727A /* LimitWidthOnRegularSizeClass.swift in Sources */,
+				A9D530F428DA04B50056177D /* FileTransferJsonDeserializer.swift in Sources */,
+				A9AD168A28D8759D0050727A /* DefaultBackground.swift in Sources */,
+				A9D530D928D8E21C0056177D /* BonjourScanner.swift in Sources */,
+				A9AD167828D862A80050727A /* TextFieldAlert.swift in Sources */,
+				A9AD168C28D876490050727A /* LogView.swift in Sources */,
+				A9D5310C28DA60A80056177D /* FileMoveView.swift in Sources */,
+				A9D5310728DA2D970056177D /* FileEditView.swift in Sources */,
+				A985BC6C28EC6AB8008A81FD /* BleFileTransferPeripheral.swift in Sources */,
+				A92161FE2988416400FF2474 /* Logger+Utils.swift in Sources */,
+				A9D5310A28DA60750056177D /* FileSystemView.swift in Sources */,
+				A9AD169828D8A6EA0050727A /* WifiPeripheral.swift in Sources */,
+				A9AD166428D862070050727A /* ConnectedTabView.swift in Sources */,
+				A9AD164928D8592E0050727A /* String+DeletingPrefix.swift in Sources */,
+				A98A1DFC299B0D34007102A8 /* DocumentPicker.swift in Sources */,
+				A9AD164F28D8592E0050727A /* AppEnvironment.swift in Sources */,
+				A985BC6828EC69D2008A81FD /* BleAdvertisement.swift in Sources */,
+				A940C70228EC78BB0017B277 /* SavedBondedBlePeripherals.swift in Sources */,
+				A9AD167728D862A80050727A /* ActivityViewController.swift in Sources */,
+				A985BC6A28EC6A4E008A81FD /* BleAdvertisement+ManufacturerAdafruit.swift in Sources */,
+				A975B93E28EF24490039FE2F /* BleManager.swift in Sources */,
+				A9AD168028D862B80050727A /* KeyboardUtils.swift in Sources */,
+				A9D530DD28D8ED430056177D /* BonjourScannerImpl.swift in Sources */,
+				A9AD164B28D8592E0050727A /* Int+Bytes.swift in Sources */,
+				A9AD168228D862B80050727A /* FileProviderUtils.swift in Sources */,
+				A9AD167A28D862A80050727A /* HideKeyboard.swift in Sources */,
+				A911751E28FE3D7B00F86706 /* NavigationBarColorModifier.swift in Sources */,
+				A9D5310428DA2D510056177D /* FileEditViewModel.swift in Sources */,
+				A9AD169028D886110050727A /* PeripheralsView.swift in Sources */,
+				A9D5310328DA2CA80056177D /* FileSystemViewModel.swift in Sources */,
+				A9AD167928D862A80050727A /* View+If.swift in Sources */,
+				A975B94228EF3E3A0039FE2F /* BleManagerFake.swift in Sources */,
+				A9AD167628D862A80050727A /* SafeAreaInsetsEnvironmentValue.swift in Sources */,
+				A9AD165028D8592E0050727A /* Data+ScanValue.swift in Sources */,
+				A9AD168E28D877C60050727A /* Application+KeyWindow.swift in Sources */,
+				A9AD168128D862B80050727A /* UIColor+LightAndDark.swift in Sources */,
+				A9AD166228D860AE0050727A /* SnackBarView.swift in Sources */,
+				A985BC6428EC2FF0008A81FD /* BlePeripheralScannerFake.swift in Sources */,
+				A9AD164D28D8592E0050727A /* LogHelper.swift in Sources */,
+				A98CE9F628E2F17800795BC7 /* FileExplorerView.swift in Sources */,
+				A9D530D828D8E21C0056177D /* BonjourResolver.swift in Sources */,
+				A985BC5C28EB10E3008A81FD /* FileTransferNetwork.swift in Sources */,
+				A9AD168528D875780050727A /* TodoView.swift in Sources */,
+				A9AD166128D860AE0050727A /* ButtonStyles.swift in Sources */,
+				A985BC5E28EB98A4008A81FD /* BlePeripheralScanner.swift in Sources */,
+				A9AD165128D8592E0050727A /* FileTransferPathUtils.swift in Sources */,
+				A9D5310628DA2D800056177D /* FileCommandsStatusBarView.swift in Sources */,
+				A9AD165428D85A3B0050727A /* AppContainer.swift in Sources */,
+				A9AD164E28D8592E0050727A /* Types+Data.swift in Sources */,
+				A9AD164A28D8592E0050727A /* HexUtils.swift in Sources */,
+				A9D530E328D985E90056177D /* WifiFileTransferPeripheral.swift in Sources */,
+				A9AD166028D860AE0050727A /* WaveView.swift in Sources */,
+				A9D530D728D8E21C0056177D /* NWEndpoint+bonjourName.swift in Sources */,
+				A940C70428EC91460017B277 /* BleDataProcessingQueue.swift in Sources */,
+				A9D530FF28DA2A820056177D /* FileCommandsViewModel.swift in Sources */,
+				A9AD162328D858760050727A /* GliderApp.swift in Sources */,
+				A9AD168328D862B80050727A /* Result+SimpleCheck.swift in Sources */,
+				A9AD169228D8A1610050727A /* PeripheralsViewModel.swift in Sources */,
+				A985BC5A28EAD506008A81FD /* FileTransferNetworkRouter.swift in Sources */,
+				A9D530D628D8E21C0056177D /* HostNameResolver.swift in Sources */,
+				A9AD164C28D8592E0050727A /* CommandQueue.swift in Sources */,
+				A9D530F128DA040F0056177D /* FileTransferWebApiVersion.swift in Sources */,
+				A9AD169428D8A5A10050727A /* Peripheral.swift in Sources */,
+				A9AD165728D85D850050727A /* RootView.swift in Sources */,
+				A9D530F628DA10250056177D /* SavedSettingsWifiPeripherals.swift in Sources */,
+				A975B94028EF3BAD0039FE2F /* BleManagerImpl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A98254CE2768FB3F00DA1F75 /* PBXTargetDependency */ = {
+		A92161F12988401200FF2474 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A908EA732768D8FD00320AFE /* Glider SimulateBluetooth */;
-			targetProxy = A98254CD2768FB3F00DA1F75 /* PBXContainerItemProxy */;
+			target = A92161E72988401200FF2474 /* GliderFileProviderUI */;
+			targetProxy = A92161F02988401200FF2474 /* PBXContainerItemProxy */;
 		};
-		A9ED1F3D2687530800B6C27F /* PBXTargetDependency */ = {
+		A92161F42988401200FF2474 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A9ED1F332687530800B6C27F /* GliderFileProviderUI */;
-			targetProxy = A9ED1F3C2687530800B6C27F /* PBXContainerItemProxy */;
-		};
-		A9ED1F402687530800B6C27F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A9ED1F252687530700B6C27F /* GliderFileProvider */;
-			targetProxy = A9ED1F3F2687530800B6C27F /* PBXContainerItemProxy */;
+			target = A92161D62988401200FF2474 /* GliderFileProvider */;
+			targetProxy = A92161F32988401200FF2474 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A9ED1F382687530800B6C27F /* MainInterface.storyboard */ = {
+		A92161EC2988401200FF2474 /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A9ED1F392687530800B6C27F /* Base */,
-			);
-			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
-		A9F116FA26895DC7006F8FE4 /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9F116FB26895DC7006F8FE4 /* Base */,
+				A92161ED2988401200FF2474 /* Base */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -917,68 +939,143 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		A908EAA92768D8FD00320AFE /* Debug */ = {
+		A92161F72988401300FF2474 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
-				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 2X94RM7457;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "Glider/ScreenshotMode-Info";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GliderFileProviderUI;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
-				OTHER_SWIFT_FLAGS = "-D SIMULATEBLUETOOTH";
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.simulatebluetooth;
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Glider/Glider-SimulateBluetooth-Bridging-Header.h";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		A908EAAA2768D8FD00320AFE /* Release */ = {
+		A92161F82988401300FF2474 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
-				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 2X94RM7457;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "Glider/ScreenshotMode-Info";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GliderFileProviderUI;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
-				OTHER_SWIFT_FLAGS = "-D SIMULATEBLUETOOTH";
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.simulatebluetooth;
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Glider/Glider-SimulateBluetooth-Bridging-Header.h";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		A947FE452654383A007A5E5A /* Debug */ = {
+		A92161FA2988401300FF2474 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GliderFileProvider/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "File Glider";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app needs access to Bluetooth to connect to Adafruit devices";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app needs network access to search for Multicast services";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG FILEPROVIDER";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A92161FB2988401300FF2474 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = 2X94RM7457;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GliderFileProvider/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "File Glider";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app needs access to Bluetooth to connect to Adafruit devices";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app needs network access to search for Multicast services";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = FILEPROVIDER;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A96EE39328CFC64800D21360 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1005,6 +1102,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1022,24 +1120,21 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		A947FE462654383A007A5E5A /* Release */ = {
+		A96EE39428CFC64800D21360 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1066,6 +1161,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1077,246 +1173,112 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		A947FE482654383A007A5E5A /* Debug */ = {
+		A96EE39628CFC64800D21360 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 4;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Glider/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0.2;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app needs access to Bluetooth to connect to Adafruit devices";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "This app needs access to Bluetooth to connect to Adafruit devices";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app needs network access to search for Multicast services";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		A947FE492654383A007A5E5A /* Release */ = {
+		A96EE39728CFC64800D21360 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Glider/Glider.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 4;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Glider/Preview Content\"";
 				DEVELOPMENT_TEAM = 2X94RM7457;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Glider/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0.2;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app needs access to Bluetooth to connect to Adafruit devices";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "This app needs access to Bluetooth to connect to Adafruit devices";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app needs network access to search for Multicast services";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		A98254D02768FB3F00DA1F75 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2X94RM7457;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.adafruit.Glider.Glider-SimulateBluetoothUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Glider SimulateBluetooth";
-			};
-			name = Debug;
-		};
-		A98254D12768FB3F00DA1F75 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2X94RM7457;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.adafruit.Glider.Glider-SimulateBluetoothUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Glider SimulateBluetooth";
-			};
-			name = Release;
-		};
-		A9ED1F432687530800B6C27F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
-				DEVELOPMENT_TEAM = 2X94RM7457;
-				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		A9ED1F442687530800B6C27F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
-				DEVELOPMENT_TEAM = 2X94RM7457;
-				INFOPLIST_FILE = GliderFileProviderUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProviderUI;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		A9ED1F462687530800B6C27F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
-				DEVELOPMENT_TEAM = 2X94RM7457;
-				INFOPLIST_FILE = GliderFileProvider/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0.1;
-				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG FILEPROVIDER";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		A9ED1F472687530800B6C27F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = GliderFileProvider/GliderFileProvider.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
-				DEVELOPMENT_TEAM = 2X94RM7457;
-				INFOPLIST_FILE = GliderFileProvider/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0.1;
-				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderFileProvider;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = FILEPROVIDER;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		A9F1170126895DC7006F8FE4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2X94RM7457;
-				INFOPLIST_FILE = GliderShare/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderShare;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		A9F1170226895DC7006F8FE4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2X94RM7457;
-				INFOPLIST_FILE = GliderShare/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adafruit.Glider.GliderShare;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1325,89 +1287,67 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A908EAA82768D8FD00320AFE /* Build configuration list for PBXNativeTarget "Glider SimulateBluetooth" */ = {
+		A92161F62988401300FF2474 /* Build configuration list for PBXNativeTarget "GliderFileProviderUI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A908EAA92768D8FD00320AFE /* Debug */,
-				A908EAAA2768D8FD00320AFE /* Release */,
+				A92161F72988401300FF2474 /* Debug */,
+				A92161F82988401300FF2474 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A947FE3326543839007A5E5A /* Build configuration list for PBXProject "Glider" */ = {
+		A92161F92988401300FF2474 /* Build configuration list for PBXNativeTarget "GliderFileProvider" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A947FE452654383A007A5E5A /* Debug */,
-				A947FE462654383A007A5E5A /* Release */,
+				A92161FA2988401300FF2474 /* Debug */,
+				A92161FB2988401300FF2474 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A947FE472654383A007A5E5A /* Build configuration list for PBXNativeTarget "Glider" */ = {
+		A96EE38128CFC64700D21360 /* Build configuration list for PBXProject "Glider" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A947FE482654383A007A5E5A /* Debug */,
-				A947FE492654383A007A5E5A /* Release */,
+				A96EE39328CFC64800D21360 /* Debug */,
+				A96EE39428CFC64800D21360 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A98254CF2768FB3F00DA1F75 /* Build configuration list for PBXNativeTarget "Glider SimulateBluetoothUITests" */ = {
+		A96EE39528CFC64800D21360 /* Build configuration list for PBXNativeTarget "Glider" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A98254D02768FB3F00DA1F75 /* Debug */,
-				A98254D12768FB3F00DA1F75 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A9ED1F422687530800B6C27F /* Build configuration list for PBXNativeTarget "GliderFileProviderUI" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A9ED1F432687530800B6C27F /* Debug */,
-				A9ED1F442687530800B6C27F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A9ED1F452687530800B6C27F /* Build configuration list for PBXNativeTarget "GliderFileProvider" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A9ED1F462687530800B6C27F /* Debug */,
-				A9ED1F472687530800B6C27F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A9F1170326895DC7006F8FE4 /* Build configuration list for PBXNativeTarget "GliderShare" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A9F1170126895DC7006F8FE4 /* Debug */,
-				A9F1170226895DC7006F8FE4 /* Release */,
+				A96EE39628CFC64800D21360 /* Debug */,
+				A96EE39728CFC64800D21360 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		A9D530ED28DA03D70056177D /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		A908EA782768D8FD00320AFE /* FileTransferClient */ = {
+		A92162322988482300FF2474 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = FileTransferClient;
+			package = A9D530ED28DA03D70056177D /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
-		A980AC722704ED3A0093222F /* FileTransferClient */ = {
+		A9D530EE28DA03D70056177D /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = FileTransferClient;
-		};
-		A980AC742704ED450093222F /* FileTransferClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FileTransferClient;
-		};
-		A980AC762704ED4A0093222F /* FileTransferClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FileTransferClient;
+			package = A9D530ED28DA03D70056177D /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = A947FE3026543839007A5E5A /* Project object */;
+	rootObject = A96EE37E28CFC64700D21360 /* Project object */;
 }

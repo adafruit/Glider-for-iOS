@@ -33,21 +33,29 @@ class TextFieldAlertViewController: UIViewController {
     private func presentAlertController() {
         guard subscription == nil else { return } // present only once
         
-        let alertController = UIAlertController(title: alert.title, message: alert.message, preferredStyle: .alert)
+        let alertController = UIAlertController(
+            title: alert.title,
+            message: alert.message,
+            preferredStyle: .alert
+        )
+        
         // add a textField and create a subscription to update the `text` binding
         alertController.addTextField {
             $0.text = self.alert.defaultText
         }
+        
         if let cancel = alert.cancel {
             alertController.addAction(UIAlertAction(title: cancel, style: .cancel) { _ in
                 self.isPresented = false
             })
         }
+        
         let textField = alertController.textFields?.first
         alertController.addAction(UIAlertAction(title: alert.accept, style: .default) { _ in
             self.isPresented = false
             self.alert.action(textField?.text)
         })
+        
         present(alertController, animated: true, completion: nil)
     }
 }

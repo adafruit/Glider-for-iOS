@@ -2,12 +2,11 @@
 //  DocumentActionViewController.swift
 //  GliderFileProviderUI
 //
-//  Created by Antonio García on 26/6/21.
+//  Created by Antonio García on 30/1/23.
 //
 
 import UIKit
 import FileProviderUI
-import FileTransferClient
 
 class DocumentActionViewController: FPUIActionExtensionViewController {
     
@@ -15,14 +14,11 @@ class DocumentActionViewController: FPUIActionExtensionViewController {
     @IBOutlet weak var actionTypeLabel: UILabel!
     
     override func prepare(forAction actionIdentifier: String, itemIdentifiers: [NSFileProviderItemIdentifier]) {
-        DLog("prepare for action: \(actionIdentifier)")
-
         identifierLabel?.text = actionIdentifier
         actionTypeLabel?.text = "Custom action"
     }
     
     override func prepare(forError error: Error) {
-        DLog("prepare for error: \(error)")
         identifierLabel?.text = error.localizedDescription
         actionTypeLabel?.text = "Authenticate"
     }

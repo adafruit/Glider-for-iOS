@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1310"
+   LastUpgradeVersion = "1420"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A9ED1F252687530700B6C27F"
+               BlueprintIdentifier = "A92161D62988401200FF2474"
                BuildableName = "GliderFileProvider.appex"
                BlueprintName = "GliderFileProvider"
                ReferencedContainer = "container:Glider.xcodeproj">
@@ -29,7 +29,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A947FE3726543839007A5E5A"
+               BlueprintIdentifier = "A96EE38528CFC64700D21360"
                BuildableName = "Glider.app"
                BlueprintName = "Glider"
                ReferencedContainer = "container:Glider.xcodeproj">
@@ -43,23 +43,13 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A99BCD5B2768C2DC00AE8C8B"
-               BuildableName = "GliderUITests.xctest"
-               BlueprintName = "GliderUITests"
-               ReferencedContainer = "container:Glider.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
-      launchStyle = "1"
+      launchStyle = "0"
       askForAppToLaunch = "Yes"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -67,20 +57,16 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
-      <RemoteRunnable
-         runnableDebuggingMode = "1"
-         BundleIdentifier = "com.apple.DocumentsApp"
-         RemotePath = "/var/containers/Bundle/Application/E5C34E5D-20AB-4A94-8FCA-9C5E68D787E4/Files.app">
-      </RemoteRunnable>
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A947FE3726543839007A5E5A"
+            BlueprintIdentifier = "A96EE38528CFC64700D21360"
             BuildableName = "Glider.app"
             BlueprintName = "Glider"
             ReferencedContainer = "container:Glider.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -94,7 +80,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A947FE3726543839007A5E5A"
+            BlueprintIdentifier = "A96EE38528CFC64700D21360"
             BuildableName = "Glider.app"
             BlueprintName = "Glider"
             ReferencedContainer = "container:Glider.xcodeproj">

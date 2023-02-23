@@ -7,7 +7,6 @@
 
 import Foundation
 import FileProvider
-import FileTransferClient
 
 class FileMetadataCache {
     
@@ -15,8 +14,8 @@ class FileMetadataCache {
     static let shared = FileMetadataCache()
     
     // Data
-    private static let userDefaults = UserDefaults(suiteName: "group.com.adafruit.Glider")!        // Shared between the app and extensions
-    private static let fileMetadataKey = "metadata_6"
+    private static let userDefaults = UserDefaults(suiteName: "group.2X94RM7457.com.adafruit.Glider")!        // Shared between the app and extensions
+    private static let fileMetadataKey = "metadata_a3"
     private static let buildNumberKey = "buildNumber"
 
     private var metadata = [NSFileProviderItemIdentifier: FileProviderItem]()
@@ -37,7 +36,7 @@ class FileMetadataCache {
         
         // If is the first time add root container
         if metadata[.rootContainer] == nil {
-            metadata[.rootContainer] = FileProviderItem(blePeripheralIdentifier: nil)
+            metadata[.rootContainer] = FileProviderItem(peripheralType: .rootContainer)
             saveToUserDefaults()
         }
     }
@@ -67,7 +66,7 @@ class FileMetadataCache {
     func setDirectoryItems(items: [FileProviderItem]) {
         guard let firstItem = items.first else { return }
         let commonPath = firstItem.path
-        let commonPeripheral = firstItem.blePeripheralIdentifier
+        let commonPeripheralType = firstItem.peripheralType
         let areAllDirectoriesEqual = items.map{$0.path}.allSatisfy{$0 == commonPath}
         guard areAllDirectoriesEqual else {
             DLog("setDirectoryItems error: all items should have the same directory ")
@@ -79,11 +78,11 @@ class FileMetadataCache {
         
         // Sync: Delete any previous contents of the directory that is not present in the new items array
         let itemsIdentifiers = items.map {$0.itemIdentifier}
-        let itemsToDelete = metadata.filter({(fileProviderItemIdentifier, fileProviderItem) in
-            let alreadyExists = fileProviderItem.blePeripheralIdentifier == commonPeripheral && fileProviderItem.path == commonPath
+        let itemsToDelete = metadata.filter{(fileProviderItemIdentifier, fileProviderItem) in
+            let alreadyExists = fileProviderItem.peripheralType == commonPeripheralType && fileProviderItem.path == commonPath
             let isInNewSet = itemsIdentifiers.contains(fileProviderItem.itemIdentifier)    // This check could be elminated because we are going to add all new elements later. So we could just delete all of the current elements in the directory
             return alreadyExists && !isInNewSet && fileProviderItemIdentifier != .rootContainer && !FileTransferPathUtils.isRootDirectory(path: fileProviderItem.path)
-        })
+        }
         let _ = itemsToDelete.map { metadata.removeValue(forKey: $0.key) }      // Delete items
         if itemsToDelete.count > 0 {
             DLog("Metadata: deleted \(itemsToDelete.count) items that are no longer present in directory: \(commonPath)")

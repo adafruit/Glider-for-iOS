@@ -7,7 +7,6 @@
 
 import Foundation
 import FileProvider
-import FileTransferClient
 
 struct FileProviderUtils {
     static func signalFileProviderChanges() {

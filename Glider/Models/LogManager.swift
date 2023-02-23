@@ -6,11 +6,11 @@
 //
 
 import Foundation
-import FileTransferClient
 import Combine
 
 class LogManager: ObservableObject {
-    private static let applicationGroupSharedDirectoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.adafruit.Glider")!       // Shared between the app and extensions
+    // Note: Used group.<TEAM_ID>.<bundle_id> to avoid warnings when executing the app: https://stackoverflow.com/questions/38275395/failed-to-read-values-in-cfprefsplistsource-ios-10
+    private static let applicationGroupSharedDirectoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.2X94RM7457.com.adafruit.Glider")!       // Shared between the app and extensions
     private static let logFilename = "log.json"
     private static let fileProviderFilename = "fileprovider_log.json"
     private static let maxEntries = 10000
@@ -135,13 +135,8 @@ class LogManager: ObservableObject {
         }
         
         // Make sure that we are publishing changes from the main thread
-        if Thread.isMainThread {
+        DispatchQueue.main.async {
             appendHandler()
-        }
-        else {
-            DispatchQueue.main.async {
-                appendHandler()
-            }
         }
         //DLog(message)
     }

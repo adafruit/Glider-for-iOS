@@ -6,15 +6,17 @@
 //
 
 import SwiftUI
-import FileTransferClient
+//import FileTransferClient
 
 struct RootView: View {
     // Debug
     private static let debugForceDestination = AppEnvironment.isDebug && false ? RootViewModel.Destination.debug : nil
     
+    // Params
+    let appContainer: AppContainer
+    
     //
     @StateObject private var model = RootViewModel()
-    @ObservedObject private var connectionManager = FileTransferConnectionManager.shared
     
     // Snackbar
     @State private var snackBarIsShowing = false
@@ -27,23 +29,32 @@ struct RootView: View {
         // Main screen
         ZStack {
             switch Self.debugForceDestination ?? model.destination {
+                /*
             case .startup:
                 StartupView()
             case .scan:
-                ScanView()
-            case .bluetoothStatus:
-                BluetoothStatusView()
+                ScanView()*/
+            //case .bluetoothStatus:
+            //    BluetoothStatusView()
             case .connected:
-                ConnectedTabView()
+                ConnectedTabView(
+                    connectionManager: appContainer.connectionManager,
+                    savedBondedBlePeripherals: appContainer.savedBondedBlePeripherals,
+                    savedSettingsWifiPeripherals: appContainer.savedSettingsWifiPeripherals
+                )
             case .debug:
-                ScanView()
+                EmptyView()
             default:
                 TodoView()
             }
             
             // SnackBar
-            SnackBarView(isShowing: $snackBarIsShowing, title: snackBarTitle, backgroundColor: snacBarBackgroundColor)
-                .padding(.bottom, 80)
+            SnackBarView(
+                isShowing: $snackBarIsShowing,
+                title: snackBarTitle,
+                backgroundColor: snacBarBackgroundColor)
+            .padding(.bottom, 80)
+            /*
                 .onReceive(NotificationCenter.default.publisher(for: .didSelectPeripheralForFileTransfer)) { notification in
                     
                     if let peripheral = BleManager.shared.peripheral(from: notification) {
@@ -54,8 +65,9 @@ struct RootView: View {
                     if isSelectedPeripheralReconnecting {
                         showSnackBar(title: "Reconnecting...", backgroundColor: .orange)
                     }
-                }
+                }*/
         }
+        /*
         .onReceive(NotificationCenter.default.publisher(for: .didUpdateBleState)) { notification in
             if !Config.isSimulatingBluetooth {
                 model.showWarningIfBluetoothStateIsNotReady()
@@ -71,9 +83,9 @@ struct RootView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             DLog("App moving to the foreground. Force reconnect")
             FileTransferConnectionManager.shared.reconnect()
-        }
+        }*/
         .environmentObject(model)
-        .environmentObject(connectionManager)
+        .environmentObject(appContainer.connectionManager)
     }
     
     // MARK: - SnackBar
@@ -99,9 +111,12 @@ struct RootView: View {
     }
 }
 
+// MARK: - Previews
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
-        RootView()
+        let appContainer = AppContainerImpl.shared
+
+        RootView(appContainer: appContainer)
     }
 }
 

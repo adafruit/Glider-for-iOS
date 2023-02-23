@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FileTransferClient
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -14,20 +13,37 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // UI
         setupAppearances()
         
-        // Setup FileTransferConnectionManager userDefaults
-        FileTransferConnectionManager.shared.userDefaults = UserDefaults(suiteName: "group.com.adafruit.Glider")!
+        // Setup ConnectionManager userDefaults
+        //ConnectionManager.shared.userDefaults = UserDefaults(suiteName: "group.2X94RM7457.com.adafruit.Glider")!
+        
+        /* Debug delete all domains*/
+        NSFileProviderManager.getDomainsWithCompletionHandler() { (domains, error) in
+            domains.forEach { domain in
+                NSFileProviderManager.remove(domain) { error in
+                    
+                }
+            }
+        }
+        
         
         return true
     }
     
     private func setupAppearances() {
+        
         // Navigation bar title
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
         
+        /*
         // Navigation bar background
         UINavigationBar.appearance().barTintColor = .clear
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        */
+        
+        
+        // UIDocumentBrowserViewController buttons color
+        UINavigationBar.appearance(whenContainedInInstancesOf: [UIDocumentBrowserViewController.self]).tintColor = UIColor.blue
         
         // List background
         UITableView.appearance().backgroundColor = UIColor.clear

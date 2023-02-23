@@ -6,11 +6,13 @@
 //
 
 import Foundation
-import FileTransferClient
+import os.log
+import Combine
 
 /// Helper class to serialize FileTransfer operations
 /// It will check that the peripheral is connected and properly initialized before executing each operation
 class GliderClient {
+    
     // Enums
     enum GliderError: LocalizedError {
         case bluetoothNotSupported
@@ -21,51 +23,56 @@ class GliderClient {
     }
 
     // Singleton (used to manage concurrency)
-    private static var sharedInstances = [UUID: GliderClient]()
-    static func shared(peripheralIdentifier: UUID) -> GliderClient {
-        guard let instance = sharedInstances[peripheralIdentifier] else {
+    private static var sharedInstances = [FileProviderItem.PeripheralType: GliderClient]()
+    static func shared(peripheralType: FileProviderItem.PeripheralType) -> GliderClient {
+        guard let instance = sharedInstances[peripheralType] else {
             // Create new instance
-            DLog("Create GliderClient instance for \(peripheralIdentifier)")
-            let client = GliderClient(identifier: peripheralIdentifier)
-            sharedInstances[peripheralIdentifier] = client
+            logger.info("Create GliderClient instance for \(peripheralType.address)")
+            let client = GliderClient(peripheralType: peripheralType)
+            sharedInstances[peripheralType] = client
             return client
         }
         return instance     // Return existing instance
     }
 
     // Data
+    private static let logger = Logger.createLogger(category: "GliderClient")
+
     private lazy var operationsQueue: OperationQueue = {
         var queue = OperationQueue()
-        queue.name = "Operations queue for \(identifier)"
+        queue.name = "Operations queue for \(peripheralType)"
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
     
     // MARK: - Lifecycle
-    private let identifier: UUID
+    private let peripheralType: FileProviderItem.PeripheralType
     
-    private init(identifier: UUID) {
-        self.identifier = identifier
+    private init(peripheralType: FileProviderItem.PeripheralType) {
+        self.peripheralType = peripheralType
     }
     
+   
     // MARK: - Read
-    func readFile(path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+    func readFile(path: String, connectionManager: ConnectionManager, progress: FileTransferProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
         
-        let operation = GliderReadFileOperation(identifier: identifier, path: path, progress: progress, completion: completion)
+        let operation = GliderReadFileOperation(peripheralType: peripheralType, path: path, connectionManager: connectionManager, progress: progress, completion: completion)
         DLog("GliderClient: add read operation \(path)")
         operationsQueue.addOperation(operation)
     }
     
-    private class GliderReadFileOperation: Operation {
-        private let identifier: UUID
-        
+    private class GliderReadFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
+    
         private let path: String
-        private let progress: FileTransferClient.ProgressHandler?
+        private let connectionManager: ConnectionManager
+        private let progress: FileTransferProgressHandler?
         private let completion: ((Result<Data, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, progress: FileTransferProgressHandler? = nil, completion: ((Result<Data, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
+            self.connectionManager = connectionManager
             self.progress = progress
             self.completion = completion
             super.init()
@@ -76,7 +83,7 @@ class GliderClient {
             
             //DLog("GliderClient: read start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
 
                 switch result {
@@ -99,24 +106,26 @@ class GliderClient {
     }
     
     // MARK: - Write
-    func writeFile(path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
-        let operation = GliderWriteFileOperation(identifier: identifier, path: path, data: data, progress: progress, completion: completion)
+    func writeFile(path: String, data: Data, connectionManager: ConnectionManager, progress: FileTransferProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+        let operation = GliderWriteFileOperation(peripheralType: peripheralType, path: path, data: data, connectionManager: connectionManager, progress: progress, completion: completion)
         DLog("GliderClient: add write operation \(path)")
         operationsQueue.addOperation(operation)
     }
     
-    private class GliderWriteFileOperation: Operation {
-        private let identifier: UUID
-        
+    private class GliderWriteFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
+    
         private let path: String
         private let data: Data
-        private let progress: FileTransferClient.ProgressHandler?
+        private let connectionManager: ConnectionManager
+        private let progress: FileTransferProgressHandler?
         private let completion: ((Result<Void, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, data: Data, progress: FileTransferClient.ProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, data: Data, connectionManager: ConnectionManager, progress: FileTransferProgressHandler? = nil, completion: ((Result<Void, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
             self.data = data
+            self.connectionManager = connectionManager
             self.progress = progress
             self.completion = completion
             super.init()
@@ -127,7 +136,7 @@ class GliderClient {
             
             //DLog("GliderClient: write start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
                 switch result {
                 case .success(let client):
@@ -156,21 +165,23 @@ class GliderClient {
     }
     
     // MARK: - Delete
-    func deleteFile(path: String, completion: ((Result<Void, Error>) -> Void)?) {
-        let operation = GliderDeleteFileOperation(identifier: identifier, path: path, completion: completion)
+    func deleteFile(path: String, connectionManager: ConnectionManager, completion: ((Result<Void, Error>) -> Void)?) {
+        let operation = GliderDeleteFileOperation(peripheralType: peripheralType, path: path, connectionManager: connectionManager, completion: completion)
         DLog("GliderClient: add delete operation \(path)")
         operationsQueue.addOperation(operation)
     }
 
-    private class GliderDeleteFileOperation: Operation {
-        private let identifier: UUID
-        
+    private class GliderDeleteFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
+    
         private let path: String
+        private let connectionManager: ConnectionManager
         private let completion: ((Result<Void, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, completion: ((Result<Void, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, completion: ((Result<Void, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
+            self.connectionManager = connectionManager
             self.completion = completion
             super.init()
         }
@@ -180,7 +191,7 @@ class GliderClient {
             
             //DLog("GliderClient: delete start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
                 //DLog("GliderClient: delete prepared: \(result.isSuccess)")
                 switch result {
@@ -201,23 +212,26 @@ class GliderClient {
             syncSemaphore.wait()        // Operation main() should return when completed
         }
     }
-    
+     
+     
     // MARK: - Make Directory
-    func makeDirectory(path: String, completion: ((Result<Date?, Error>) -> Void)?) {
-        let operation = GliderMakeDirectoryFileOperation(identifier: identifier, path: path, completion: completion)
+    func makeDirectory(path: String, connectionManager: ConnectionManager, completion: ((Result<Date?, Error>) -> Void)?) {
+        let operation = GliderMakeDirectoryFileOperation(peripheralType: peripheralType, path: path, connectionManager: connectionManager, completion: completion)
         DLog("GliderClient: add make directory operation \(path)")
         operationsQueue.addOperation(operation)
     }
 
-    private class GliderMakeDirectoryFileOperation: Operation {
-        private let identifier: UUID
+    private class GliderMakeDirectoryFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
         
         private let path: String
+        private let connectionManager: ConnectionManager
         private let completion: ((Result<Date?, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, completion: ((Result<Date?, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, completion: ((Result<Date?, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
+            self.connectionManager = connectionManager
             self.completion = completion
             super.init()
         }
@@ -227,7 +241,7 @@ class GliderClient {
                         
             //DLog("GliderClient: make directory start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
                 //DLog("GliderClient: make directory prepared: \(result.isSuccess)")
                 switch result {
@@ -251,21 +265,23 @@ class GliderClient {
     
     
     // MARK: - List Directory
-    func listDirectory(path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
-        let operation = GliderListDirectoryFileOperation(identifier: identifier, path: path, completion: completion)
-        DLog("GliderClient: add list directory operation \(path)")
+    func listDirectory(path: String, connectionManager: ConnectionManager, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
+        let operation = GliderListDirectoryFileOperation(peripheralType: peripheralType, path: path, connectionManager: connectionManager, completion: completion)
+        Self.logger.info("GliderClient: add list directory operation \(path)")
         operationsQueue.addOperation(operation)
     }
-
-    private class GliderListDirectoryFileOperation: Operation {
-        private let identifier: UUID
+    
+    private class GliderListDirectoryFileOperation: GliderOperation {
+        private let peripheralType: FileProviderItem.PeripheralType
         
         private let path: String
-        private let completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?
+        private let connectionManager: ConnectionManager
+        private let completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?
         
-        init(identifier: UUID, path: String, completion: ((Result<[BlePeripheral.DirectoryEntry]?, Error>) -> Void)?) {
-            self.identifier = identifier
+        init(peripheralType: FileProviderItem.PeripheralType, path: String, connectionManager: ConnectionManager, completion: ((Result<[DirectoryEntry]?, Error>) -> Void)?) {
+            self.peripheralType = peripheralType
             self.path = path
+            self.connectionManager = connectionManager
             self.completion = completion
             super.init()
         }
@@ -275,7 +291,7 @@ class GliderClient {
             
             //DLog("GliderClient: list directory start")
             let syncSemaphore = DispatchSemaphore(value: 0)     // Make the main() function synchronous
-            GliderClient.setupFileTransferIfNeeded(identifier: identifier) { [weak self] result in
+            setupFileTransferIfNeeded(peripheralType: peripheralType, connectionManager: connectionManager) { [weak self] result in
                 guard let self = self else { syncSemaphore.signal(); return }
                 //DLog("GliderClient: list directory prepared: \(result.isSuccess)")
                 switch result {
@@ -298,48 +314,152 @@ class GliderClient {
     }
 
     
-    // MARK: - Common
-    private static func setupFileTransferIfNeeded(identifier: UUID, completion: @escaping (Result<FileTransferClient, Error>)->Void) {
-        let fileTransferClient = FileTransferConnectionManager.shared.fileTransferClient(fromIdentifier: identifier)
-        let isReconnecting = FileTransferConnectionManager.shared.isReconnectingPeripheral(withIdentifier: identifier)
-        guard fileTransferClient == nil || !fileTransferClient!.isFileTransferEnabled || isReconnecting else {
-            // It is already setup
-            completion(.success(fileTransferClient!))
-            return
-        }
-        
-        // Check ble supported
-        guard BleManager.shared.state != .unsupported else {
-            DLog("Bluetooth unsupported")
-            completion(.failure(GliderError.bluetoothNotSupported))
-            return
-        }
+ 
+    // MARK: - Base GliderOperation
+    private class GliderOperation: Operation {
+        // Config
+        private static let kMaxTimeToWaitForBleSupport: TimeInterval = 5.0
+        private static let kMaxTimeToWaitForPeripheralConnection: TimeInterval = 5.0
+      
+        // Data
+        private static let logger = Logger.createLogger(category: "GliderOperation")
 
-        // Wait until ble status is known
-        FileTransferConnectionManager.shared.waitForKnownBleStatusSynchronously()
-        if isReconnecting {     // Already reconnecting, just wait
-            DLog("Reconnecting. Wait...")
-            FileTransferConnectionManager.shared.waitForStableConnectionsSynchronously()
-        }
-        else {
+        private let bleSupportSemaphore = DispatchSemaphore(value: 0)
+        private let connectionSemaphore = DispatchSemaphore(value: 0)
+        private var cancellables = Set<AnyCancellable>()
+              
+        func setupFileTransferIfNeeded(peripheralType: FileProviderItem.PeripheralType, connectionManager: ConnectionManager, completion: @escaping (Result<FileTransferClient, Error>)->Void) {
+            
+            let peripheralAddress = peripheralType.address
+            var fileTransferClient = connectionManager.fileTransferClient(address: peripheralAddress)
+            let isBeingSetup = connectionManager.peripheralAddressesBeingSetup.contains(peripheralAddress)
+            
+            guard fileTransferClient == nil || /*!fileTransferClient!.isFileTransferEnabled || */isBeingSetup else {
+                // It is already setup
+                completion(.success(fileTransferClient!))
+                return
+            }
+            
+            // Check ble supported
+            let bleManager = connectionManager.bleManager
+            guard bleManager.bleState != .unsupported else {
+                Self.logger.info("Bluetooth unsupported")
+                completion(.failure(GliderError.bluetoothNotSupported))
+                return
+            }
+            
+            // Wait until ble status is known
+            waitForKnownBleStatusSynchronously(bleManager: bleManager, maxTimeToWaitForBleSupport: Self.kMaxTimeToWaitForBleSupport)
+            if isBeingSetup {     // Already reconnecting, just wait
+                Self.logger.info("Reconnecting. Wait...")
+                waitForStableConnectionsSynchronously(peripheralAddress: peripheralAddress, connectionManager: connectionManager)
+            }
+            
+            fileTransferClient = connectionManager.fileTransferClient(address: peripheralAddress)
+            guard fileTransferClient == nil /*|| !fileTransferClient!.isFileTransferEnabled  */ else {
+                // It is already setup
+                completion(.success(fileTransferClient!))
+                return
+            }
+            
+            // Connect
+            switch peripheralType {
+            case .rootContainer:
+                Self.logger.error("invalid peripheral: .rootContainer")
+                completion(.failure(GliderError.connectionFailed))
+                
+            case let .bleBondedData(address, _):
+                if let uuid = UUID(uuidString: address) {
+                    connectionManager.reconnectToBondedBlePeripherals(knownUuids: [uuid]) { fileTransferClients in
+                        if let fileTransferClient = fileTransferClients.first {
+                            Self.logger.info("reconnectToBondedBlePeripherals ready: \(fileTransferClients)")
+                            completion(.success(fileTransferClient))
+                        }
+                        else {
+                            Self.logger.info("reconnectToBondedBlePeripherals failed")
+                            completion(.failure(GliderError.connectionFailed))
+                        }
+                    }
+                }
+                else {
+                    Self.logger.error("invalid peripheral: .bleBondedData")
+                    completion(.failure(GliderError.connectionFailed))
+                }
+                
+            case let .ble(address, _),
+                let .wifi(address, _):
+                connectionManager.connect(knownAddress: address) { result in
+                    switch result {
+                    case let .success(fileTransferClient):
+                        completion(.success(fileTransferClient))
+                        
+                    case let .failure(error):
+                        completion(.failure(error))
+                    }
+                }
+            }
+            
+            /*
             let isTryingToReconnect = FileTransferConnectionManager.shared.reconnect()
             
             // Wait until connections are restored (if needed)
             if isTryingToReconnect {
-                DLog("Forced reconnecting. Wait...")
-                FileTransferConnectionManager.shared.waitForStableConnectionsSynchronously()
+                Self.logger.info("Forced reconnecting. Wait...")
+                waitForStableConnectionsSynchronously(peripheralAddress: peripheralAddress, connectionManager: connectionManager)
+            }
+
+            // Result with fileTransferClient
+            fileTransferClient = connectionManager.fileTransferClient(address: peripheralAddress)
+            if let fileTransferClient = fileTransferClient {
+                Self.logger.info("Connection ready")
+                completion(.success(fileTransferClient))
+            }
+            else {
+                Self.logger.info("Connection failed")
+                completion(.failure(GliderError.connectionFailed))
+            }*/
+        }
+
+        // MARK: - Utils
+        private func waitForKnownBleStatusSynchronously(bleManager: BleManager, maxTimeToWaitForBleSupport: TimeInterval) {
+            if bleManager.bleState == .unknown || bleManager.bleState == .resetting {
+                bleManager.bleStatePublisher
+                    .sink { [weak self] notification in
+                        guard let self = self else { return }
+                        DLog("waitForKnownBleStatusSynchronously status updated: \(bleManager.bleState.rawValue)")
+                        self.bleSupportSemaphore.signal()
+                        self.cancellables.removeAll()       // Notification observer no longer needed
+                    }
+                    .store(in: &cancellables)
+
+                let semaphoreResult = self.bleSupportSemaphore.wait(timeout: .now() + maxTimeToWaitForBleSupport)
+                if semaphoreResult == .timedOut {
+                    DLog("waitForKnownBleStatusSynchronously time-out. status: \(bleManager.bleState.rawValue)")
+                }
             }
         }
 
-        // Result with fileTransferClient
-        if let fileTransferClient = FileTransferConnectionManager.shared.fileTransferClient(fromIdentifier: identifier) {
-            DLog("Connection ready")
-            completion(.success(fileTransferClient))
-        }
-        else {
-            DLog("Connection failed")
-            completion(.failure(GliderError.connectionFailed))
+        private func waitForStableConnectionsSynchronously(peripheralAddress: String, connectionManager: ConnectionManager) {
+            let isBeingSetup = connectionManager.peripheralAddressesBeingSetup.contains(peripheralAddress)
+            
+            guard isBeingSetup else  { return }
+            DLog("Wait for connection started")
+            
+            connectionManager.peripheralAddressesBeingSetup.publisher.sink { peripheralAddressesBeingSetup in
+                let isBeingSetup = connectionManager.peripheralAddressesBeingSetup.contains(peripheralAddress)
+                            
+                if !isBeingSetup {
+                    DLog("Wait for connection finished")
+                    self.connectionSemaphore.signal()
+                    self.cancellables.removeAll()       // Notification observer no longer needed
+                }
+            }
+            .store(in: &cancellables)
+            
+            let semaphoreResult = self.connectionSemaphore.wait(timeout: .now() + Self.kMaxTimeToWaitForPeripheralConnection)
+            if semaphoreResult == .timedOut {
+                DLog("Wait for connection check time-out")
+            }
         }
     }
-
 }

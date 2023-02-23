@@ -7,20 +7,43 @@
 
 import FileProvider
 import UniformTypeIdentifiers
-import FileTransferClient
 
 final class FileProviderItem: NSObject, NSFileProviderItem {
     static let peripheralSeparator: Character = "$"
     static let pathSeparator = "/"
-    
-    private(set) var blePeripheralIdentifier: UUID?
-    private(set) var path: String                               // Always includes a trailing separator
-    private(set) var entry: BlePeripheral.DirectoryEntry?       // nil for peripheral root routes (i.e: 37464$/)
-    var lastUpdate: Date                                        // Used to keep track of which files has been modified locally
+  
+    enum PeripheralType: Codable, Equatable, Hashable {
+        case rootContainer       // i.e. rootContainer
+        case wifi(address: String, name: String?)
+        case ble(address: String, name: String?)
+        case bleBondedData(address: String, name: String?)
+        
+        var address: String {
+            switch self {
+            case .rootContainer: return ""
+            case let .wifi(address, _): return address
+            case let .ble(address, _): return address
+            case let .bleBondedData(address, _): return address
+            }
+        }
+    }
+
+    let peripheralType: PeripheralType
+    private(set) var path: String                   // Always includes a trailing separator
+    private(set) var entry: DirectoryEntry?         // nil for peripheral root routes (i.e: 37464$/)
+    var lastUpdate: Date                            // Used to keep track of which files has been modified locally
     var creation: Date
     
+    
     var peripheralRoute: String {
-        return "\(blePeripheralIdentifier?.uuidString ?? "")\(Self.peripheralSeparator)"
+        switch peripheralType {
+        case .rootContainer:
+            return "\(Self.peripheralSeparator)\(Self.peripheralSeparator)"    // Nothing before the peripheralSeparator
+        case let .wifi(address, _),
+            let .ble(address, _),
+            let .bleBondedData(address, _):
+            return "\(address)\(Self.peripheralSeparator)"
+        }
     }
     
     var isDirectory: Bool {
@@ -51,21 +74,21 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
         }
     }
     
-    init(blePeripheralIdentifier: UUID?) {
-        self.blePeripheralIdentifier = blePeripheralIdentifier
+    init(peripheralType: PeripheralType) {
+        self.peripheralType = peripheralType
         self.path = FileTransferPathUtils.rootDirectory
         self.entry = nil
+        
         self.creation = Date()
         self.lastUpdate = self.creation
     }
     
-    init(blePeripheralIdentifier: UUID, path: String, entry: BlePeripheral.DirectoryEntry) {
-        self.blePeripheralIdentifier = blePeripheralIdentifier
+    convenience init(peripheralType: PeripheralType, path: String, entry: DirectoryEntry) {
+        self.init(peripheralType: peripheralType)
+        
         let pathEndingWithSeparator = FileTransferPathUtils.pathWithTrailingSeparator(path: path)
         self.path = pathEndingWithSeparator
         self.entry = entry
-        self.creation = Date()
-        self.lastUpdate = self.creation
     }
     
     // MARK: - Mandatory properties
@@ -97,12 +120,17 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
         if let entry = entry {
             result = entry.name
         }
-        else if let blePeripheralIdentifier = blePeripheralIdentifier { // Peripheral root
-            result = peripheralName ?? blePeripheralIdentifier.uuidString
+        else {
+            switch peripheralType {
+            case .rootContainer:
+                result = "Peripherals"
+            case let .wifi(address, name),
+                let .ble(address, name),
+                let .bleBondedData(address, name):
+                result = name ?? address
+            }
         }
-        else {      // Root
-            result = "Peripherals"
-        }
+
         
         //DLog("filename for: '\(self.fullFilePath)' -> \(result)")
         return result
@@ -117,13 +145,18 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
                 return [.allowsReading, .allowsWriting, .allowsDeleting]
             }
         }
-        else if blePeripheralIdentifier != nil { // Peripheral root
-            return [.allowsContentEnumerating, .allowsAddingSubItems]
+        else {
+            switch peripheralType {
+            case .rootContainer:     // Root
+                return [.allowsContentEnumerating]
+            default:                //  Peripheral root
+                return [.allowsContentEnumerating, .allowsAddingSubItems]
+            }
         }
-        else {   // Root
-            return [.allowsContentEnumerating]
-        }
-//        return .allowsAll
+        
+        //return .allowsAll
+        //return [.allowsReading, .allowsWriting, .allowsRenaming, .allowsReparenting, .allowsTrashing, .allowsDeleting]
+
     }
     
     var contentType: UTType {
@@ -138,14 +171,13 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
                 return UTType(filenameExtension: fileExtension) ?? .item
             }
         }
-        else if blePeripheralIdentifier != nil { // Peripheral root
+        else if case .rootContainer = peripheralType { // Root
             return .folder
         }
-        else {   // Root
+        else { // Peripheral root
             return .folder
         }
     }
-    
     
     var documentSize: NSNumber? {
         if let entry = entry {
@@ -185,10 +217,11 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     
     
     // MARK: - Utils
+    /*
     var peripheralName: String? {
         guard let blePeripheralIdentifier = blePeripheralIdentifier else { return nil }
         return FileTransferConnectionManager.shared.peripheral(fromIdentifier: blePeripheralIdentifier)?.debugName
-    }
+    }*/
     
     private func isRootContainer(fullPath: String) -> Bool {
         return peripheralIdentifier(fullPath: fullPath) == nil

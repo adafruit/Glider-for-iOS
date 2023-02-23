@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import FileTransferClient
 
 struct FileEditView: View {
     // Params
@@ -15,7 +14,7 @@ struct FileEditView: View {
     @Environment(\.filename) private var filename
     
     //
-    @EnvironmentObject private var connectionManager: FileTransferConnectionManager
+    @EnvironmentObject private var connectionManager: ConnectionManager
     @Environment(\.safeAreaInsets) private var safeAreaInsets
    
     // Data
@@ -23,7 +22,7 @@ struct FileEditView: View {
     @State private var editedContents = "" //FileEditViewModel.defaultFileContentePlaceholder
     
     var body: some View {
-        let isLoading = connectionManager.isSelectedPeripheralReconnecting
+        let isLoading = connectionManager.isReconnectingToBondedPeripherals
         let isInteractionDisabled = model.isTransmitting || isLoading
         let filePath = path + filename
         
@@ -58,7 +57,7 @@ struct FileEditView: View {
                 // Empty view
                 VStack(spacing: 8) {
                     Text("This file is empty")
-                    Text("You can add content using the keyboard or press the numbered buttons to insert a predefined snippet.")
+                    Text("You can add content using the keyboard")
                         .font(.caption)
                 }
                 .foregroundColor(.white)
@@ -85,30 +84,18 @@ struct FileEditView: View {
                         .padding(.horizontal, 2)
                     
                 })
-                    .buttonStyle(PrimaryButtonStyle(height: 36, foregroundColor: mainColor))
+                .buttonStyle(PrimaryButtonStyle(height: 36, foregroundColor: mainColor))
                 
                 Spacer()
                 
-                HStack(spacing: 8) {
-                    let width: CGFloat = 40
-                    
-                    let fileContentPlaceholders = model.fileContentSnippets
-                    
-                    // Snippets
-                    ForEach(0..<fileContentPlaceholders.count, id: \.self) { i in
-                        Button("\(i+1)") {
-                            editedContents = fileContentPlaceholders[i]
-                        }
-                        .buttonStyle(PrimaryButtonStyle(width: width, foregroundColor: mainColor))
-                    }
-                    
+                HStack(spacing: 8) {                    
                     // Delete
                     Button {
                         editedContents = ""
                     } label: {
-                        Image(systemName: "trash")
+                        Label("Clear", systemImage: "trash")
                     }
-                    .buttonStyle(PrimaryButtonStyle(width: width, foregroundColor: mainColor))
+                    .buttonStyle(PrimaryButtonStyle(height: 36, foregroundColor: mainColor))
                 }
             }
             .padding(.horizontal)
@@ -141,9 +128,15 @@ extension EnvironmentValues {
 // MARK: - Preview
 struct FileEditView_Previews: PreviewProvider {
     static var previews: some View {
+        let connectionManager = ConnectionManager(       bleManager: BleManagerFake(), blePeripheralScanner: BlePeripheralScannerFake(),
+            wifiPeripheralScanner: BonjourScannerFake(),
+            onBlePeripheralBonded: nil,
+            onWifiPeripheralGetPasswordForHostName: nil
+        )
+        
         NavigationView {
             FileEditView(fileTransferClient: nil, path: "/")
-                .environmentObject(FileTransferConnectionManager.shared)
+                .environmentObject(connectionManager)
                 .environment(\.filename, "test.txt")
         }
         .navigationViewStyle(StackNavigationViewStyle())
