@@ -49,7 +49,6 @@ struct FileExplorerView: View {
     }
 }
 
-
 private struct FileExplorerBody: View {
     @ObservedObject var model: FileSystemViewModel
     let fileTransferClient: FileTransferClient
@@ -57,7 +56,6 @@ private struct FileExplorerBody: View {
     
     @State private var path = FileTransferPathUtils.rootDirectory
 
-    
     var body: some View {
         let mainColor = Color.white.opacity(0.7)
         
@@ -126,24 +124,20 @@ private struct FileExplorerBody: View {
                 .foregroundColor(.white)
             }
             
-            
             // FileSystem
-            if let selectedClient = fileTransferClient {
+            ZStack {
+                FileSystemView(model: model, fileTransferClient: fileTransferClient, path: $path, isLoading: isLoading)
                 
-                ZStack {
-                    FileSystemView(model: model, fileTransferClient: selectedClient, path: $path, isLoading: isLoading)
-                    
-                    // Bottom status bar
-                    FileCommandsStatusBarView(model: model, backgroundColor: mainColor)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-                }
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(mainColor)
-                )
-                .clipped()
-                .cornerRadius(8)
+                // Bottom status bar
+                FileCommandsStatusBarView(model: model, backgroundColor: mainColor)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             }
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(mainColor)
+            )
+            .clipped()
+            .cornerRadius(8)
             
             Spacer()
         }
@@ -209,7 +203,6 @@ private struct FileExplorerBody: View {
                 .disabled(isLoading)
                 .sheet(isPresented: $showUploadFileDialog) { DocumentPicker(onUploadFile: onUploadFile)
                 }
-                
             }
         }
     }
@@ -218,18 +211,13 @@ private struct FileExplorerBody: View {
 struct FileExplorerView_Previews: PreviewProvider {
     static var previews: some View {
         TabView {
-            /*
-             let connectionManager = ConnectionManager(
-             wifiPeripheralScanner: BonjourScannerFake(),
-             onWifiPeripheralGetPasswordForHostName: nil
-             )
-             
-             FileExplorerView()
-             .tabItem {
-             Label("Explorer", systemImage: "folder")
-             }
-             .environmentObject(connectionManager)
-             */
+            let connectionManager = ConnectionManager(
+                bleManager: BleManagerFake(),
+                blePeripheralScanner: BlePeripheralScannerFake(),
+                wifiPeripheralScanner: BonjourScannerFake(),
+                onBlePeripheralBonded: nil,
+                onWifiPeripheralGetPasswordForHostName: nil
+            )
             
             let fileTransferClient = FileTransferClient(fileTransferPeripheral: WifiFileTransferPeripheral(wifiPeripheral: WifiPeripheral(name: "test", address: "127.0.0.1", port: 80), onGetPasswordForHostName: nil))
             
@@ -243,6 +231,7 @@ struct FileExplorerView_Previews: PreviewProvider {
                     .navigationBarTitle("File Explorer", displayMode: .inline)
             }
             .navigationViewStyle(StackNavigationViewStyle())
+            .environmentObject(connectionManager)
         }
     }
 }
