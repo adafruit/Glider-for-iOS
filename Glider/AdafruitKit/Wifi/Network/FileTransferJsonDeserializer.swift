@@ -37,21 +37,24 @@ extension FileTransferNetwork {
     
     internal func decodeListDirectory(data: Data) -> [DirectoryEntry] {
         let json = JSON(data)
-        
-        var entries = [DirectoryEntry]()
-        for (_, entryJson) in json {
-            let name = entryJson["name"].stringValue
-            let isDirectory = entryJson["directory"].boolValue
-            let fileSize = entryJson["file_size"].intValue
-            let timestamp = entryJson["modified_ns"].int64Value
-
-            let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
-            let entry = DirectoryEntry(name: name, type: isDirectory ? .directory : .file(size: fileSize), modificationDate: date)
+            var entries = [DirectoryEntry]()
             
-            entries.append(entry)
-        }
-        
-        return entries
+
+            if let filesArray = json["files"].array {
+                for entryJson in filesArray {
+                    let name = entryJson["name"].stringValue
+                    let isDirectory = entryJson["directory"].boolValue
+                    let fileSize = entryJson["file_size"].intValue
+                    let modifiedNs = entryJson["modified_ns"].int64Value
+                    let date = Date(timeIntervalSince1970: TimeInterval(modifiedNs / 1_000_000_000)) 
+                    
+                    let entry = DirectoryEntry(name: name, type: isDirectory ? .directory : .file(size: fileSize), modificationDate: date)
+                    
+                    entries.append(entry)
+                }
+            }
+            
+            return entries
     }
 
 }
