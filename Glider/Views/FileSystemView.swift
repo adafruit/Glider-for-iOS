@@ -81,9 +81,23 @@ struct FileSystemView: View {
                 .padding(.bottom, 20)       // Add some margin because the status bar
             }
                         
-            VStack {
+            VStack(alignment: .center) {
                 // Empty view
-                Text("No files found")
+                VStack {
+                            Text("No Folders Found")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                                .padding()
+
+                    Text("Make sure you're using the latest CircuitPython version.")
+                        .multilineTextAlignment(.center)
+                                .font(.subheadline)
+                                .foregroundColor(.primary)
+                                .padding([.leading, .trailing, .bottom])
+                        }
+                        .background(Color("button_primary_accent"))
+                        .cornerRadius(10)
+                        .padding()
                     .foregroundColor(.white)
                     .if(showOnlyDirectories || model.isTransmitting || model.entries.count > 0) {
                         $0.hidden()
